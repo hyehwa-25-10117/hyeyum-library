@@ -75,6 +75,13 @@
     .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; font-size: 14px; font-weight: 600; }
     .band-row a { text-decoration: underline; text-underline-offset: 2px; }
     .band-row a:hover { color: var(--primary); }
+    .band-kw { align-items: center; margin-top: 12px; }
+    .band-kw strong { font-weight: 700; color: var(--muted); }
+    .band-kw ol { display: flex; flex-wrap: wrap; gap: 8px 18px; list-style: none; counter-reset: kw; }
+    .band-kw li { counter-increment: kw; }
+    .band-kw button { padding: 0; border: 0; background: none; font-weight: 600; color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+    .band-kw button::before { content: counter(kw) " "; color: var(--primary); font-weight: 900; }
+    .band-kw button:hover { color: var(--primary); }
 
     main.wrap { padding-top: 6px; padding-bottom: 70px; min-height: 60vh; }
     .crumb { margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--muted); }
@@ -105,15 +112,42 @@
     .btn-sm { padding: 6px 12px; font-size: 14px; font-weight: 600; }
     button:disabled, .btn-navy:disabled, .btn-line:disabled { background: var(--sunken); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
 
-    .home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin-top: 50px; align-items: start; }
+    .home { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 310px) minmax(0, 1fr); gap: 40px; margin-top: 50px; align-items: start; }
+    .home .side-title { font-size: 24px; margin-bottom: 4px; }
+    .home-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid var(--text); margin-bottom: 4px; }
+    .home-head .side-title { padding: 0; border: 0; margin: 0; }
+    .view-all { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: var(--text); }
+    .view-all svg { width: 10px; height: 10px; fill: var(--primary); }
+    .view-all:hover { color: var(--primary); }
+    .sch-title { display: block; font-size: 16px; font-weight: 500; line-height: 1.4; }
+    .sch-title:hover { color: var(--primary); }
+    .sch-time { margin-top: 2px; font-size: 14px; color: var(--muted); }
     .home .side-box { margin-top: 0; }
+    .home-side { display: grid; gap: 16px; }
+    .home-side .side-title { margin-bottom: 16px !important; }
+    .sns-card { position: relative; display: grid; justify-items: center; align-content: start; gap: 10px; width: min(100%, 310px); aspect-ratio: 1; padding: 18px 18px 30px; border-radius: var(--radius-md); background: var(--accent-soft); color: var(--text); text-align: center; }
+    .sns-card strong { font-size: 17px; font-weight: 900; }
+    .sns-card strong b { color: var(--primary); font-weight: 900; }
+    .sns-shot { width: 64%; padding: 7px 7px 22px; background: #fff; border-radius: var(--radius-btn); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+    .sns-shot img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+    .sns-ico { position: absolute; left: 50%; bottom: 14px; display: grid; place-items: center; width: 40px; height: 40px; margin-left: -20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+    .sns-ico svg { width: 24px; height: 24px; }
+    a.sns-card { transition: transform var(--base) var(--ease); }
+    a.sns-card:hover { transform: translateY(-4px); }
+    .home-loan .home-head { margin-bottom: 16px; }
+    .myloan-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding-bottom: 10px; font-size: 15px; }
+    .myloan-sum .num { font-size: 28px; font-weight: 900; color: var(--primary); }
     .home .sec:first-child { margin-top: 0; }
     .posts { margin-top: 50px; }
     .headrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
     .headrow h2 { font-size: 32px; font-weight: 900; line-height: 1.06; }
     .headrow-more { flex: none; font-size: 15px; font-weight: 600; }
     .headrow-more:hover { color: var(--primary); }
-    .posts-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; list-style: none; }
+    .posts-wrap { position: relative; }
+    .posts-list { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 60px) / 4); gap: 20px; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+    .posts-list::-webkit-scrollbar { display: none; }
+    .posts-list > li { scroll-snap-align: start; }
+    .posts-wrap .shelf-nav { top: 76px; }
     .post { display: block; opacity: 0; transition: opacity 500ms var(--ease); transition-delay: calc(var(--i, 0) * 100ms); }
     .posts.is-in .post { opacity: 1; }
     .post-thumb { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-btn); background: var(--surface-muted); }
@@ -124,8 +158,8 @@
     .post:hover .post-img, .post:focus-visible .post-img { transform: scale(1.08); }
     .post:hover .post-title, .post:focus-visible .post-title { color: var(--primary); }
     @media (max-width: 767px) {
-      .posts-list { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - 15px) / 2); gap: 15px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
-      .posts-list > li { scroll-snap-align: start; }
+      .posts-list { grid-auto-columns: calc((100% - 15px) / 2); gap: 15px; }
+      .posts-wrap .shelf-nav { top: 50px; }
       .post-title { font-size: 16px; }
       .headrow h2 { font-size: 26px; }
     }
@@ -249,7 +283,6 @@
     .day-md { font-size: 13px; font-weight: 700; line-height: 1; color: var(--primary); font-variant-numeric: tabular-nums; }
     .day-time { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .day-note { font-size: 14px; color: var(--muted); }
-    .hours-all { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
     .side-box { background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 20px 24px; margin-top: 30px; }
     .side-box h3 { font-size: 18px; font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--text); margin-bottom: 10px; }
     .side-box .num { font-size: 28px; color: var(--primary); font-weight: 900; }
@@ -311,25 +344,52 @@
     .go-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding: 15px 20px; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); font-weight: 700; }
     .go-card:hover { background: var(--hover-bg); color: var(--primary); }
 
-    .hive { --hw: min(30vw, 150px); padding: 30px 0 34px; }
-    .hrow { display: flex; justify-content: center; gap: 6px; }
-    .hrow + .hrow { margin-top: calc(var(--hw) * -0.2887 + 5px); }
-    .hex {
-      position: relative; width: var(--hw); height: calc(var(--hw) * 1.1547); border: 0; padding: 0 10px;
-      clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-      display: grid; place-content: center; justify-items: center; gap: 4px; text-align: center;
-      background: var(--fill); color: var(--text);
-      transition: transform 0.5s var(--ease), opacity var(--base) var(--ease);
+    .cls-tabs { display: flex; border-bottom: 1px solid var(--text); margin-bottom: 30px; }
+    .cls-tabs a { margin-bottom: -1px; padding: 14px 30px; border: 1px solid transparent; border-bottom: 0; border-radius: 12px 12px 0 0; font-size: 18px; font-weight: 700; color: var(--muted); }
+    .cls-tabs a.on { border-color: var(--text); background: var(--surface); color: var(--text); }
+    .rec-layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 30px; align-items: start; }
+    .cat-side { position: relative; z-index: 4; padding: 10px 0; border: 1px solid #e8e8e8; border-radius: var(--radius-md); background: var(--sunken); }
+    .cat-l1, .cat-l2 { list-style: none; }
+    .cat-l1 > li > a { display: block; padding: 9px 20px; font-size: 15px; }
+    .cat-l1 > li > a:hover, .cat-l2 a:hover { color: var(--primary); }
+    .cat-l1 > li.on > a, .cat-l2 a.on { color: var(--primary); font-weight: 700; }
+    .cat-l2 { display: none; }
+    .cat-l2 a { display: block; padding: 7px 20px; font-size: 14px; }
+    @media (hover: hover) and (min-width: 768px) {
+      .cat-l2 { position: absolute; left: 100%; top: -1px; min-width: 200px; max-height: calc(100% + 2px); overflow-y: auto; padding: 10px 0; border: 1px solid #e8e8e8; border-radius: var(--radius-md); background: var(--surface); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
+      .cat-l1 > li:hover > .cat-l2, .cat-l1 > li:focus-within > .cat-l2 { display: block; }
     }
-    .hex:hover { transform: scale(1.06); }
-    .hex .hx-e { width: calc(var(--hw) * 0.4); height: calc(var(--hw) * 0.58); object-fit: cover; border-radius: var(--radius-btn); }
-    .hex .hx-t { font-size: 13px; font-weight: 900; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .hex .hx-a { font-size: 11px; line-height: 1.2; max-height: 0; opacity: 0; overflow: hidden; transition: opacity var(--base) var(--ease); }
-    .hive.has-on .hex:not(.on) { transform: scale(0.84); opacity: 0.45; }
-    .hex.on { transform: scale(1.38); z-index: 2; }
-    .hex.on .hx-a { max-height: 2em; opacity: 1; }
-    .pick { max-width: 640px; margin: 0 auto; }
-    .pick.idle { text-align: center; color: var(--muted); }
+    @media (hover: none), (max-width: 767px) {
+      .cat-l1 > li.on > .cat-l2 { display: block; padding-left: 12px; }
+    }
+    @media (max-width: 767px) {
+      .rec-layout { grid-template-columns: 1fr; }
+      .cls-tabs a { padding: 12px 18px; font-size: 16px; }
+    }
+    .rk-head { margin: 4px 0 20px; font-size: 26px; font-weight: 900; }
+    .rk-head b { color: var(--primary); font-weight: 900; }
+    .rk-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 36px 22px; list-style: none; }
+    .rk-card { display: block; color: var(--text); }
+    .rk-thumb { position: relative; display: block; aspect-ratio: 181 / 236; overflow: hidden; border-radius: 8px; background: var(--sunken); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); }
+    .rk-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--base) var(--ease); }
+    .rk-flag { position: absolute; left: 0; right: 0; top: 0; z-index: 1; padding: 6px 0; text-align: center; font-size: 14px; font-weight: 700; color: #fff; background: rgba(3, 104, 217, 0.92); }
+    .rk-flag.no { background: rgba(254, 177, 0, 0.95); color: var(--on-accent); }
+    .rk-more { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; background: rgba(0, 0, 0, 0.45); color: #fff; font-size: 15px; font-weight: 700; opacity: 0; transition: opacity var(--base) var(--ease); }
+    .rk-card:hover .rk-more, .rk-card:focus-visible .rk-more { opacity: 1; }
+    .rk-card:hover .rk-thumb img { transform: scale(1.04); }
+    .rk-rank { position: relative; display: inline-block; margin-top: 14px; padding: 2px 16px 2px 8px; font-size: 14px; font-weight: 600; color: var(--primary); background: var(--hover-bg); clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%); }
+    .rk-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 8px; font-size: 18px; font-weight: 700; line-height: 1.45; }
+    .rk-card:hover .rk-title { color: var(--primary); }
+    .rk-writer { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
+    @media (max-width: 991px) { .rk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 575px) { .rk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; } .rk-title { font-size: 16px; } }
+    .rank { flex: none; width: 28px; font-size: 20px; font-weight: 900; color: var(--primary); text-align: center; font-variant-numeric: tabular-nums; }
+    .kw-rank { list-style: none; }
+    .kw-rank li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .kw-rank li:last-child { border-bottom: 0; }
+    .kw-rank button { flex: 1; min-width: 0; padding: 0; border: 0; background: none; color: var(--text); font-size: 17px; font-weight: 700; text-align: left; }
+    .kw-rank button:hover { color: var(--primary); }
+    .kw-rank .cnt { flex: none; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
 
     .detail { display: grid; grid-template-columns: 220px 1fr; gap: 30px; }
     .cover { display: block; width: 100%; height: 300px; object-fit: contain; background: var(--sunken); border-radius: var(--radius-md); }
@@ -361,10 +421,11 @@
     .pin-ring { fill: none; stroke: var(--primary-deep); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: ping 1.4s ease-out infinite; }
     @keyframes ping { from { transform: scale(0.6); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
     .you { fill: var(--accent); stroke: var(--text); stroke-width: 1.5; }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .chips a { padding: 5px 12px; border: 1px solid var(--border-input); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; font-weight: 600; }
-    .chips a:hover { border-color: var(--primary); color: var(--primary); }
-    .chips a.on { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; border-top: 2px solid #25231d; }
+    .chips a { display: flex; align-items: center; height: 50px; padding: 0 12px; border-bottom: 1px solid #dcdbe0; font-size: 15px; font-weight: 500; }
+    .chips a:not(:nth-child(3n)) { border-right: 1px solid #dcdbe0; }
+    .chips a:hover { color: var(--primary); background: var(--hover-bg); }
+    .chips a.on { color: var(--primary); font-weight: 700; background: var(--hover-bg); }
     .dir { padding: 15px 20px; background: var(--hover-bg); border-radius: var(--radius-md); margin-bottom: 10px; }
 
     .notice-body { background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; }
@@ -412,6 +473,69 @@
       .shelf-item { transform: none; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
+    .sg-cal {
+      --space-5: 5px; --space-6: 6px; --space-10: 10px; --space-12: 12px; --space-15: 15px; --space-20: 20px; --space-30: 30px;
+      --radius-round: 999px; --duration-fast: var(--fast); --ease-base: var(--ease);
+      --text-muted: var(--muted); --surface-sunken: var(--sunken); --on-color: #fff; --sunday: #c8102e;
+      --font-sans: var(--font-family, var(--font));
+    }
+    .sg-cal { color: var(--text); }
+    .sg-cal__head { display: flex; align-items: center; justify-content: center; gap: var(--space-20); margin-bottom: var(--space-20); }
+    .sg-cal__month { margin: 0; min-width: 160px; text-align: center; font: 900 28px/1.2 var(--font-sans); font-variant-numeric: tabular-nums; }
+    .sg-cal__arrow { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: var(--radius-round); background: none; color: var(--primary); cursor: pointer; transition: background-color var(--duration-fast) var(--ease-base); }
+    .sg-cal__arrow:hover { background: var(--hover-bg); }
+    .sg-cal__arrow svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .sg-cal__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-12); margin-bottom: var(--space-12); }
+    .sg-cal__filters { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+    .sg-cal__filter { display: inline-flex; align-items: center; gap: var(--space-6); padding: var(--space-6) var(--space-15); border: 1px solid var(--border); border-radius: var(--radius-pill);
+      background: var(--surface); color: var(--text); font: 700 14px/1.5 var(--font-sans); cursor: pointer; }
+    .sg-cal__filter[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--on-color); }
+    .sg-cal__ico { display: inline-block; flex: none; width: 18px; height: 18px; background: no-repeat center / contain; vertical-align: -3px; }
+    .sg-cal__ico--event { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23f9c23c%22 d=%22m5.05 29.9l1.472-.394l.394-.855l2.55.067l2.653-.71l.598-.926l2.482.102l2.591-.694c1.8-.48 2.41-2.74 1.09-4.06L9.56 13.1c-1.32-1.32-3.58-.72-4.06 1.09l-.773 2.887l.108 2.344l-.88.542l-.79 2.951l.132 2.248l-.863.484l-.344 1.284c-.49 1.8 1.16 3.45 2.96 2.97%22/%3E%3Cpath fill=%22%233f5fff%22 d=%22M7.8 25.053c-1.48-1.383-2.74-3.047-3.854-5.058l.778-2.904c1.278 2.798 2.716 4.889 4.441 6.5c1.663 1.553 3.633 2.697 6.07 3.583l-3.128.837c-1.602-.797-3.027-1.764-4.306-2.958m-3.514 2.833a12 12 0 0 1-1.855-2.234l.745-2.783c.703 1.49 1.49 2.634 2.476 3.557c.984.92 2.208 1.659 3.838 2.285l-2.989.8a12 12 0 0 1-2.215-1.625%22/%3E%3Cpath fill=%22%236d4534%22 d=%22M19.11 25.69c1.4-1.4-.34-5.4-3.88-8.94S7.7 11.47 6.3 12.87s.34 5.4 3.88 8.94s7.54 5.27 8.93 3.88%22/%3E%3Cpath fill=%22%23f70a8d%22 d=%22M11.61 7.27a9.73 9.73 0 0 1 .72 7.49a9.7 9.7 0 0 1-3.81 5.2c-.52-.65-.97-1.3-1.35-1.93a7.4 7.4 0 0 0 2.91-3.96c.59-1.91.4-3.93-.54-5.69c-.31-.58-.09-1.29.48-1.59c.58-.31 1.29-.09 1.59.48m10.54 9.443a6.65 6.65 0 0 1 6.454-1.01a1.048 1.048 0 0 0 .732-1.965a8.74 8.74 0 0 0-8.486 1.33a1.048 1.048 0 1 0 1.3 1.645M6.01 9.69a1.16 1.16 0 1 0 0-2.32a1.16 1.16 0 0 0 0 2.32m20.12-1.16a1.16 1.16 0 1 1-2.32 0a1.16 1.16 0 0 1 2.32 0%22/%3E%3Cpath fill=%22%23f9c23c%22 d=%22M12.49 3.96a.96.96 0 1 1-1.92 0a.96.96 0 0 1 1.92 0m12.99 20.45a.97.97 0 1 1-1.94 0a.97.97 0 0 1 1.94 0%22/%3E%3Cpath fill=%22%2300a6ed%22 d=%22M21.63 4.02a.95.95 0 0 0-.58-.24a.99.99 0 0 0-1.04.92c-.07 1.1-.83 3.09-1.12 3.76q-.001.008-.005.015q-.005.008-.005.015q-.08.198-.172.39a2.8 2.8 0 0 0-1.358-.92l-.03-.01c-1.35-.45-2.82.28-3.27 1.64c-.22.66-.17 1.36.14 1.98s.84 1.08 1.5 1.3q.106.036.214.045q.76.206 1.465.015a6 6 0 0 1-.099.41c-.14.52.17 1.06.69 1.2a.98.98 0 0 0 1.2-.69a8.2 8.2 0 0 0 .293-2.482q.78-.98 1.247-2.148l.015-.036c.185-.448 1.158-2.802 1.255-4.374c.01-.31-.12-.6-.34-.79m-4.88 5.79c.275.092.558.246.678.876c-.492.457-.808.407-1.088.314a1 1 0 0 0-.102-.028a.6.6 0 0 1-.288-.292a.58.58 0 0 1-.03-.48c.11-.33.47-.51.8-.4zm1.52 8.35c3.41-.95 6.98-.52 10.06 1.22c.57.33.77 1.04.46 1.6c-.32.57-1.04.77-1.61.45a10.85 10.85 0 0 0-8.27-1c-2.31.64-4.29 2-5.72 3.88c-.61-.42-1.24-.9-1.86-1.44c1.73-2.27 4.14-3.93 6.94-4.71m-1.646-1.175a1.15 1.15 0 1 1-2.3 0a1.15 1.15 0 0 1 2.3 0%22/%3E%3C/g%3E%3C/svg%3E"); }
+    .sg-cal__ico--edu { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23533566%22 d=%22M19.3 23.138h-6.64c-3.84 0-6.95-3.11-6.95-6.95v-4.36h20.53v4.36c.01 3.84-3.1 6.95-6.94 6.95%22/%3E%3Cpath fill=%22%23321b41%22 d=%22m17.13 5.278l12.28 6.29c.76.39.76 1.48 0 1.87l-12.28 6.29c-.72.37-1.56.37-2.28 0l-12.28-6.29c-.76-.39-.76-1.48 0-1.87l12.28-6.29a2.48 2.48 0 0 1 2.28 0%22/%3E%3Cpath fill=%22%23ffb02e%22 d=%22M15.15 12.048c.19-.41.68-.57 1.08-.37l6.71 3.44c.27.14.43.41.43.71v6.28a1.83 1.83 0 0 1 .97 2.1v.02c-.01.04-.02.09-.04.13c0 .01-.01.02-.01.03c-.01.04-.03.08-.05.12c0 .01-.01.02-.01.02c-.05.11-.12.22-.19.31c-.01.02-.02.03-.04.05l.47 2.2a1.94 1.94 0 0 1-1.9 2.35a1.94 1.94 0 0 1-1.9-2.35l.47-2.2c-.25-.31-.4-.7-.4-1.13c0-.25.05-.49.14-.7c0-.01.01-.02.02-.03c.01-.03.03-.07.05-.1c.02-.04.04-.08.07-.12c.01-.01.01-.02.02-.03c.18-.28.44-.51.74-.66v-5.8l-6.25-3.2c-.39-.2-.57-.68-.38-1.07%22/%3E%3C/g%3E%3C/svg%3E"); }
+    .sg-cal__ico--notice { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23212121%22 d=%22M26.18 19.61a3.72 3.72 0 1 0 0-7.44a3.72 3.72 0 0 0 0 7.44%22/%3E%3Cpath fill=%22%23d3d3d3%22 d=%22m11 11l.68-1c1.25 0 2.49-.29 3.61-.83l6.26-3.08v19.62l-6.26-3.08a8.2 8.2 0 0 0-3.61-.84L11 20zM6.216 29.008H8.79c.67 0 1.21-.54 1.21-1.21V19.89H5.006v7.908c0 .67.54 1.21 1.21 1.21%22/%3E%3Cpath fill=%22%23f8312f%22 d=%22M24.07 3A3.07 3.07 0 0 0 21 6.07v19.65a3.07 3.07 0 0 0 6.14 0V6.07A3.077 3.077 0 0 0 24.07 3%22/%3E%3Cpath fill=%22%23ca0b4a%22 d=%22M3.727 10H12v11.78H3.727C2.77 21.78 2 21.03 2 20.11v-8.43c0-.93.77-1.68 1.727-1.68%22/%3E%3C/g%3E%3C/svg%3E"); }
+    .sg-cal__ico--closed { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23d3d3d3%22 d=%22M16 2a6 6 0 0 0-6 6v3a6 6 0 0 0 12 0V8a6 6 0 0 0-6-6m0 2.5A3.5 3.5 0 0 1 19.5 8v3a3.5 3.5 0 1 1-7 0V8A3.5 3.5 0 0 1 16 4.5%22/%3E%3Cpath fill=%22%23f9c23c%22 d=%22M5 14a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z%22/%3E%3Cpath fill=%22%23433b6b%22 d=%22M17.5 20.5a2.5 2.5 0 1 0-3 0V24a1.5 1.5 0 0 0 3 0z%22/%3E%3C/g%3E%3C/svg%3E"); }
+    .sg-cal__views { display: flex; gap: var(--space-5); }
+    .sg-cal__view { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-btn); background: var(--surface); color: var(--text-muted); cursor: pointer; }
+    .sg-cal__view[aria-pressed="true"] { border-color: var(--primary); color: var(--primary); }
+    .sg-cal__view svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .sg-cal__table { width: 100%; table-layout: fixed; border-collapse: collapse; border-top: 2px solid var(--primary); }
+    .sg-cal__table th { padding: var(--space-10) 0; border-bottom: 1px solid var(--border); font: 700 13px/1.5 var(--font-sans); color: var(--text); }
+    .sg-cal__table th:first-child, .sg-cal__table td:first-child .sg-cal__num { color: var(--sunday); }
+    .sg-cal__table th:last-child, .sg-cal__table td:last-child .sg-cal__num { color: var(--primary); }
+    .sg-cal__table td { height: 112px; padding: var(--space-6); border: 1px solid var(--border); border-top: 0; vertical-align: top; }
+    .sg-cal__table td:first-child { border-left: 0; } .sg-cal__table td:last-child { border-right: 0; }
+    .sg-cal__num { display: inline-grid; place-items: center; min-width: 26px; height: 26px; margin-bottom: var(--space-5); border-radius: var(--radius-round); font: 700 13px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
+    .sg-cal__table td.is-other { background: var(--bg); } .sg-cal__table td.is-other .sg-cal__num { opacity: .45; }
+    .sg-cal__table td.is-today .sg-cal__num { background: var(--primary); color: var(--on-color) !important; }
+    .sg-cal__table td.is-closed { background: var(--surface-sunken); }
+    .sg-cal__event { display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: var(--space-5); align-items: start; margin-top: var(--space-5); padding: var(--space-5) var(--space-6); border-radius: var(--radius-btn); background: var(--surface-sunken); text-decoration: none; }
+    .sg-cal__event .sg-cal__ico { grid-row: span 2; margin-top: 1px; vertical-align: 0; }
+    .sg-cal a.sg-cal__event { color: var(--text); }
+    .sg-cal a.sg-cal__event:hover { background: var(--hover-bg); }
+    .sg-cal__title { display: block; min-width: 0; font: 700 13px/1.4 var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sg-cal__time { display: block; font: 400 12px/1.4 var(--font-sans); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    .sg-cal__list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--primary); }
+    .sg-cal__row { display: grid; grid-template-columns: 72px 1fr; gap: var(--space-15); padding: var(--space-15) 0; border-bottom: 1px dashed var(--border); }
+    .sg-cal__date { display: grid; justify-items: center; align-content: start; gap: var(--space-5); }
+    .sg-cal__date b { font: 900 24px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
+    .sg-cal__date span { font: 700 13px/1 var(--font-sans); color: var(--text-muted); }
+    .sg-cal__row.is-today .sg-cal__date b { color: var(--primary); }
+    .sg-cal__items { display: grid; gap: var(--space-10); }
+    .sg-cal__item { display: grid; grid-template-columns: 110px 1fr; gap: var(--space-10); align-items: baseline; text-decoration: none; }
+    .sg-cal a.sg-cal__item { color: var(--text); }
+    .sg-cal a.sg-cal__item:hover .sg-cal__item-title { color: var(--primary); }
+    .sg-cal__item .sg-cal__time { font-size: 14px; }
+    .sg-cal__item-title { font: 400 16px/1.5 var(--font-sans); }
+    .sg-cal__cat { display: inline-flex; align-items: center; gap: var(--space-5); margin-right: var(--space-6); font: 700 12px/1.2 var(--font-sans); color: var(--text-muted); }
+    .sg-cal__empty { padding: var(--space-30) 0; text-align: center; color: var(--text-muted); }
+    .sg-cal [hidden] { display: none !important; }
+    @media (max-width: 640px) {
+      .sg-cal__table, .sg-cal__views { display: none !important; }
+      .sg-cal .sg-cal__list, .sg-cal .sg-cal__list[hidden] { display: block !important; }
+      .sg-cal__item { grid-template-columns: 1fr; gap: 0; }
+    }
+    .tag.edu { background: var(--primary); }
   </style>
 </head>
 <body>
@@ -450,6 +574,10 @@
         <a href="#/map">책 위치 지도</a>
         <a href="#/hours">이용 안내</a>
       </div>
+      <div class="band-row band-kw" id="top-kw" hidden>
+        <strong>인기 검색어</strong>
+        <ol id="top-kw-list"></ol>
+      </div>
     </div>
   </section>
 
@@ -462,7 +590,7 @@
         <li><a href="#/map">찾아오시는 길</a></li>
         <li><a href="#/notice">공지사항</a></li>
       </ul>
-      <p>혜윰도서관 · 혜화여자고등학교<br>도서·대출·일정·운영 시간은 모두 수업용 예시입니다.<br>© 2026 Hyeyum Library</p>
+      <p>혜윰도서관 · 혜화여자고등학교<br>© 2026 Hyeyum Library</p>
     </div>
   </footer>
 
@@ -511,11 +639,14 @@
     { s: '2026-10-09', t: 'close', n: '한글날 휴관' },
     { s: '2026-10-21', t: 'event', n: '가을 독서 주간 개막', time: '점심시간' },
     { s: '2026-11-05', t: 'event', n: '독서토론 동아리 공개 모임', time: '방과후' },
+    { s: '2026-11-10', t: 'edu', n: '독서로 이용 교육: 소장 자료 찾기', time: '점심시간' },
     { s: '2026-11-12', t: 'event', n: '작가와의 만남', time: '방과후 · 시청각실' },
     { s: '2026-11-16', e: '2026-11-18', t: 'close', n: '장서 점검 휴관' },
     { s: '2026-11-20', t: 'event', n: '책갈피 만들기 체험', time: '점심시간' },
+    { s: '2026-11-24', t: 'edu', n: '도서부원 대출·반납 교육', time: '방과후' },
     { s: '2026-11-25', t: 'event', n: '북큐레이션: 겨울에 읽는 책', time: '하루 종일' },
     { s: '2026-12-04', t: 'event', n: '독서 골든벨', time: '방과후' },
+    { s: '2026-12-09', t: 'edu', n: '수행평가 자료 찾기 교육', time: '점심시간' },
     { s: '2026-12-11', t: 'close', n: '도서관 소독 휴관' },
     { s: '2026-12-18', t: 'event', n: '겨울방학 장기대출 시작', time: '하루 종일' },
     { s: '2026-12-28', e: '2026-12-31', t: 'close', n: '연말 휴관' },
@@ -631,7 +762,7 @@
     return { open: false, text: '오늘 운영 끝' };
   }
 
-  const TAG_NAME = { close: '휴관', event: '행사', notice: '공지', new: '신간' };
+  const TAG_NAME = { close: '휴관', event: '행사', edu: '교육', notice: '공지', new: '신간' };
 
   function buildNotices() {
     const fromEvents = EVENTS.map(e => ({
@@ -640,7 +771,7 @@
       n: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `${e.n} (${rangeText(e)})`,
       body: e.t === 'close'
         ? `${rangeText(e)} ${e.n}로 도서관 문을 닫습니다.\n이 기간에는 대출·반납이 모두 멈춰요.\n반납 예정일이 휴관일이면 다음 운영일까지 반납하면 돼요.`
-        : `${rangeText(e)} ${e.time}에 「${e.n}」 행사가 열립니다.\n관심 있는 학생은 도서관 대출·반납 데스크에서 신청해 주세요.`,
+        : `${rangeText(e)} ${e.time}에 「${e.n}」 ${e.t === 'edu' ? '교육이' : '행사가'} 열립니다.\n관심 있는 학생은 도서관 대출·반납 데스크에서 신청해 주세요.`,
     }));
     const k = key(today);
     return fromEvents.concat(EXTRA_NOTICES).filter(x => x.d <= k).sort((a, b) => b.d.localeCompare(a.d));
@@ -680,7 +811,7 @@
 
   const NGROUPS = [
     { id: 'notice', name: '일반공지', types: ['notice', 'new'] },
-    { id: 'event', name: '행사', types: ['event'] },
+    { id: 'event', name: '행사·교육', types: ['event', 'edu'] },
     { id: 'close', name: '휴관', types: ['close'] },
   ];
 
@@ -689,7 +820,7 @@
   }
 
   const NEWS_CATS = [['', '전체'], ['event', '행사'], ['close', '휴관'], ['notice', '공지']];
-  const newsKind = t => t === 'close' ? 'close' : t === 'event' ? 'event' : 'notice';
+  const newsKind = t => t === 'close' ? 'close' : t === 'event' || t === 'edu' ? 'event' : 'notice';
   let newsShown = 8;
 
   function newsCards(list) {
@@ -717,7 +848,11 @@
   function postsHtml() {
     return `<section class="posts" data-reveal>
         <div class="headrow"><h2>도서관 소식</h2><a class="headrow-more" href="#/news">더보기 ›</a></div>
-        <ul class="posts-list">${NOTICES.slice(0, 4).map((x, i) => `<li><div class="post" style="--i:${i}"><span class="post-thumb"><span class="post-img" aria-hidden="true">준비 중</span></span><span class="post-cat">미정</span><span class="post-title">준비 중</span></div></li>`).join('')}</ul>
+        <div class="posts-wrap" id="posts-wrap">
+          <button type="button" class="shelf-nav prev" data-shelf-nav="-1" aria-label="도서관 소식 이전">${ARROW('M15 5l-7 7 7 7')}</button>
+          <ul class="posts-list" data-track>${NOTICES.slice(0, 8).map((x, i) => `<li><div class="post" style="--i:${i}"><span class="post-thumb"><span class="post-img" aria-hidden="true">준비 중</span></span><span class="post-cat">미정</span><span class="post-title">준비 중</span></div></li>`).join('')}</ul>
+          <button type="button" class="shelf-nav next" data-shelf-nav="1" aria-label="도서관 소식 다음">${ARROW('M9 5l7 7-7 7')}</button>
+        </div>
       </section>`;
   }
 
@@ -739,22 +874,96 @@
     return { closed: false, note: SLOTS.map(s => s.n).join(' · ') };
   }
 
-  function hoursBox() {
-    const st = libStatus();
-    const days = Array.from({ length: 5 }, (_, i) => addDays(today, i));
+  function scheduleBox() {
+    const k = key(today);
+    const list = EVENTS.filter(e => (e.t === 'event' || e.t === 'edu') && (e.e || e.s) >= k).slice(0, 4);
     return `
-      <h2 class="side-title">도서관 이용시간</h2>
-      <ul class="days">${days.map((d, i) => {
-        const info = dayInfo(d);
-        const time = info.closed ? '휴관' : `${SLOTS[0].f} ~ ${SLOTS[SLOTS.length - 1].t}`;
-        const note = i === 0 ? `오늘 · ${info.closed ? info.note : st.text}` : info.note;
-        return `<li class="day${info.closed ? ' closed' : ''}"><div class="day-date"><span class="day-dow">${WEEK[d.getDay()]}</span><span class="day-md">${pad(d.getMonth() + 1)}-${pad(d.getDate())}</span></div><div><p class="day-time">${time}</p><p class="day-note">${esc(note)}</p></div></li>`;
-      }).join('')}</ul>
-      <a href="#/hours" class="hours-all">도서관 이용시간 전체 보기</a>`;
+      <div class="home-head"><h2 class="side-title">행사·교육 일정</h2><a class="view-all" href="#/calendar">전체보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l12 8-12 8z"/></svg></a></div>
+      <ul class="days">${list.map(e => {
+        const d = new Date(e.s + 'T00:00');
+        const i = NOTICES.findIndex(x => x.n === `${e.n} (${rangeText(e)})`);
+        const href = i < 0 ? '#/calendar' : `#/notice/${i}`;
+        return `<li class="day"><div class="day-date"><span class="day-dow">${WEEK[d.getDay()]}</span><span class="day-md">${pad(d.getMonth() + 1)}-${pad(d.getDate())}</span></div><div><a class="sch-title" href="${href}">${esc(e.n)}</a><p class="sch-time">${esc(e.time || '하루 종일')}</p></div></li>`;
+      }).join('')}</ul>`;
   }
 
   const POPULAR_BOOKS = ['b5', 'b10', 'b15', 'b4', 'b6', 'b7', 'b1', 'b2', 'b3', 'b8'];
   const NEW_BOOKS = ['b9', 'b14', 'b16', 'b18', 'b19', 'b17', 'b11', 'b12', 'b13'];
+
+  const IG_URL = '';
+  const IG_ICON = '<svg viewBox="0 0 32 32" aria-hidden="true"><defs><radialGradient id="ig-g" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset=".1" stop-color="#fdf497"/><stop offset=".5" stop-color="#fd5949"/><stop offset=".68" stop-color="#d6249f"/><stop offset="1" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#ig-g)"/><rect x="8" y="8" width="16" height="16" rx="5" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="16" cy="16" r="3.8" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="21.4" cy="10.6" r="1.3" fill="#fff"/></svg>';
+
+  function snsBox() {
+    const inner = `<strong><b>혜윰도서관</b> 인스타그램</strong><span class="sns-shot"><img src="covers/school-bg.jpg" alt="" loading="lazy"></span><span class="sns-ico">${IG_ICON}</span>`;
+    return `<section aria-label="도서관 SNS"><h2 class="side-title">도서관 SNS</h2>${IG_URL
+      ? `<a class="sns-card" href="${IG_URL}" target="_blank" rel="noopener" aria-label="혜윰도서관 인스타그램">${inner}</a>`
+      : `<div class="sns-card">${inner}</div>`}</section>`;
+  }
+
+  const SB_URL = 'https://idnzeimckgevrrymnybc.supabase.co';
+  const SB_KEY = 'sb_publishable_4w9Gv11aSAzQUEb2Ay_D9Q_Usaxi6gD';
+
+  async function rpc(fn, args, keepalive) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+        method: 'POST',
+        headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(args || {}),
+        signal: ctrl.signal,
+        keepalive: !!keepalive,
+      });
+      if (!res.ok) return { ok: false, status: res.status };
+      const text = await res.text();
+      return { ok: true, data: text ? JSON.parse(text) : null };
+    } catch (e) {
+      return { ok: false, status: 0 };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  let loanCounts = {};
+  let popularIds = POPULAR_BOOKS.slice();
+  let topSearches = [];
+  let topSearchRows = [];
+
+  function applyPopular(rows) {
+    loanCounts = {};
+    rows.forEach(r => { if (book(r.book_id)) loanCounts[r.book_id] = Number(r.loans); });
+    const order = id => { const i = POPULAR_BOOKS.indexOf(id); return i < 0 ? 99 : i; };
+    const ranked = Object.keys(loanCounts).sort((a, b) => loanCounts[b] - loanCounts[a] || order(a) - order(b));
+    popularIds = ranked.concat(POPULAR_BOOKS.filter(id => !loanCounts[id])).slice(0, 10);
+  }
+
+  function renderTopSearches() {
+    $('top-kw-list').innerHTML = topSearches.map(k => `<li><button type="button" data-kw="${esc(k)}">${esc(k)}</button></li>`).join('');
+    $('top-kw').hidden = !topSearches.length;
+  }
+
+  async function refreshStats() {
+    const before = popularIds.join();
+    const [p, q] = await Promise.all([
+      rpc('library_popular_books', { p_limit: 50 }),
+      rpc('library_top_searches', { p_limit: 20 }),
+    ]);
+    if (p.ok && Array.isArray(p.data)) applyPopular(p.data);
+    const beforeKw = topSearchRows.map(r => r.keyword + r.searches).join();
+    if (q.ok && Array.isArray(q.data)) {
+      topSearchRows = q.data;
+      topSearches = q.data.slice(0, 8).map(r => r.keyword);
+    }
+    renderTopSearches();
+    const { name, args } = parse();
+    const changed = popularIds.join() !== before || topSearchRows.map(r => r.keyword + r.searches).join() !== beforeKw;
+    if (changed && (name === '' || name === 'rec' || name === 'list')) {
+      const y = window.scrollY;
+      router();
+      window.scrollTo(0, y);
+    }
+  }
+
   const ARROW = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 
   function shelfHtml(title, ids, toDls) {
@@ -762,7 +971,7 @@
         <div class="shelf-head"><h2 class="sec-title">${title}</h2></div>
         <div class="shelf-wrap">
           <button type="button" class="shelf-nav prev" data-shelf-nav="-1" aria-label="${title} 이전">${ARROW('M15 5l-7 7 7 7')}</button>
-          <ul class="shelf-list">${ids.map((id, i) => {
+          <ul class="shelf-list" data-track>${ids.map((id, i) => {
             const b = book(id);
             return `<li class="shelf-item" style="--i:${Math.min(i, 5)}"><a class="shelf-book" href="${toDls ? '#' : '#/book/' + b.id}"${toDls ? ` data-school="${esc(b.title)}"` : ''}><span class="shelf-cover"><span class="shelf-pages"></span><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
           }).join('')}</ul>
@@ -779,7 +988,7 @@
   }
 
   function initShelves() {
-    document.querySelectorAll('.shelf-list').forEach(list => {
+    document.querySelectorAll('[data-track]').forEach(list => {
       updateShelfNav(list);
       list.addEventListener('scroll', () => updateShelfNav(list), { passive: true });
     });
@@ -792,20 +1001,18 @@
       ${noticeBoxes()}
       ${postsHtml()}
       <div class="home">
-        <div>
-          ${hoursBox()}
-        </div>
-        <aside>
-          <div class="side-box">
-            <h3>나의 대출</h3>
-            <p><span class="num">${infos.length}</span> / ${LOAN_LIMIT}권 대출 중 ${over ? `<span class="badge bad">연체 ${over}권</span>` : ''}</p>
-            <dl class="info-dl">${infos.slice().sort((a, b) => a.left - b.left).map(x => `<dt>${esc(x.b.title)}</dt><dd>${x.left < 0 ? `<b style="color:var(--bad)">연체 ${-x.left}일</b>` : x.left === 0 ? 'D-DAY' : `D-${x.left}`}</dd>`).join('')}</dl>
-            <div class="acts" style="margin-top:12px"><a href="#/loans" class="btn-line btn-sm">대출현황 보기</a></div>
-          </div>
+        <section class="home-sch" aria-label="행사·교육 일정">${scheduleBox()}</section>
+        <aside class="home-side">
+          ${snsBox()}
         </aside>
+        <section class="home-loan" aria-label="나의 대출">
+          <div class="home-head"><h2 class="side-title">나의 대출</h2><a class="view-all" href="#/loans">전체보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l12 8-12 8z"/></svg></a></div>
+          <p class="myloan-sum"><span><span class="num">${infos.length}</span> / ${LOAN_LIMIT}권</span>${over ? `<span class="badge bad">연체 ${over}권</span>` : ''}</p>
+          <dl class="info-dl">${infos.slice().sort((a, b) => a.left - b.left).map(x => `<dt>${esc(x.b.title)}</dt><dd>${x.left < 0 ? `<b style="color:var(--bad)">연체 ${-x.left}일</b>` : x.left === 0 ? 'D-DAY' : `D-${x.left}`}</dd>`).join('')}</dl>
+        </section>
       </div>
       <div class="shelves-bg">
-        ${shelfHtml('인기도서', POPULAR_BOOKS)}
+        ${shelfHtml('인기도서', popularIds)}
         ${shelfHtml('신간 도서', NEW_BOOKS, true)}
       </div>`;
   }
@@ -933,54 +1140,90 @@
         </div>
       </div>`);
   }
-  let hiveOn = null;
+  const CATS = [['소설', ['한국소설', '일본소설', '영미소설', '프랑스소설', '독일소설', '중국소설', '러시아소설', '세계의소설', '장르소설']], ['에세이/시/희곡', ['에세이', '시', '희곡', '문학의이해', '한국문학', '세계의문학']], ['인문', ['인문학일반', '철학일반', '동양철학', '서양철학', '심리학/정신분석학', '신화/종교학', '서지/출판', '기호/논리/언어학', '인류학/고고학', '문화/문화이론']], ['자기계발', ['성공/처세', '인생처세', '능력계발', '힐링', '대상별', '대학교재']], ['경제/경영', ['경제', '경영', '마케팅/세일즈', '재테크/투자', '창업/취업/은퇴']], ['가정/취미/실용', ['가정', '요리', '취미/스포츠', '역학']], ['의학/건강', ['의학', '질병치료와예방', '건강정보', '건강운동']], ['여행/지리', ['국내여행', '미국여행', '캐나다여행', '중남미여행', '유럽여행', '북유럽여행', '동유럽여행', '프랑스여행', '영국여행', '스페인여행', '독일여행', '이탈리아여행', '터키여행', '중동여행', '아프리카여행', '일본여행', '중국여행', '홍콩/대만/마카오여행', '동남아시아여행', '호주/뉴질랜드여행', '인도/티베트/네팔여행', '괌/사이판/하와이여행', '발리/몰디브여행', '세계일주여행', '기타지역여행', '테마여행', '유학/해외연수/이민', '워킹홀리데이', '지도']], ['과학/기술', ['과학의이해', '수학', '화학', '물리학', '지구과학', '천문학', '동식물', '생명과학']], ['사회과학', ['사회학', '사회사상/사회사상사', '사회문제', '언론/미디어', '정치/외교', '행정학', '법학', '교육학', '여성학/젠더', '국방/군사/통일']], ['종교', ['종교학', '기독교', '불교', '가톨릭', '세계종교', '한국종교']], ['역사/문화', ['역사일반', '한국사', '동양사', '서양사', '주제별역사', '문화/문화사', '유적/유물']], ['예술/대중문화', ['예술이론', '건축', '무용', '미술', '디자인', '사진', '연극', '영화', '음악', '대중문화']], ['외국어', ['영어', '일본어', '중국어', '프랑스어', '독일어', '기타외국어', '한자/한문', '외국인을위한한국어']], ['컴퓨터', ['그래픽/멀티미디어', '오피스', '웹디자인/홈페이지', '컴퓨터공학', '프로그래밍개발/방법론', '프로그래밍언어', '모바일프로그래밍', '스마트폰/태블릿/SNS', 'e비즈니스/창업/교육', 'OS/Networking', 'PC/게임/디지털카메라', '수험서']], ['수험서/자격증/취업', ['공무원수험서', '국가고시', '공사/기업수험서', '인문/사회/법관련', '경제/금융/회계관련', '전자/전기관련', '건축/토목/기계관련', '가스/안전/환경관련', '보건/의료관련', '운전/관광/기타관련', '취업/상식/면접', '진학/유학']], ['사전', ['어학사전', '전문사전', '백과사전']], ['만화', ['만화일반', '장르만화', '교양만화']], ['유아', ['그림책', '유아학습', '놀이학습', '연령별']], ['어린이', ['어린이문학', '어린이학습/교양', '참고서/문제집', '어린이만화']], ['청소년', ['문학', '교양/학습', '학습참고서', '청소년이해']], ['부모', ['부모교육', '임신/출산', '영유아', '초등자녀', '청소년자녀', '건강/환경', '육아/교육', '학습/학교', '진로/적성']]];
 
-  function hiveHtml() {
-    let i = 0;
-    return HIVE_ROWS.map(count => {
-      const row = HIVE.slice(i, i + count);
-      i += count;
-      return `<div class="hrow">${row.map(h => {
-        const b = book(h.id);
-        return `<button type="button" class="hex${hiveOn === h.id ? ' on' : ''}" style="--fill:${h.fill}" data-hex="${h.id}" aria-pressed="${hiveOn === h.id}">
-          <img class="hx-e" src="${coverOf(b)}" alt=""><span class="hx-t">${esc(b.title)}</span><span class="hx-a">${esc(b.author)}</span>
-        </button>`;
-      }).join('')}</div>`;
-    }).join('');
+  const KDC = [
+    ['0', '총류', [['00', '총류·컴퓨터'], ['01', '도서학·서지학'], ['02', '문헌정보학'], ['03', '백과사전'], ['04', '강연집·수필집'], ['05', '연속간행물'], ['06', '학회·단체·기관'], ['07', '신문·저널리즘'], ['08', '전집·총서'], ['09', '향토자료']]],
+    ['1', '철학', [['10', '철학 일반'], ['11', '형이상학'], ['12', '인식론·인간학'], ['13', '철학의 체계'], ['14', '경학'], ['15', '동양철학'], ['16', '서양철학'], ['17', '논리학'], ['18', '심리학'], ['19', '윤리학']]],
+    ['2', '종교', [['20', '종교 일반'], ['21', '비교종교'], ['22', '불교'], ['23', '기독교'], ['24', '도교'], ['25', '천도교'], ['27', '힌두교'], ['28', '이슬람교'], ['29', '기타 종교']]],
+    ['3', '사회과학', [['30', '사회과학 일반'], ['31', '통계자료'], ['32', '경제학'], ['33', '사회학·사회문제'], ['34', '정치학'], ['35', '행정학'], ['36', '법학'], ['37', '교육학'], ['38', '풍속·민속학'], ['39', '국방·군사학']]],
+    ['4', '자연과학', [['40', '자연과학 일반'], ['41', '수학'], ['42', '물리학'], ['43', '화학'], ['44', '천문학'], ['45', '지학'], ['46', '광물학'], ['47', '생명과학'], ['48', '식물학'], ['49', '동물학']]],
+    ['5', '기술과학', [['50', '기술과학 일반'], ['51', '의학'], ['52', '농업·농학'], ['53', '공학·환경공학'], ['54', '건축공학'], ['55', '기계공학'], ['56', '전기·전자공학'], ['57', '화학공학'], ['58', '제조업'], ['59', '생활과학']]],
+    ['6', '예술', [['60', '예술 일반'], ['62', '조각·조형미술'], ['63', '공예'], ['64', '서예'], ['65', '회화·디자인'], ['66', '사진예술'], ['67', '음악'], ['68', '공연·매체예술'], ['69', '오락·스포츠']]],
+    ['7', '언어', [['70', '언어 일반'], ['71', '한국어'], ['72', '중국어'], ['73', '일본어'], ['74', '영어'], ['75', '독일어'], ['76', '프랑스어'], ['77', '스페인어'], ['78', '이탈리아어'], ['79', '기타 언어']]],
+    ['8', '문학', [['80', '문학 일반'], ['81', '한국문학'], ['82', '중국문학'], ['83', '일본문학'], ['84', '영미문학'], ['85', '독일문학'], ['86', '프랑스문학'], ['87', '스페인문학'], ['88', '이탈리아문학'], ['89', '기타 문학']]],
+    ['9', '역사', [['90', '역사 일반'], ['91', '아시아'], ['92', '유럽'], ['93', '아프리카'], ['94', '북아메리카'], ['95', '남아메리카'], ['96', '오세아니아'], ['98', '지리'], ['99', '전기']]],
+  ];
+
+  const BOOK_CAT = {
+    b1: ['소설', '한국소설'], b2: ['과학/기술', '천문학'], b3: ['컴퓨터', '프로그래밍언어'], b4: ['소설', '한국소설'],
+    b5: ['역사/문화', '역사일반'], b6: ['인문', '서양철학'], b7: ['소설', '독일소설'], b8: ['과학/기술', '생명과학'],
+    b9: ['사회과학', '사회문제'], b10: ['소설', '한국소설'], b11: ['소설', '프랑스소설'], b12: ['소설', '영미소설'],
+    b13: ['인문', '심리학/정신분석학'], b14: ['에세이/시/희곡', '에세이'], b15: ['과학/기술', '수학'], b16: ['예술/대중문화', '미술'],
+    b17: ['외국어', '영어'], b18: ['과학/기술', '생명과학'], b19: ['종교', '세계종교'],
+  };
+
+  const CLS_TABS = [['cat', '카테고리분류'], ['kdc', '한국십진분류']];
+
+  function inClass(id, mode, l1, l2) {
+    if (!l1) return true;
+    if (mode === 'kdc') {
+      const c = book(id).call;
+      return c[0] === l1 && (!l2 || c.slice(0, 2) === l2);
+    }
+    const bc = BOOK_CAT[id];
+    return !!bc && bc[0] === l1 && (!l2 || bc[1] === l2);
   }
 
-  function pickHtml() {
-    const h = HIVE.find(x => x.id === hiveOn);
-    if (!h) return '마음에 드는 벌집 칸을 골라 보세요';
-    const b = book(h.id);
-    return `
-      <div class="loan-top">
-        <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
-        <div class="book-main">
-          <span class="rtag">${esc(h.tag)}</span>
-          <p class="book-title">${esc(b.title)}</p>
-          <p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>
-        </div>
-        ${statusTag(b)}
-      </div>
-      <p style="margin-top:10px">${esc(h.why)}</p>
-      <div class="acts"><a href="#/book/${b.id}" class="btn-navy btn-sm">책 상세 보기</a><a href="#/route/${shelfOf(b.call)}/${b.id}" class="btn-line btn-sm">서가 위치</a></div>`;
+  function recHref(tab, mode, l1, l2) {
+    return '#/rec/' + [tab, mode, l1, l2].filter(x => x).map(encodeURIComponent).join('/');
   }
 
-  function renderHive() {
-    const hive = $('hive');
-    if (!hive) return;
-    hive.innerHTML = hiveHtml();
-    hive.classList.toggle('has-on', !!hiveOn);
-    $('pick').innerHTML = pickHtml();
-    $('pick').classList.toggle('idle', !hiveOn);
+  function classSide(tab, mode, l1, l2) {
+    const tree = mode === 'kdc'
+      ? KDC.map(([k, name, subs]) => [k, `${k}00 ${name}`, subs.map(([s, n]) => [s, `${s}0 ${n}`])])
+      : CATS.map(([name, subs]) => [name, name, subs.map(s => [s, s])]);
+    return `<nav class="cat-side" aria-label="${mode === 'kdc' ? '한국십진분류' : '카테고리분류'}"><ul class="cat-l1">
+      <li class="${l1 ? '' : 'on'}"><a href="${recHref(tab, mode)}">전체</a></li>
+      ${tree.map(([k, label, subs]) => `<li class="${k === l1 ? 'on' : ''}"><a href="${recHref(tab, mode, k)}">${esc(label)}</a>${subs.length ? `<ul class="cat-l2">${subs.map(([sk, sl]) =>
+        `<li><a href="${recHref(tab, mode, k, sk)}" class="${k === l1 && sk === l2 ? 'on' : ''}">${esc(sl)}</a></li>`).join('')}</ul>` : ''}</li>`).join('')}
+    </ul></nav>`;
   }
 
-  function pageRec() {
-    return sub('추천 도서', [[null, '추천 도서']], `
-      <p class="hint">벌집 칸을 누르면 커져요. 한 번 더 누르면 작아져요.</p>
-      <div class="hive" id="hive"></div>
-      <div class="card pick" id="pick"></div>`);
+  const REC_TABS = [['popular', '인기도서'], ['new', '신간 도서'], ['search', '최다검색']];
+
+  function bookRows(ids, isNew) {
+    if (!ids.length) return '';
+    return `<div class="card" style="padding-top:0;padding-bottom:0">${ids.map((id, i) => {
+      const b = book(id);
+      return `<div class="book-row">${isNew ? '' : `<span class="rank">${i + 1}</span>`}<img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy"><div class="book-main"><a class="book-title" href="${isNew ? '#' : '#/book/' + b.id}"${isNew ? ` data-school="${esc(b.title)}"` : ''}>${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}${!isNew && loanCounts[b.id] ? ` · 대출 ${loanCounts[b.id]}회` : ''}</p>${statusTag(b)}</div><a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a></div>`;
+    }).join('')}</div>`;
+  }
+
+  function rankGrid(ids) {
+    if (!ids.length) return '';
+    return `<h3 class="rk-head">인기도서 <b>TOP ${ids.length}</b></h3><ol class="rk-grid">${ids.map((id, i) => {
+      const b = book(id);
+      return `<li><a class="rk-card" href="#/book/${b.id}"><span class="rk-thumb"><span class="rk-flag${b.ok ? '' : ' no'}">${b.ok ? '대출가능' : '대출중'}</span><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지" loading="lazy"><span class="rk-more">자세히보기</span></span><span class="rk-rank">${i + 1}위</span><span class="rk-title">${esc(b.title)}</span><span class="rk-writer">${esc(b.author)} 지음${loanCounts[b.id] ? ` · 대출 ${loanCounts[b.id]}회` : ''}</span></a></li>`;
+    }).join('')}</ol>`;
+  }
+
+  function searchRows() {
+    if (!topSearchRows.length) return '';
+    return `<div class="card" style="padding-top:0;padding-bottom:0"><ol class="kw-rank">${topSearchRows.map((r, i) =>
+      `<li><span class="rank">${i + 1}</span><button type="button" data-kw="${esc(r.keyword)}">${esc(r.keyword)}</button><span class="cnt">${Number(r.searches)}회</span></li>`).join('')}</ol></div>`;
+  }
+
+  function pageRec(tab, mode, l1, l2) {
+    const cur = REC_TABS.some(t => t[0] === tab) ? tab : 'popular';
+    const m = mode === 'kdc' ? 'kdc' : 'cat';
+    const ok = id => inClass(id, m, l1, l2);
+    const tabs = REC_TABS.map(([id, name]) => `<a href="${recHref(id, m, l1, l2)}" class="${id === cur ? 'on' : ''}">${name}</a>`).join('');
+    const clsTabs = CLS_TABS.map(([id, name]) => `<a href="${recHref(cur, id)}" class="${id === m ? 'on' : ''}">${name}</a>`).join('');
+    const body = cur === 'search' ? searchRows() : cur === 'new' ? bookRows(NEW_BOOKS.filter(ok), true) : rankGrid(popularIds.filter(ok));
+    return sub('추천 도서', [['#/rec', '컬렉션'], [null, '추천 도서']], `
+      <div class="cls-tabs">${clsTabs}</div>
+      <div class="rec-layout">${classSide(cur, m, l1, l2)}<div><div class="ntabs">${tabs}</div>${body}</div></div>`);
   }
 
   function pageBook(id) {
@@ -1067,20 +1310,11 @@
       `<a href="#/route/${id}" class="${sel === id ? 'on' : ''}">${id === 'new' ? '' : shelfLabel(id) + ' '}${SHELVES[id].name}</a>`).join('')}</div>`;
   }
 
-  function directions(id) {
-    const s = SHELVES[id];
-    if (s.side === 'top') return '입구에서 가운데 통로로 쭉 올라가 맨 안쪽 벽에 있어요.';
-    if (s.side === 'left') return '입구로 들어와 가운데 통로를 걷다가 왼쪽 벽 쪽으로 가세요.';
-    if (s.side === 'right') return '입구로 들어와 가운데 통로를 걷다가 오른쪽 벽 쪽으로 가세요.';
-    return '입구로 들어오면 오른쪽 앞에 바로 보여요.';
-  }
-
   function pageMap() {
     return sub('책 위치', [[null, '책 위치']], `
       <div class="map-layout">
         <div class="card map-card">${mapSvg(null)}</div>
         <div>
-          <p class="dir">노란 점이 입구예요. 서가를 누르면 입구부터 가는 길을 그려 줄게요.</p>
           ${chipsHtml(null)}
           <table class="tbl" style="margin-top:16px">
             <tr><th>왼쪽 벽</th><td>000 총류 · 100 철학 · 200 종교</td></tr>
@@ -1102,14 +1336,13 @@
       <div class="map-layout">
         <div class="card map-card">${mapSvg(id)}</div>
         <div>
-          <p class="dir"><b>${id === 'new' ? '' : (id === '8xx' ? '820~890' : id) + ' '}${s.name}</b>${target ? ` — 『${esc(target.title)}』 (${esc(target.call)})` : ''}<br>${directions(id)}</p>
           <div class="card" style="padding-top:0;padding-bottom:0">
             ${list.map(b => `
               <div class="book-row${b.id === bookId ? ' hit-row' : ''}">
                 <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
                 <div class="book-main"><a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p></div>
                 ${statusTag(b)}
-              </div>`).join('') || '<p class="empty">이 서가의 예시 도서가 아직 없어요</p>'}
+              </div>`).join('')}
           </div>
           ${chipsHtml(id)}
           <div class="acts"><a href="#/map" class="btn-gray">전체 지도로</a></div>
@@ -1141,9 +1374,8 @@
       ['자료 검색', [['통합검색(독서로)', 'school']]],
       ['책 위치', [['서가 배치도', '#/map'], ['길 안내', '#/route/810']]],
     ] },
-    { key: 'collection', name: '컬렉션', href: '#/list/popular', cols: [
-      ['New & Best', [['신간 도서', '#/list/new'], ['인기도서', '#/list/popular']]],
-      ['추천 도서', [['벌집 추천', '#/rec']]],
+    { key: 'collection', name: '컬렉션', href: '#/rec', cols: [
+      ['추천 도서', [['인기도서', '#/rec/popular'], ['신간 도서', '#/rec/new'], ['최다검색', '#/rec/search']]],
       ['테마도서', [['테마도서', 'soon'], ['수행평가 도서', 'soon']]],
     ] },
     { key: 'service', name: '이용 서비스', href: '#/soon/service/희망도서 신청', cols: [
@@ -1152,8 +1384,8 @@
       ['규정', [['도서관 이용 규정', 'soon'], ['이용 안내', '#/hours']]],
     ] },
     { key: 'news', name: '행사·소식', href: '#/notice', cols: [
-      ['일정', [['행사·교육 일정 달력', 'soon']]],
-      ['공지사항', [['일반 공지', '#/notice/notice'], ['행사', '#/notice/event'], ['휴관', '#/notice/close']]],
+      ['일정', [['행사·교육 일정 달력', '#/calendar']]],
+      ['공지사항', [['일반 공지', '#/notice/notice'], ['행사·교육', '#/notice/event'], ['휴관', '#/notice/close']]],
       ['소식', [['도서관 소식', '#/news']]],
     ] },
     { key: 'guide', name: '이용 안내', href: '#/hours', cols: [
@@ -1182,14 +1414,108 @@
     return sub(esc(name), [[m ? m.href : null, m ? m.name : ''], [null, esc(name)]], '<p class="card empty">준비 중이에요</p>');
   }
 
-  function pageList(kind) {
-    const isNew = kind === 'new';
-    const ids = isNew ? NEW_BOOKS : POPULAR_BOOKS;
-    const title = isNew ? '신간 도서' : '인기도서';
-    return sub(title, [['#/list/popular', '컬렉션'], [null, title]], `<div class="card" style="padding-top:0;padding-bottom:0">${ids.map(id => {
-      const b = book(id);
-      return `<div class="book-row"><img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy"><div class="book-main"><a class="book-title" href="${isNew ? '#' : '#/book/' + b.id}"${isNew ? ` data-school="${esc(b.title)}"` : ''}>${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>${statusTag(b)}</div><a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a></div>`;
-    }).join('')}</div>`);
+  const CAL_CAT = { event: '행사', edu: '교육', notice: '공지', closed: '휴관' };
+  const calKind = t => t === 'close' ? 'closed' : t === 'new' ? 'notice' : t;
+  let calY = today.getFullYear(), calM = today.getMonth(), calCat = 'all', calView = 'grid';
+
+  function calItems(k) {
+    const evs = eventsOn(k).map(e => ({ c: calKind(e.t), n: e.n, time: e.time || '', ref: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `${e.n} (${rangeText(e)})` }));
+    const ns = EXTRA_NOTICES.filter(x => x.d === k).map(x => ({ c: 'notice', n: x.n, time: '', ref: x.n }));
+    return evs.concat(ns).filter(x => calCat === 'all' || x.c === calCat);
+  }
+
+  function calHref(x) {
+    const i = NOTICES.findIndex(y => y.n === x.ref);
+    return i < 0 ? null : `#/notice/${i}`;
+  }
+
+  const calIco = c => `<span class="sg-cal__ico sg-cal__ico--${c}" role="img" aria-label="${CAL_CAT[c]}"></span>`;
+
+  function calChip(x) {
+    const h = calHref(x);
+    const inner = `${calIco(x.c)}<span class="sg-cal__title">${esc(x.n)}</span><span class="sg-cal__time">${esc(x.time || CAL_CAT[x.c])}</span>`;
+    return h ? `<a class="sg-cal__event" href="${h}" title="${esc(x.n)}">${inner}</a>` : `<span class="sg-cal__event" title="${esc(x.n)}">${inner}</span>`;
+  }
+
+  function calRow(x) {
+    const h = calHref(x);
+    const inner = `<span class="sg-cal__time">${esc(x.time || '종일')}</span><span><span class="sg-cal__cat">${calIco(x.c)}${CAL_CAT[x.c]}</span><span class="sg-cal__item-title">${esc(x.n)}</span></span>`;
+    return h ? `<a class="sg-cal__item" href="${h}">${inner}</a>` : `<span class="sg-cal__item">${inner}</span>`;
+  }
+
+  function renderCalendar() {
+    const root = $('cal');
+    if (!root) return;
+    const tk = key(today);
+    root.querySelector('.sg-cal__month').textContent = `${calY}. ${pad(calM + 1)}`;
+    const first = new Date(calY, calM, 1);
+    const start = addDays(first, -first.getDay());
+    let rows = '';
+    for (let w = 0; w < 6; w++) {
+      let tr = '<tr>';
+      for (let i = 0; i < 7; i++) {
+        const d = addDays(start, w * 7 + i), k = key(d), cls = [];
+        if (d.getMonth() !== calM) cls.push('is-other');
+        if (k === tk) cls.push('is-today');
+        if (eventsOn(k).some(e => e.t === 'close')) cls.push('is-closed');
+        tr += `<td class="${cls.join(' ')}"><span class="sg-cal__num"${k === tk ? ` aria-label="오늘 ${d.getDate()}일"` : ''}>${d.getDate()}</span>${calItems(k).map(calChip).join('')}</td>`;
+      }
+      rows += tr + '</tr>';
+      if (w >= 3 && addDays(start, (w + 1) * 7).getMonth() !== calM) break;
+    }
+    root.querySelector('tbody').innerHTML = rows;
+    const last = new Date(calY, calM + 1, 0).getDate();
+    let list = '';
+    for (let n = 1; n <= last; n++) {
+      const d = new Date(calY, calM, n), k = key(d), items = calItems(k);
+      if (!items.length) continue;
+      list += `<li class="sg-cal__row${k === tk ? ' is-today' : ''}"><div class="sg-cal__date"><b>${pad(n)}</b><span>${WEEK[d.getDay()]}</span></div><div class="sg-cal__items">${items.map(calRow).join('')}</div></li>`;
+    }
+    root.querySelector('.sg-cal__list').innerHTML = list;
+    root.querySelector('.sg-cal__table').hidden = calView !== 'grid';
+    root.querySelector('.sg-cal__list').hidden = calView !== 'list';
+    root.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === calCat));
+    root.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === calView));
+  }
+
+  function initCalendar() {
+    const root = $('cal');
+    if (!root) return;
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.step) {
+        calM += Number(b.dataset.step);
+        if (calM < 0) { calM = 11; calY--; }
+        if (calM > 11) { calM = 0; calY++; }
+      }
+      if (b.dataset.cat) calCat = b.dataset.cat;
+      if (b.dataset.view) calView = b.dataset.view;
+      renderCalendar();
+    });
+    renderCalendar();
+  }
+
+  function pageCalendar() {
+    const filters = [['all', '전체'], ...Object.entries(CAL_CAT)].map(([c, name]) =>
+      `<button class="sg-cal__filter" type="button" data-cat="${c}" aria-pressed="false">${c === 'all' ? '' : `<span class="sg-cal__ico sg-cal__ico--${c}" aria-hidden="true"></span>`}${name}</button>`).join('');
+    return sub('행사·교육 일정', [['#/notice', '행사·소식'], [null, '행사·교육 일정 달력']], `
+      <section class="sg-cal" id="cal" aria-label="행사·교육 일정">
+        <div class="sg-cal__head">
+          <button class="sg-cal__arrow" type="button" data-step="-1" aria-label="이전 달"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <h2 class="sg-cal__month" aria-live="polite"></h2>
+          <button class="sg-cal__arrow" type="button" data-step="1" aria-label="다음 달"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <div class="sg-cal__bar">
+          <div class="sg-cal__filters" role="group" aria-label="분류">${filters}</div>
+          <div class="sg-cal__views" role="group" aria-label="보기">
+            <button class="sg-cal__view" type="button" data-view="grid" aria-pressed="true" aria-label="달력 보기"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button>
+            <button class="sg-cal__view" type="button" data-view="list" aria-pressed="false" aria-label="리스트 보기"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+          </div>
+        </div>
+        <table class="sg-cal__table"><thead><tr>${WEEK.map(w => `<th>${w}</th>`).join('')}</tr></thead><tbody></tbody></table>
+        <ul class="sg-cal__list" hidden></ul>
+      </section>`);
   }
 
   const PAGES = {
@@ -1198,13 +1524,14 @@
     extend: { html: pageExtend, title: '연장 신청', nav: 'my' },
     done: { html: pageDone, title: '연장 완료', nav: 'my' },
     hours: { html: pageHours, title: '도서관 이용시간', nav: 'guide' },
-    rec: { html: pageRec, title: '추천 도서', nav: 'collection', after: renderHive },
+    rec: { html: pageRec, title: '추천 도서', nav: 'collection' },
     book: { html: pageBook, title: '책 상세', nav: 'collection' },
-    list: { html: pageList, title: '컬렉션', nav: 'collection' },
+    list: { html: k => pageRec(k === 'new' ? 'new' : 'popular'), title: '추천 도서', nav: 'collection' },
     map: { html: pageMap, title: '책 위치', nav: 'find' },
     route: { html: pageRoute, title: '길 안내', nav: 'find' },
     notice: { html: pageNotice, title: '공지사항', nav: 'news' },
     news: { html: pageNews, title: '도서관 소식', nav: 'news' },
+    calendar: { html: pageCalendar, title: '행사·교육 일정', nav: 'news', after: initCalendar },
     soon: { html: pageSoon, title: '준비 중', nav: g => g },
   };
 
@@ -1219,6 +1546,26 @@
     location.hash = '#/' + path;
   }
 
+  let postsTimer = null;
+
+  function initPosts() {
+    clearInterval(postsTimer);
+    const wrap = $('posts-wrap');
+    if (!wrap) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const list = wrap.querySelector('[data-track]');
+    postsTimer = setInterval(() => {
+      if (!document.body.contains(list)) return clearInterval(postsTimer);
+      const li = list.querySelector('li');
+      if (!li) return;
+      const step = li.offsetWidth + parseFloat(getComputedStyle(list).columnGap || 0);
+      if (list.scrollLeft + list.clientWidth >= list.scrollWidth - 2) list.scrollTo({ left: 0, behavior: 'smooth' });
+      else list.scrollBy({ left: step, behavior: 'smooth' });
+    }, 3000);
+    wrap.addEventListener('pointerdown', () => clearInterval(postsTimer), { once: true });
+    wrap.addEventListener('keydown', () => clearInterval(postsTimer), { once: true });
+  }
+
   function router() {
     const { name, args } = parse();
     const page = PAGES[name] || PAGES[''];
@@ -1226,6 +1573,7 @@
     if (page.after) page.after(...args);
     watchReveal();
     initShelves();
+    initPosts();
     $('band').hidden = !page.band;
     if (name === '') $('q').value = '';
     const navKey = typeof page.nav === 'function' ? page.nav(...args) : page.nav;
@@ -1265,19 +1613,22 @@
       $('q').focus();
       return;
     }
+    rpc('library_log_search', { p_keyword: text }, true);
     openExternal(schoolUrl(text, $('scope').value));
   });
 
   document.addEventListener('click', e => {
+    const kw = e.target.closest('[data-kw]');
+    if (kw) {
+      $('q').value = kw.dataset.kw;
+      $('scope').value = '';
+      $('search-form').requestSubmit();
+      return;
+    }
     const school = e.target.closest('[data-school]');
     if (school) {
       e.preventDefault();
       return openSchool(school);
-    }
-    const hex = e.target.closest('[data-hex]');
-    if (hex) {
-      hiveOn = hiveOn === hex.dataset.hex ? null : hex.dataset.hex;
-      return renderHive();
     }
     const ret = e.target.closest('[data-return]');
     if (ret) {
@@ -1316,7 +1667,7 @@
   document.addEventListener('click', e => {
     const nav = e.target.closest('[data-shelf-nav]');
     if (!nav) return;
-    const list = nav.parentElement.querySelector('.shelf-list');
+    const list = nav.parentElement.querySelector('[data-track]');
     list.scrollBy({ left: Number(nav.dataset.shelfNav) * list.clientWidth, behavior: 'smooth' });
   });
 
@@ -1375,6 +1726,7 @@
 
   window.addEventListener('hashchange', router);
   router();
+  refreshStats();
 </script>
 </body>
 </html>
