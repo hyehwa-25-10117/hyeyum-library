@@ -138,23 +138,34 @@
     .tag.notice { background: var(--muted); }
     .tag.new { background: var(--primary); }
     .more { display: flex; justify-content: flex-end; margin-top: 20px; }
-    .shelf { padding: 40px 0 10px; }
+    .bookshelf { padding: 40px 0 10px; }
+    .bookshelf + .bookshelf { padding-top: 70px; }
     .shelf-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
     .shelf-head .sec-title { border: 0; padding: 0; margin: 0; }
-    .shelf-list { position: relative; display: flex; justify-content: space-around; gap: 20px; list-style: none; padding: 90px 0 0; }
-    .shelf-list::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; border-radius: var(--radius-btn); background: var(--surface-muted); }
-    .shelf-item { position: relative; z-index: 1; width: 150px; transform: translateY(20px); transition: transform 500ms var(--ease); transition-delay: calc(var(--i, 0) * 100ms); }
-    .shelf.is-in .shelf-item { transform: translateY(0); }
-    .shelf-book { position: relative; display: block; padding-bottom: 12px; transition: transform 500ms var(--ease); }
-    .shelf-book::before { content: ""; position: absolute; z-index: 0; left: -16px; right: -16px; bottom: -64px; height: 0; border-radius: var(--radius-md); background: var(--surface); transition: height var(--base) var(--ease); }
-    .shelf-cover { position: relative; z-index: 1; display: block; aspect-ratio: 5 / 7; border-radius: 2px; background: var(--surface-muted); outline: 1px solid transparent; transition: outline-color var(--base) var(--ease); }
-    .shelf-cover img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 2px; }
-    .shelf-title { position: absolute; z-index: 1; left: 0; right: 0; top: calc(100% + 2px); font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--text); text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0; transition: opacity var(--base) var(--ease); }
+    .shelf-wrap { position: relative; }
+    .shelf-list { display: flex; gap: 24px; list-style: none; padding: 40px 0 6px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+    .shelf-list::-webkit-scrollbar { display: none; }
+    .shelf-nav { position: absolute; top: calc(40px + 105px); z-index: 3; display: grid; place-items: center; width: 44px; height: 44px; margin-top: -22px; padding: 0; border: 1px solid var(--border-input); border-radius: 50%; background: var(--surface); color: var(--text); transition: background-color var(--base) var(--ease), color var(--base) var(--ease), opacity var(--base) var(--ease); }
+    @media (hover: hover) { .shelf-nav:hover { background: var(--primary); border-color: var(--primary); color: #fff; } }
+    .shelf-nav:disabled { opacity: 0; pointer-events: none; }
+    .shelf-nav svg { width: 20px; height: 20px; }
+    .shelf-nav.prev { left: -10px; }
+    .shelf-nav.next { right: -10px; }
+    .shelf-item { position: relative; z-index: 1; flex: 0 0 calc((100% - 4 * 24px) / 5); display: flex; justify-content: center; scroll-snap-align: start; transform: translateY(20px); transition: transform 500ms var(--ease); transition-delay: calc(var(--i, 0) * 100ms); }
+    .bookshelf.is-in .shelf-item { transform: translateY(0); }
+    .shelf-book { position: relative; display: block; width: 150px; perspective: 600px; }
+    .shelf-cover { position: relative; display: block; aspect-ratio: 5 / 7; transform-style: preserve-3d; transition: transform .5s; }
+    .shelf-cover img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2); }
+    .shelf-cover::before { content: ""; position: absolute; z-index: 1; left: 0; top: 0; bottom: 0; width: 9%; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15); pointer-events: none; }
+    .shelf-pages { position: absolute; top: 1%; bottom: 1%; right: 0; width: 20px; transform-origin: right center; transform: rotateY(-90deg); background: repeating-linear-gradient(90deg, #f4f1ea 0 2px, #ddd8cc 2px 3px); border-right: 1px solid #aaa; }
+    .shelf-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 16px; font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--text); text-align: center; transition: color var(--base) var(--ease); }
     @media (hover: hover) and (min-width: 641px) {
-      .shelf-book:hover, .shelf-book:focus-visible { transform: translateY(-48px); }
-      .shelf-book:hover::before, .shelf-book:focus-visible::before { height: calc(100% + 80px); border: 1px solid var(--border); }
-      .shelf-book:hover .shelf-cover, .shelf-book:focus-visible .shelf-cover { outline-color: var(--border); }
-      .shelf-book:hover .shelf-title, .shelf-book:focus-visible .shelf-title { opacity: 1; }
+      .shelf-book:hover .shelf-cover, .shelf-book:focus-visible .shelf-cover { transform: rotateY(-45deg) translateX(-10%); }
+      .shelf-book:hover .shelf-title, .shelf-book:focus-visible .shelf-title { color: var(--primary); }
+    }
+    @keyframes bookSpin { 50% { transform: rotateY(-45deg) translateX(-10%); } }
+    @media (hover: none), (max-width: 640px) {
+      .bookshelf.is-in .shelf-cover { animation: bookSpin 2s ease-in-out; animation-delay: calc(0.6s + var(--i, 0) * 150ms); }
     }
     .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 20px; }
     .link-grid a { display: block; padding: 15px 20px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); font-weight: 700; }
@@ -316,9 +327,13 @@
       .sec-title, .side-title, .search-band h2 { font-size: 26px; }
       .search-form button { width: 54px; }
       .scope button { padding: 10px 20px; font-size: 15px; }
-      .shelf-list { overflow-x: auto; justify-content: flex-start; padding-top: 20px; }
-      .shelf-item { flex: none; width: 120px; }
-      .shelf-title { position: static; opacity: 1; margin-top: 10px; }
+      .shelf-list { gap: 16px; padding-top: 20px; }
+      .shelf-item { flex: 0 0 120px; }
+      .shelf-book { width: 120px; }
+      .shelf-nav { top: calc(20px + 84px); width: 38px; height: 38px; margin-top: -19px; }
+      .shelf-nav.prev { left: -8px; }
+      .shelf-nav.next { right: -8px; }
+      .shelf-title { margin-top: 10px; font-size: 14px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .shelf-item { transform: none; }
@@ -638,6 +653,38 @@
       <a href="#/hours" class="hours-all">도서관 이용시간 전체 보기</a>`;
   }
 
+  const POPULAR_BOOKS = ['b5', 'b10', 'b15', 'b4', 'b6', 'b7', 'b1', 'b2', 'b3', 'b8'];
+  const NEW_BOOKS = ['b9', 'b14', 'b16', 'b18', 'b19', 'b17', 'b11', 'b12', 'b13'];
+  const ARROW = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+
+  function shelfHtml(title, ids) {
+    return `<section class="bookshelf" data-reveal>
+        <div class="shelf-head"><h2 class="sec-title">${title}</h2></div>
+        <div class="shelf-wrap">
+          <button type="button" class="shelf-nav prev" data-shelf-nav="-1" aria-label="${title} 이전">${ARROW('M15 5l-7 7 7 7')}</button>
+          <ul class="shelf-list">${ids.map((id, i) => {
+            const b = book(id);
+            return `<li class="shelf-item" style="--i:${Math.min(i, 5)}"><a class="shelf-book" href="#/book/${b.id}"><span class="shelf-cover"><span class="shelf-pages"></span><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
+          }).join('')}</ul>
+          <button type="button" class="shelf-nav next" data-shelf-nav="1" aria-label="${title} 다음">${ARROW('M9 5l7 7-7 7')}</button>
+        </div>
+      </section>`;
+  }
+
+  function updateShelfNav(list) {
+    const wrap = list.parentElement;
+    const max = list.scrollWidth - list.clientWidth - 2;
+    wrap.querySelector('.prev').disabled = list.scrollLeft <= 2;
+    wrap.querySelector('.next').disabled = list.scrollLeft >= max;
+  }
+
+  function initShelves() {
+    document.querySelectorAll('.shelf-list').forEach(list => {
+      updateShelfNav(list);
+      list.addEventListener('scroll', () => updateShelfNav(list), { passive: true });
+    });
+  }
+
   function pageHome() {
     const infos = loanInfos();
     const over = infos.filter(x => x.left < 0).length;
@@ -666,15 +713,8 @@
           </div>
         </aside>
       </div>
-      <section class="shelf" data-reveal>
-        <div class="shelf-head">
-          <h2 class="sec-title">이달의 추천 도서</h2>
-        </div>
-        <ul class="shelf-list">${HIVE.slice(0, 5).map((h, i) => {
-          const b = book(h.id);
-          return `<li class="shelf-item" style="--i:${i}"><a class="shelf-book" href="#/book/${b.id}"><span class="shelf-cover"><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
-        }).join('')}</ul>
-      </section>`;
+      ${shelfHtml('인기도서', POPULAR_BOOKS)}
+      ${shelfHtml('신간 도서', NEW_BOOKS)}`;
   }
 
   function pageLoans() {
@@ -1033,6 +1073,7 @@
     $('view').innerHTML = page.html(...args);
     if (page.after) page.after(...args);
     watchReveal();
+    initShelves();
     $('band').hidden = !page.band;
     if (name === '') $('q').value = '';
     document.querySelectorAll('#gnb a').forEach(a => a.classList.toggle('on', a.dataset.nav === page.nav));
@@ -1105,6 +1146,13 @@
     }
     const shelf = e.target.closest('[data-shelf]');
     if (shelf) return go('route/' + shelf.dataset.shelf);
+  });
+
+  document.addEventListener('click', e => {
+    const nav = e.target.closest('[data-shelf-nav]');
+    if (!nav) return;
+    const list = nav.parentElement.querySelector('.shelf-list');
+    list.scrollBy({ left: Number(nav.dataset.shelfNav) * list.clientWidth, behavior: 'smooth' });
   });
 
   document.addEventListener('click', e => {
