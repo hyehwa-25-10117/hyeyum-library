@@ -495,10 +495,6 @@
     .sg-cal__ico--edu { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23533566%22 d=%22M19.3 23.138h-6.64c-3.84 0-6.95-3.11-6.95-6.95v-4.36h20.53v4.36c.01 3.84-3.1 6.95-6.94 6.95%22/%3E%3Cpath fill=%22%23321b41%22 d=%22m17.13 5.278l12.28 6.29c.76.39.76 1.48 0 1.87l-12.28 6.29c-.72.37-1.56.37-2.28 0l-12.28-6.29c-.76-.39-.76-1.48 0-1.87l12.28-6.29a2.48 2.48 0 0 1 2.28 0%22/%3E%3Cpath fill=%22%23ffb02e%22 d=%22M15.15 12.048c.19-.41.68-.57 1.08-.37l6.71 3.44c.27.14.43.41.43.71v6.28a1.83 1.83 0 0 1 .97 2.1v.02c-.01.04-.02.09-.04.13c0 .01-.01.02-.01.03c-.01.04-.03.08-.05.12c0 .01-.01.02-.01.02c-.05.11-.12.22-.19.31c-.01.02-.02.03-.04.05l.47 2.2a1.94 1.94 0 0 1-1.9 2.35a1.94 1.94 0 0 1-1.9-2.35l.47-2.2c-.25-.31-.4-.7-.4-1.13c0-.25.05-.49.14-.7c0-.01.01-.02.02-.03c.01-.03.03-.07.05-.1c.02-.04.04-.08.07-.12c.01-.01.01-.02.02-.03c.18-.28.44-.51.74-.66v-5.8l-6.25-3.2c-.39-.2-.57-.68-.38-1.07%22/%3E%3C/g%3E%3C/svg%3E"); }
     .sg-cal__ico--notice { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23212121%22 d=%22M26.18 19.61a3.72 3.72 0 1 0 0-7.44a3.72 3.72 0 0 0 0 7.44%22/%3E%3Cpath fill=%22%23d3d3d3%22 d=%22m11 11l.68-1c1.25 0 2.49-.29 3.61-.83l6.26-3.08v19.62l-6.26-3.08a8.2 8.2 0 0 0-3.61-.84L11 20zM6.216 29.008H8.79c.67 0 1.21-.54 1.21-1.21V19.89H5.006v7.908c0 .67.54 1.21 1.21 1.21%22/%3E%3Cpath fill=%22%23f8312f%22 d=%22M24.07 3A3.07 3.07 0 0 0 21 6.07v19.65a3.07 3.07 0 0 0 6.14 0V6.07A3.077 3.077 0 0 0 24.07 3%22/%3E%3Cpath fill=%22%23ca0b4a%22 d=%22M3.727 10H12v11.78H3.727C2.77 21.78 2 21.03 2 20.11v-8.43c0-.93.77-1.68 1.727-1.68%22/%3E%3C/g%3E%3C/svg%3E"); }
     .sg-cal__ico--closed { background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22none%22%3E%3Cpath fill=%22%23d3d3d3%22 d=%22M16 2a6 6 0 0 0-6 6v3a6 6 0 0 0 12 0V8a6 6 0 0 0-6-6m0 2.5A3.5 3.5 0 0 1 19.5 8v3a3.5 3.5 0 1 1-7 0V8A3.5 3.5 0 0 1 16 4.5%22/%3E%3Cpath fill=%22%23f9c23c%22 d=%22M5 14a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z%22/%3E%3Cpath fill=%22%23433b6b%22 d=%22M17.5 20.5a2.5 2.5 0 1 0-3 0V24a1.5 1.5 0 0 0 3 0z%22/%3E%3C/g%3E%3C/svg%3E"); }
-    .sg-cal__views { display: flex; gap: var(--space-5); }
-    .sg-cal__view { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-btn); background: var(--surface); color: var(--text-muted); cursor: pointer; }
-    .sg-cal__view[aria-pressed="true"] { border-color: var(--primary); color: var(--primary); }
-    .sg-cal__view svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
     .sg-cal__table { width: 100%; table-layout: fixed; border-collapse: collapse; border-top: 2px solid var(--primary); }
     .sg-cal__table th { padding: var(--space-10) 0; border-bottom: 1px solid var(--border); font: 700 13px/1.5 var(--font-sans); color: var(--text); }
     .sg-cal__table th:first-child, .sg-cal__table td:first-child .sg-cal__num { color: var(--sunday); }
@@ -515,25 +511,13 @@
     .sg-cal a.sg-cal__event:hover { background: var(--hover-bg); }
     .sg-cal__title { display: block; min-width: 0; font: 700 13px/1.4 var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sg-cal__time { display: block; font: 400 12px/1.4 var(--font-sans); color: var(--text-muted); font-variant-numeric: tabular-nums; }
-    .sg-cal__list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--primary); }
-    .sg-cal__row { display: grid; grid-template-columns: 72px 1fr; gap: var(--space-15); padding: var(--space-15) 0; border-bottom: 1px dashed var(--border); }
-    .sg-cal__date { display: grid; justify-items: center; align-content: start; gap: var(--space-5); }
-    .sg-cal__date b { font: 900 24px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
-    .sg-cal__date span { font: 700 13px/1 var(--font-sans); color: var(--text-muted); }
-    .sg-cal__row.is-today .sg-cal__date b { color: var(--primary); }
-    .sg-cal__items { display: grid; gap: var(--space-10); }
-    .sg-cal__item { display: grid; grid-template-columns: 110px 1fr; gap: var(--space-10); align-items: baseline; text-decoration: none; }
-    .sg-cal a.sg-cal__item { color: var(--text); }
-    .sg-cal a.sg-cal__item:hover .sg-cal__item-title { color: var(--primary); }
-    .sg-cal__item .sg-cal__time { font-size: 14px; }
-    .sg-cal__item-title { font: 400 16px/1.5 var(--font-sans); }
-    .sg-cal__cat { display: inline-flex; align-items: center; gap: var(--space-5); margin-right: var(--space-6); font: 700 12px/1.2 var(--font-sans); color: var(--text-muted); }
-    .sg-cal__empty { padding: var(--space-30) 0; text-align: center; color: var(--text-muted); }
     .sg-cal [hidden] { display: none !important; }
     @media (max-width: 640px) {
-      .sg-cal__table, .sg-cal__views { display: none !important; }
-      .sg-cal .sg-cal__list, .sg-cal .sg-cal__list[hidden] { display: block !important; }
-      .sg-cal__item { grid-template-columns: 1fr; gap: 0; }
+      .sg-cal__table td { height: 64px; padding: 4px; }
+      .sg-cal__num { min-width: 22px; height: 22px; font-size: 12px; margin-bottom: 2px; }
+      .sg-cal__event { display: inline-flex; margin: 2px 2px 0 0; padding: 3px; }
+      .sg-cal__event .sg-cal__ico { margin: 0; }
+      .sg-cal__event .sg-cal__title, .sg-cal__event .sg-cal__time { display: none; }
     }
     .tag.edu { background: var(--primary); }
   </style>
@@ -1416,7 +1400,7 @@
 
   const CAL_CAT = { event: '행사', edu: '교육', notice: '공지', closed: '휴관' };
   const calKind = t => t === 'close' ? 'closed' : t === 'new' ? 'notice' : t;
-  let calY = today.getFullYear(), calM = today.getMonth(), calCat = 'all', calView = 'grid';
+  let calY = today.getFullYear(), calM = today.getMonth(), calCat = 'all';
 
   function calItems(k) {
     const evs = eventsOn(k).map(e => ({ c: calKind(e.t), n: e.n, time: e.time || '', ref: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `${e.n} (${rangeText(e)})` }));
@@ -1435,12 +1419,6 @@
     const h = calHref(x);
     const inner = `${calIco(x.c)}<span class="sg-cal__title">${esc(x.n)}</span><span class="sg-cal__time">${esc(x.time || CAL_CAT[x.c])}</span>`;
     return h ? `<a class="sg-cal__event" href="${h}" title="${esc(x.n)}">${inner}</a>` : `<span class="sg-cal__event" title="${esc(x.n)}">${inner}</span>`;
-  }
-
-  function calRow(x) {
-    const h = calHref(x);
-    const inner = `<span class="sg-cal__time">${esc(x.time || '종일')}</span><span><span class="sg-cal__cat">${calIco(x.c)}${CAL_CAT[x.c]}</span><span class="sg-cal__item-title">${esc(x.n)}</span></span>`;
-    return h ? `<a class="sg-cal__item" href="${h}">${inner}</a>` : `<span class="sg-cal__item">${inner}</span>`;
   }
 
   function renderCalendar() {
@@ -1464,18 +1442,7 @@
       if (w >= 3 && addDays(start, (w + 1) * 7).getMonth() !== calM) break;
     }
     root.querySelector('tbody').innerHTML = rows;
-    const last = new Date(calY, calM + 1, 0).getDate();
-    let list = '';
-    for (let n = 1; n <= last; n++) {
-      const d = new Date(calY, calM, n), k = key(d), items = calItems(k);
-      if (!items.length) continue;
-      list += `<li class="sg-cal__row${k === tk ? ' is-today' : ''}"><div class="sg-cal__date"><b>${pad(n)}</b><span>${WEEK[d.getDay()]}</span></div><div class="sg-cal__items">${items.map(calRow).join('')}</div></li>`;
-    }
-    root.querySelector('.sg-cal__list').innerHTML = list;
-    root.querySelector('.sg-cal__table').hidden = calView !== 'grid';
-    root.querySelector('.sg-cal__list').hidden = calView !== 'list';
     root.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === calCat));
-    root.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === calView));
   }
 
   function initCalendar() {
@@ -1490,7 +1457,6 @@
         if (calM > 11) { calM = 0; calY++; }
       }
       if (b.dataset.cat) calCat = b.dataset.cat;
-      if (b.dataset.view) calView = b.dataset.view;
       renderCalendar();
     });
     renderCalendar();
@@ -1508,13 +1474,8 @@
         </div>
         <div class="sg-cal__bar">
           <div class="sg-cal__filters" role="group" aria-label="분류">${filters}</div>
-          <div class="sg-cal__views" role="group" aria-label="보기">
-            <button class="sg-cal__view" type="button" data-view="grid" aria-pressed="true" aria-label="달력 보기"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button>
-            <button class="sg-cal__view" type="button" data-view="list" aria-pressed="false" aria-label="리스트 보기"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
-          </div>
         </div>
         <table class="sg-cal__table"><thead><tr>${WEEK.map(w => `<th>${w}</th>`).join('')}</tr></thead><tbody></tbody></table>
-        <ul class="sg-cal__list" hidden></ul>
       </section>`);
   }
 
