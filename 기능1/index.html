@@ -52,10 +52,11 @@
     .search-form input:focus { outline: 2px solid var(--primary-deep); outline-offset: 2px; }
     .search-form button { padding: 12px 28px; font-size: 18px; font-weight: 700; color: #fff; background: var(--primary); border: 0; border-radius: var(--radius-pill); transition: background-color var(--base) var(--ease); }
     .search-form button:hover { background: var(--primary-deep); }
+    .band-note { margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--muted); }
+    .band-note.is-done { color: var(--primary); }
     .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; font-size: 14px; font-weight: 600; }
     .band-row a { text-decoration: underline; text-underline-offset: 2px; }
     .band-row a:hover { color: var(--primary); }
-    .band-school { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 20px; }
 
     main.wrap { padding-top: 6px; padding-bottom: 70px; min-height: 60vh; }
     .crumb { margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--muted); }
@@ -67,6 +68,8 @@
     .hint { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
     .card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px; }
     .empty { padding: 26px; text-align: center; color: var(--muted); }
+    .empty-title { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .btn-navy.btn-school { padding: 14px 32px; font-size: 16px; font-weight: 700; }
     .acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 
     .btn-navy, .btn-line, .btn-red, .btn-gray {
@@ -118,8 +121,6 @@
     .day-md { font-size: 13px; font-weight: 700; line-height: 1; color: var(--primary); font-variant-numeric: tabular-nums; }
     .day-time { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .day-note { font-size: 14px; color: var(--muted); }
-    .day.closed .day-dow { background: var(--muted); }
-    .day.closed .day-md { color: var(--muted); }
     .hours-all { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
     .side-box { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px 24px; margin-top: 30px; }
     .side-box h3 { font-size: 18px; font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--text); margin-bottom: 10px; }
@@ -328,7 +329,7 @@
         <ul id="gnb">
           <li><a href="#/" data-nav="">홈</a></li>
           <li><a href="#/loans" data-nav="loans">대출현황</a></li>
-          <li><a href="#/hours" data-nav="hours">이용 시간</a></li>
+          <li><a href="#/hours" data-nav="hours">도서관 이용시간</a></li>
           <li><a href="#/rec" data-nav="rec">추천 도서</a></li>
           <li><a href="#/map" data-nav="map">책 위치</a></li>
           <li><a href="#/notice" data-nav="notice">공지사항</a></li>
@@ -338,7 +339,6 @@
         <ul class="util-links">
           <li><a href="#" data-school="">독서로</a></li>
         </ul>
-        <span class="status" id="status"></span>
       </div>
     </div>
   </header>
@@ -347,13 +347,10 @@
     <div class="wrap">
       <h2>자료 검색</h2>
       <form class="search-form" id="search-form" role="search">
-        <input type="search" id="q" placeholder="책 제목, 저자, 청구기호" autocomplete="off" aria-label="도서 검색">
+        <input type="search" id="q" placeholder="책 제목, 저자" autocomplete="off" aria-label="도서 검색">
         <button type="submit">검색</button>
       </form>
-      <div class="band-school">
-        <button type="button" class="btn-line btn-sm" data-school="">혜화여고 도서관에서 찾기</button>
-        <span class="school-msg" role="status" aria-live="polite"></span>
-      </div>
+      <p class="band-note" id="band-note" role="status" aria-live="polite">혜윰도서관이 실제로 가진 책을 독서로에서 찾아 새 탭으로 보여 줘요.</p>
       <div class="band-row">
         <a href="#/rec">추천 도서</a>
         <a href="#/map">책 위치 지도</a>
@@ -448,7 +445,7 @@
   ];
 
   const EXTRA_NOTICES = [
-    { d: '2026-11-02', t: 'notice', n: '혜화여고 도서관(독서로) 검색 연결 안내', body: '검색창 아래 "혜화여고 도서관에서 찾기" 버튼을 누르면 입력한 검색어가 복사되고, 학교 도서관(독서로) 검색 페이지가 새 탭으로 열려요.\n열린 창 검색칸에 Ctrl+V 하면 바로 검색할 수 있어요.' },
+    { d: '2026-11-02', t: 'notice', n: '독서로 소장 자료 검색 연결 안내', body: '홈 검색창에 책 제목을 쓰고 "검색"을 누르면 독서로에서 혜윰도서관이 실제로 가진 책을 검색한 결과가 새 탭으로 열려요.\n책 상세 페이지의 "독서로에서 찾기" 버튼을 눌러도 바로 검색돼요.' },
     { d: '2026-10-15', t: 'notice', n: '연체 도서 대출 정지 규정 안내', body: '반납 예정일이 지난 책이 있으면 늦은 날만큼 대출이 멈춰요.\n연체 중인 책이 한 권이라도 있으면 다른 책도 연장할 수 없어요. 먼저 연체 도서를 반납해 주세요.' },
     { d: '2026-10-01', t: 'new', n: '10월 신간 도서 입고 안내', body: '「수학이 필요한 순간」, 「팩트풀니스」 등 신간이 들어왔어요.\n입구 오른쪽 신간·추천 서가에서 만나 보세요.' },
   ];
@@ -475,8 +472,10 @@
   };
   const DOOR = [180, 306];
 
-  const SCHOOL_URL = 'https://read365.edunet.net/PureScreen/SchoolSearch?schoolName='
-    + encodeURIComponent('혜화여자고등학교') + '&provCode=B10&neisCode=B100000562';
+  const SCHOOL = { schoolName: '혜화여자고등학교', provCode: 'B10', neisCode: 'B100000562' };
+  const schoolUrl = text => text
+    ? 'https://read365.edunet.net/PureScreen/SchoolSearchResult?' + new URLSearchParams({ searchKeyword: text, ...SCHOOL, searchType: '' })
+    : 'https://read365.edunet.net/PureScreen/SchoolSearch?' + new URLSearchParams(SCHOOL);
 
   const DAY = 86400000;
   const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
@@ -597,12 +596,6 @@
     return `<span class="st ${b.ok ? 'ok' : 'no'}">${b.ok ? '대출 가능' : '대출 중'}</span>`;
   }
 
-  function searchBooks(q) {
-    const n = norm(q);
-    if (!n) return [];
-    return BOOKS.filter(b => norm(b.title + ' ' + b.author + ' ' + b.call).includes(n));
-  }
-
   function crumb(items) {
     return `<nav class="crumb" aria-label="현재 위치"><a href="#/">홈</a>${items.map(([href, label]) => ` › ${href ? `<a href="${href}">${label}</a>` : label}`).join('')}</nav>`;
   }
@@ -611,8 +604,8 @@
     return `${crumb(items)}<h1 class="page-title">${title}</h1>${body}`;
   }
 
-  function schoolBtn(text, cls) {
-    return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">혜화여고 도서관에서 찾기</button><span class="school-msg" role="status" aria-live="polite"></span>`;
+  function schoolBtn(text, cls, label) {
+    return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">${esc(label || '독서로에서 찾기')}</button><span class="school-msg" role="status" aria-live="polite"></span>`;
   }
 
   function noticeList(list) {
@@ -634,14 +627,14 @@
     const st = libStatus();
     const days = Array.from({ length: 5 }, (_, i) => addDays(today, i));
     return `
-      <h2 class="side-title">이용 시간</h2>
+      <h2 class="side-title">도서관 이용시간</h2>
       <ul class="days">${days.map((d, i) => {
         const info = dayInfo(d);
         const time = info.closed ? '휴관' : `${SLOTS[0].f} ~ ${SLOTS[SLOTS.length - 1].t}`;
         const note = i === 0 ? `오늘 · ${info.closed ? info.note : st.text}` : info.note;
         return `<li class="day${info.closed ? ' closed' : ''}"><div class="day-date"><span class="day-dow">${WEEK[d.getDay()]}</span><span class="day-md">${pad(d.getMonth() + 1)}-${pad(d.getDate())}</span></div><div><p class="day-time">${time}</p><p class="day-note">${esc(note)}</p></div></li>`;
       }).join('')}</ul>
-      <a href="#/hours" class="hours-all">이용 시간 전체 보기</a>`;
+      <a href="#/hours" class="hours-all">도서관 이용시간 전체 보기</a>`;
   }
 
   function pageHome() {
@@ -668,9 +661,9 @@
             <div class="link-grid">
               <a href="#/loans">나의 대출현황</a>
               <a href="#/map">책 위치 지도</a>
-              <a href="#/hours">이용 시간</a>
+              <a href="#/hours">도서관 이용시간</a>
               <a href="#/rec">추천 도서</a>
-              <a href="#" data-school="">독서로 (학교 도서관)</a>
+              <a href="#" data-school="">독서로 (소장 자료 검색)</a>
             </div>
           </section>
         </div>
@@ -684,30 +677,6 @@
           </div>
         </aside>
       </div>`;
-  }
-
-  function resultsHtml(q) {
-    if (!q.trim()) {
-      return `<p class="card empty">책 제목, 저자, 청구기호로 검색해 보세요.<br>예: ${['코스모스', '김초엽', '813.7'].map(w => `<a href="#/search/${encodeURIComponent(w)}" style="color:var(--link);text-decoration:underline">${w}</a>`).join(' · ')}</p>`;
-    }
-    const list = searchBooks(q);
-    return `
-      <p class="hint">“${esc(q.trim())}” 검색 결과 <b>${list.length}</b>권</p>
-      ${list.length ? `<div class="card" style="padding-top:0;padding-bottom:0">${list.map(b => `
-        <div class="book-row">
-          <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
-          <div class="book-main">
-            <a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a>
-            <p class="book-meta">${esc(b.author)} · ${esc(b.call)} · ${SHELVES[shelfOf(b.call)].name} 서가</p>
-            ${statusTag(b)}
-          </div>
-          <a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a>
-        </div>`).join('')}</div>`
-      : `<div class="card empty">혜윰도서관에는 찾는 책이 없어요.<div class="acts" style="justify-content:center">${schoolBtn(q.trim())}</div></div>`}`;
-  }
-
-  function pageSearch(q = '') {
-    return sub('검색 결과', [[null, '검색']], `<div id="results">${resultsHtml(q)}</div>`);
   }
 
   function pageLoans() {
@@ -808,7 +777,7 @@
     tl += [8, 10, 12, 14, 16, 18].map(h => `<span class="tick" style="left:${pos(h * 60)}%">${h}시</span>`).join('');
     if (!st.closedDay && cur >= START && cur <= START + SPAN) tl += `<span class="now" style="left:${pos(cur)}%"></span>`;
     const closes = upcoming('close', 4);
-    return sub('이용 시간', [[null, '이용 시간']], `
+    return sub('도서관 이용시간', [[null, '도서관 이용시간']], `
       ${st.closedDay ? `<div class="closed-banner"><span class="status closed">휴관</span>오늘은 ${esc(st.reason)}로 도서관이 쉬어요.</div>` : ''}
       <div class="two-col">
         <div>
@@ -906,7 +875,7 @@
         </div>
       </div>
       <div class="ext-box">
-        <div><b>독서로 (외부)</b><small>학교 도서관 시스템에서 이 책을 찾아봐요. 책 제목이 자동으로 복사돼요.</small></div>
+        <div><b>독서로 (외부)</b><small>혜윰도서관에 이 책이 실제로 있는지 독서로에서 바로 검색해 봐요.</small></div>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">${schoolBtn(b.title)}</div>
       </div>`);
   }
@@ -1034,11 +1003,10 @@
 
   const PAGES = {
     '': { html: pageHome, title: '홈', nav: '', band: true },
-    search: { html: pageSearch, title: '검색', nav: null, band: true },
     loans: { html: pageLoans, title: '대출현황', nav: 'loans' },
     extend: { html: pageExtend, title: '연장 신청', nav: 'loans' },
     done: { html: pageDone, title: '연장 완료', nav: 'loans' },
-    hours: { html: pageHours, title: '이용 시간', nav: 'hours' },
+    hours: { html: pageHours, title: '도서관 이용시간', nav: 'hours' },
     rec: { html: pageRec, title: '추천 도서', nav: 'rec', after: renderHive },
     book: { html: pageBook, title: '책 상세', nav: 'rec' },
     map: { html: pageMap, title: '책 위치', nav: 'map' },
@@ -1064,56 +1032,18 @@
     $('view').innerHTML = page.html(...args);
     if (page.after) page.after(...args);
     $('band').hidden = !page.band;
-    if (name === 'search') $('q').value = args[0] || '';
     if (name === '') $('q').value = '';
     document.querySelectorAll('#gnb a').forEach(a => a.classList.toggle('on', a.dataset.nav === page.nav));
     document.title = page === PAGES[''] ? '혜윰도서관' : `${page.title} | 혜윰도서관`;
-    renderStatus();
     window.scrollTo(0, 0);
   }
 
-  function renderStatus() {
-    const st = libStatus();
-    const el = $('status');
-    el.className = `status ${st.open ? 'open' : 'closed'}`;
-    el.textContent = st.closedDay ? `휴관 · ${st.reason}` : st.text;
-  }
-
-  function copyText(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
-    ta.remove();
-    if (ok) return Promise.resolve();
-    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
-    return Promise.reject(new Error('copy failed'));
-  }
-
   function openSchool(btn) {
-    const fromBand = btn.closest('.band-school') || btn.closest('.util-links') || btn.closest('.link-grid');
+    const fromBand = btn.closest('.util-links') || btn.closest('.link-grid');
     const text = (btn.dataset.school || (fromBand ? $('q').value : '')).trim();
     const msg = btn.nextElementSibling && btn.nextElementSibling.classList.contains('school-msg') ? btn.nextElementSibling : null;
-    if (msg) {
-      msg.className = 'school-msg';
-      msg.textContent = '';
-    }
-    if (text) {
-      copyText(text).then(() => {
-        if (msg) msg.textContent = `“${text}” 복사 완료! 열린 창 검색칸에 Ctrl+V 하세요.`;
-      }).catch(() => {
-        if (msg) {
-          msg.className = 'school-msg fail';
-          msg.textContent = `복사에 실패했어요. 열린 창에 “${text}”를 직접 입력하세요.`;
-        }
-      });
-    }
-    window.open(SCHOOL_URL, '_blank', 'noopener');
+    if (msg) msg.textContent = text ? `독서로에서 “${text}” 검색 결과를 새 탭에 열었어요.` : '';
+    window.open(schoolUrl(text), '_blank', 'noopener');
   }
 
   function findBookIn(text) {
@@ -1151,14 +1081,14 @@
       const list = upcoming('close', 3);
       return {
         text: list.length ? `다가오는 휴관일이야\n${list.map(e => `• ${rangeText(e)} ${e.n}`).join('\n')}\n주말이랑 공휴일도 쉬어!` : '당분간 예정된 휴관일은 없어! 주말이랑 공휴일만 쉬어',
-        acts: [{ label: '이용 시간 보기', go: () => go('hours') }],
+        acts: [{ label: '도서관 이용시간 보기', go: () => go('hours') }],
       };
     }
     if (/시간|몇시|열어|열려|운영|언제|닫아/.test(t)) {
       const st = libStatus();
       return {
         text: `지금은 "${st.text}" 상태야\n${SLOTS.map(s => `• ${s.n} ${s.f}~${s.t}`).join('\n')}`,
-        acts: [{ label: '이용 시간 보기', go: () => go('hours') }],
+        acts: [{ label: '도서관 이용시간 보기', go: () => go('hours') }],
       };
     }
     if (/행사|이벤트|프로그램|체험|골든벨/.test(t)) {
@@ -1269,12 +1199,17 @@
 
   $('search-form').addEventListener('submit', e => {
     e.preventDefault();
-    go('search/' + encodeURIComponent($('q').value.trim()));
-  });
-  $('q').addEventListener('input', e => {
-    if (parse().name !== 'search' || !$('results')) return;
-    history.replaceState(null, '', '#/search/' + encodeURIComponent(e.target.value.trim()));
-    $('results').innerHTML = resultsHtml(e.target.value);
+    const text = $('q').value.trim();
+    const note = $('band-note');
+    if (!text) {
+      note.className = 'band-note';
+      note.textContent = '찾을 책 제목이나 저자를 입력해 주세요.';
+      $('q').focus();
+      return;
+    }
+    window.open(schoolUrl(text), '_blank', 'noopener');
+    note.className = 'band-note is-done';
+    note.textContent = `독서로에서 “${text}” 검색 결과를 새 탭에 열었어요.`;
   });
 
   document.addEventListener('click', e => {
@@ -1337,7 +1272,6 @@
 
   window.addEventListener('hashchange', router);
   router();
-  setInterval(renderStatus, 60000);
 </script>
 </body>
 </html>
