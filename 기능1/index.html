@@ -26,17 +26,34 @@
     a:focus-visible, button:focus-visible, input:focus-visible, .shelf:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     .wrap { max-width: 1170px; margin: 0 auto; padding: 0 15px; }
 
-    .top { background: var(--surface); border-bottom: 1px solid var(--border); }
+    .top { position: relative; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--border); }
     .top .wrap { display: flex; align-items: center; gap: 40px; min-height: 88px; }
     .brand { flex: none; display: block; }
     .brand strong { display: block; font-size: 22px; font-weight: 900; line-height: 1.1; color: var(--text); }
     .brand span { display: block; margin-top: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--primary); }
-    .gnb { flex: 1; min-width: 0; }
-    .gnb ul { display: flex; gap: 32px; list-style: none; }
-    .gnb a { position: relative; display: block; padding: 10px 0; font-size: 17px; font-weight: 700; white-space: nowrap; color: var(--text); }
-    .gnb a:hover { color: var(--primary); }
-    .gnb a.on { color: var(--primary); }
-    .gnb a.on::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 24px; height: 3px; margin-left: -12px; border-radius: var(--radius-btn); background: var(--primary); }
+    .gnb { flex: 1; min-width: 0; align-self: stretch; }
+    .gnb > ul { display: flex; gap: 32px; height: 100%; list-style: none; }
+    .gnb > ul > li { display: flex; align-items: center; }
+    .gnb-top { position: relative; display: block; padding: 10px 0; font-size: 17px; font-weight: 700; white-space: nowrap; color: var(--text); }
+    .gnb-top:hover, .gnb li.is-open > .gnb-top, .gnb-top.on { color: var(--primary); }
+    .gnb-top.on::after, .gnb li.is-open > .gnb-top::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 24px; height: 3px; margin-left: -12px; border-radius: var(--radius-btn); background: var(--primary); }
+    .mega { position: absolute; left: 0; right: 0; top: 100%; display: grid; grid-template-rows: 0fr; visibility: hidden; background: var(--surface); border-bottom: 1px solid var(--border); transition: grid-template-rows .3s cubic-bezier(0.37, 0, 0.63, 1), visibility 0s linear .3s; }
+    .gnb li.is-open > .mega { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows .3s cubic-bezier(0.37, 0, 0.63, 1), visibility 0s; }
+    .top.is-switching .mega { transition: none; }
+    .mega-clip { overflow: hidden; min-height: 0; }
+    .mega-inner { position: relative; display: grid; grid-template-columns: 220px 1fr; max-width: 1170px; margin: 0 auto; padding: 0 15px; }
+    .mega-lead { padding: 30px 24px; background: var(--sunken); }
+    .mega-lead strong { display: block; font-size: 26px; font-weight: 900; line-height: 1.2; }
+    .mega-lead strong::after { content: ""; display: block; width: 24px; height: 3px; margin-top: 12px; border-radius: var(--radius-btn); background: var(--primary); }
+    .mega-cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); padding: 30px 50px 30px 0; }
+    .mega-col { padding: 0 30px; border-left: 1px solid var(--border); }
+    .mega-col h3 { margin-bottom: 12px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+    .mega-col ul { list-style: none; display: grid; gap: 6px; }
+    .mega-col a { font-size: 15px; color: var(--muted); }
+    .mega-col a::before { content: "- "; }
+    .mega-col a:hover, .mega-col a:focus-visible { color: var(--primary); }
+    .mega-close { position: absolute; top: 14px; right: 15px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; color: var(--text); font-size: 24px; line-height: 1; }
+    .mega-close:hover { background: var(--sunken); }
     .util { flex: none; display: flex; align-items: center; gap: 20px; }
     .util-links { display: flex; gap: 20px; list-style: none; font-size: 14px; font-weight: 600; }
     .util-links a:hover { color: var(--primary); }
@@ -45,16 +62,15 @@
     .status.closed { background: var(--primary-deep); }
 
     .search-band { background: var(--sunken); padding: 30px 0 50px; }
-    .search-band h2 { font-size: 32px; font-weight: 900; line-height: 1.06; margin-bottom: 15px; }
-    .scope { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .scope button { border: 0; border-radius: var(--radius-pill); padding: 12px 30px; background: var(--surface-muted); color: var(--muted); font-size: 20px; font-weight: 700; line-height: 1.2; transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease); }
-    .scope button:hover { color: var(--text); }
-    .scope button[aria-selected="true"] { background: var(--text); color: #fff; }
     .search-form { display: flex; gap: 10px; }
-    .search-form input { flex: 1; min-width: 0; padding: 12px 20px; font-size: 18px; border: 2px solid var(--primary); border-radius: var(--radius-pill); background: var(--surface); color: var(--text); }
-    .search-form input:focus { outline: 2px solid var(--primary-deep); outline-offset: 2px; }
+    .search-box { flex: 1; min-width: 0; display: flex; border: 2px solid var(--primary); border-radius: var(--radius-pill); background: var(--surface); overflow: hidden; }
+    .search-box:focus-within { outline: 2px solid var(--primary-deep); outline-offset: 2px; }
+    .search-box select { flex: none; padding: 0 14px 0 24px; border: 0; background: transparent; color: var(--text); font-size: 16px; font-weight: 700; cursor: pointer; }
+    .search-box select:focus { outline: 0; }
+    .search-box input { flex: 1; min-width: 0; padding: 14px 20px; border: 0; background: transparent; color: var(--text); font-size: 18px; }
+    .search-box input:focus { outline: 0; }
     .search-form button { display: grid; place-items: center; width: 64px; padding: 0; color: #fff; background: var(--primary); border: 0; border-radius: var(--radius-pill); transition: background-color var(--base) var(--ease); }
-    .search-form button:hover { background: var(--primary-deep); }
+    @media (hover: hover) { .search-form button:hover { background: var(--primary-deep); } }
     .search-form button svg { width: 26px; height: 26px; }
     .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; font-size: 14px; font-weight: 600; }
     .band-row a { text-decoration: underline; text-underline-offset: 2px; }
@@ -329,9 +345,10 @@
       .two-col, .detail { grid-template-columns: 1fr; }
       .cover { height: 220px; }
       .page-title { font-size: 28px; }
-      .sec-title, .side-title, .search-band h2 { font-size: 26px; }
+      .sec-title, .side-title { font-size: 26px; }
       .search-form button { width: 54px; }
-      .scope button { padding: 10px 20px; font-size: 15px; }
+      .search-box select { padding: 0 6px 0 14px; font-size: 14px; }
+      .search-box input { padding: 12px 12px; font-size: 16px; }
       .shelf-list { gap: 16px; padding-top: 20px; }
       .shelf-item { flex: 0 0 120px; }
       .shelf-book { width: 120px; }
@@ -340,7 +357,9 @@
       .shelf-nav.next { right: -8px; }
       .shelf-title { margin-top: 10px; font-size: 14px; }
     }
+    @media (max-width: 767px) { .mega { display: none; } }
     @media (prefers-reduced-motion: reduce) {
+      .mega, .gnb li.is-open > .mega { transition: none; }
       .shelf-item { transform: none; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
@@ -354,14 +373,7 @@
         <span>HYEYUM LIBRARY</span>
       </a>
       <nav class="gnb" aria-label="주 메뉴">
-        <ul id="gnb">
-          <li><a href="#/" data-nav="">홈</a></li>
-          <li><a href="#/loans" data-nav="loans">대출현황</a></li>
-          <li><a href="#/hours" data-nav="hours">도서관 이용시간</a></li>
-          <li><a href="#/rec" data-nav="rec">추천 도서</a></li>
-          <li><a href="#/map" data-nav="map">책 위치</a></li>
-          <li><a href="#/notice" data-nav="notice">공지사항</a></li>
-        </ul>
+        <ul id="gnb"></ul>
       </nav>
       <div class="util">
         <ul class="util-links">
@@ -373,14 +385,15 @@
 
   <section class="search-band" id="band" hidden>
     <div class="wrap">
-      <h2>자료 검색</h2>
-      <div class="scope" id="scope" role="tablist" aria-label="검색 대상">
-        <button type="button" role="tab" aria-selected="true" data-type="">전체</button>
-        <button type="button" role="tab" aria-selected="false" data-type="TITLE">서명</button>
-        <button type="button" role="tab" aria-selected="false" data-type="AUTHOR">저자</button>
-      </div>
       <form class="search-form" id="search-form" role="search">
-        <input type="search" id="q" placeholder="찾고 싶은 책 제목이나 저자를 입력해 주세요." autocomplete="off" aria-label="도서 검색">
+        <div class="search-box">
+          <select id="scope" aria-label="검색 범위">
+            <option value="">통합검색</option>
+            <option value="TITLE">서명</option>
+            <option value="AUTHOR">저자</option>
+          </select>
+          <input type="search" id="q" placeholder="찾고 싶은 책 제목이나 저자를 입력해 주세요." autocomplete="off" aria-label="도서 검색">
+        </div>
         <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
       </form>
       <div class="band-row">
@@ -1040,17 +1053,74 @@
       <div class="acts"><a href="#/notice" class="btn-gray">목록으로</a></div>`);
   }
 
+  const MENU = [
+    { key: 'find', name: '자료 찾기', href: '#/map', cols: [
+      ['자료 검색', [['통합검색(독서로)', 'school']]],
+      ['책 위치', [['서가 배치도', '#/map'], ['길 안내', '#/route/810']]],
+    ] },
+    { key: 'collection', name: '컬렉션', href: '#/list/popular', cols: [
+      ['New & Best', [['신간 도서', '#/list/new'], ['인기도서', '#/list/popular']]],
+      ['추천 도서', [['벌집 추천', '#/rec']]],
+      ['테마도서', [['테마도서', 'soon'], ['수행평가 도서', 'soon']]],
+    ] },
+    { key: 'service', name: '이용 서비스', href: '#/soon/service/희망도서 신청', cols: [
+      ['신청·신고', [['희망도서 신청', 'soon'], ['서가에 없는 도서 신고', 'soon']]],
+      ['기증', [['도서 기증 안내', 'soon']]],
+      ['규정', [['도서관 이용 규정', 'soon'], ['이용 안내', '#/hours']]],
+    ] },
+    { key: 'news', name: '행사·소식', href: '#/notice', cols: [
+      ['일정', [['행사·교육 일정 달력', 'soon']]],
+      ['공지사항', [['일반 공지', '#/notice/notice'], ['행사', '#/notice/event'], ['휴관', '#/notice/close']]],
+    ] },
+    { key: 'guide', name: '이용 안내', href: '#/hours', cols: [
+      ['이용시간', [['도서관 이용시간', '#/hours'], ['휴관일', '#/hours']]],
+      ['문의', [['묻고답하기(Q&A)', 'soon']]],
+    ] },
+    { key: 'my', name: 'MY LIBRARY', href: '#/loans', cols: [
+      ['대출', [['대출현황', '#/loans'], ['연장 신청', '#/loans'], ['연체 안내', '#/loans']]],
+      ['독서 기록', [['나의 독서 기록', 'soon'], ['독서 통계', 'soon']]],
+    ] },
+  ];
+
+  function menuHtml() {
+    return MENU.map(m => `<li><a class="gnb-top" href="${m.href}" data-nav="${m.key}" aria-expanded="false" aria-controls="mega-${m.key}">${m.name}</a>
+      <div class="mega" id="mega-${m.key}"><div class="mega-clip"><div class="mega-inner">
+        <div class="mega-lead"><strong>${m.name}</strong></div>
+        <div class="mega-cols">${m.cols.map(([title, links]) => `<div class="mega-col"><h3>${title}</h3><ul>${links.map(([label, to]) =>
+          to === 'school' ? `<li><a href="#" data-school="">${label}</a></li>`
+          : `<li><a href="${to === 'soon' ? `#/soon/${m.key}/${encodeURIComponent(label)}` : to}">${label}</a></li>`).join('')}</ul></div>`).join('')}</div>
+        <button type="button" class="mega-close" aria-label="메뉴 닫기">×</button>
+      </div></div></div></li>`).join('');
+  }
+
+  function pageSoon(group, name = '') {
+    const m = MENU.find(x => x.key === group);
+    return sub(esc(name), [[m ? m.href : null, m ? m.name : ''], [null, esc(name)]], '<p class="card empty">준비 중이에요</p>');
+  }
+
+  function pageList(kind) {
+    const isNew = kind === 'new';
+    const ids = isNew ? NEW_BOOKS : POPULAR_BOOKS;
+    const title = isNew ? '신간 도서' : '인기도서';
+    return sub(title, [['#/list/popular', '컬렉션'], [null, title]], `<div class="card" style="padding-top:0;padding-bottom:0">${ids.map(id => {
+      const b = book(id);
+      return `<div class="book-row"><img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy"><div class="book-main"><a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>${statusTag(b)}</div><a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a></div>`;
+    }).join('')}</div>`);
+  }
+
   const PAGES = {
     '': { html: pageHome, title: '홈', nav: '', band: true },
-    loans: { html: pageLoans, title: '대출현황', nav: 'loans' },
-    extend: { html: pageExtend, title: '연장 신청', nav: 'loans' },
-    done: { html: pageDone, title: '연장 완료', nav: 'loans' },
-    hours: { html: pageHours, title: '도서관 이용시간', nav: 'hours' },
-    rec: { html: pageRec, title: '추천 도서', nav: 'rec', after: renderHive },
-    book: { html: pageBook, title: '책 상세', nav: 'rec' },
-    map: { html: pageMap, title: '책 위치', nav: 'map' },
-    route: { html: pageRoute, title: '길 안내', nav: 'map' },
-    notice: { html: pageNotice, title: '공지사항', nav: 'notice' },
+    loans: { html: pageLoans, title: '대출현황', nav: 'my' },
+    extend: { html: pageExtend, title: '연장 신청', nav: 'my' },
+    done: { html: pageDone, title: '연장 완료', nav: 'my' },
+    hours: { html: pageHours, title: '도서관 이용시간', nav: 'guide' },
+    rec: { html: pageRec, title: '추천 도서', nav: 'collection', after: renderHive },
+    book: { html: pageBook, title: '책 상세', nav: 'collection' },
+    list: { html: pageList, title: '컬렉션', nav: 'collection' },
+    map: { html: pageMap, title: '책 위치', nav: 'find' },
+    route: { html: pageRoute, title: '길 안내', nav: 'find' },
+    notice: { html: pageNotice, title: '공지사항', nav: 'news' },
+    soon: { html: pageSoon, title: '준비 중', nav: g => g },
   };
 
   function parse() {
@@ -1073,7 +1143,9 @@
     initShelves();
     $('band').hidden = !page.band;
     if (name === '') $('q').value = '';
-    document.querySelectorAll('#gnb a').forEach(a => a.classList.toggle('on', a.dataset.nav === page.nav));
+    const navKey = typeof page.nav === 'function' ? page.nav(...args) : page.nav;
+    document.querySelectorAll('#gnb .gnb-top').forEach(a => a.classList.toggle('on', a.dataset.nav === navKey));
+    closeMega();
     document.title = page === PAGES[''] ? '혜윰도서관' : `${page.title} | 혜윰도서관`;
     window.scrollTo(0, 0);
   }
@@ -1086,10 +1158,19 @@
     document.querySelectorAll('[data-reveal]').forEach(el => revealIO ? revealIO.observe(el) : el.classList.add('is-in'));
   }
 
+  function openExternal(url) {
+    const cap = window.Capacitor;
+    if (cap && cap.isNativePlatform && cap.isNativePlatform() && cap.Plugins && cap.Plugins.Browser) {
+      cap.Plugins.Browser.open({ url, toolbarColor: '#ffffff', presentationStyle: 'popover' });
+      return;
+    }
+    location.href = url;
+  }
+
   function openSchool(btn) {
     const fromBand = btn.closest('.util-links') || btn.closest('.link-grid');
     const text = (btn.dataset.school || (fromBand ? $('q').value : '')).trim();
-    window.open(schoolUrl(text), '_blank', 'noopener');
+    openExternal(schoolUrl(text));
   }
 
   $('search-form').addEventListener('submit', e => {
@@ -1099,14 +1180,7 @@
       $('q').focus();
       return;
     }
-    const tab = document.querySelector('#scope [aria-selected="true"]');
-    window.open(schoolUrl(text, tab ? tab.dataset.type : ''), '_blank', 'noopener');
-  });
-  $('scope').addEventListener('click', e => {
-    const tab = e.target.closest('[role="tab"]');
-    if (!tab) return;
-    document.querySelectorAll('#scope [role="tab"]').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
-    $('q').focus();
+    openExternal(schoolUrl(text, $('scope').value));
   });
 
   document.addEventListener('click', e => {
@@ -1166,6 +1240,39 @@
       go('route/' + shelf.dataset.shelf);
     }
   });
+
+  $('gnb').innerHTML = menuHtml();
+  const topBar = document.querySelector('header.top');
+  let megaCur = null, megaTimer = null;
+  function setMega(li, on) {
+    li.classList.toggle('is-open', on);
+    li.querySelector('.gnb-top').setAttribute('aria-expanded', String(on));
+  }
+  function openMega(li) {
+    clearTimeout(megaTimer);
+    if (megaCur === li) return;
+    if (megaCur) { topBar.classList.add('is-switching'); setMega(megaCur, false); void topBar.offsetWidth; topBar.classList.remove('is-switching'); }
+    megaCur = li;
+    setMega(li, true);
+  }
+  function closeMega() {
+    clearTimeout(megaTimer);
+    if (megaCur) { setMega(megaCur, false); megaCur = null; }
+  }
+  document.querySelectorAll('#gnb > li').forEach(li => {
+    li.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') openMega(li); });
+    li.addEventListener('focusin', () => { if (innerWidth > 767) openMega(li); });
+    li.querySelector('.gnb-top').addEventListener('click', e => {
+      if (innerWidth > 767 && megaCur !== li) { e.preventDefault(); openMega(li); }
+    });
+  });
+  topBar.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') megaTimer = setTimeout(closeMega, 200); });
+  topBar.addEventListener('pointerenter', () => clearTimeout(megaTimer));
+  topBar.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && megaCur) { const a = megaCur.querySelector('.gnb-top'); closeMega(); a.focus(); }
+  });
+  topBar.addEventListener('click', e => { if (e.target.closest('.mega-close')) closeMega(); });
+  document.addEventListener('click', e => { if (!topBar.contains(e.target)) closeMega(); });
 
   window.addEventListener('hashchange', router);
   router();
