@@ -91,11 +91,47 @@
 
     .home { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 30px; margin-top: 30px; }
     .home .sec:first-child { margin-top: 0; }
-    .news { list-style: none; }
-    .news li { padding: 12px 0; border-bottom: 1px solid var(--border); }
-    .news time { display: block; font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-    .news .row { display: flex; align-items: center; gap: 12px; }
-    .news a:hover { color: var(--primary); }
+    .nwrap { display: flex; justify-content: space-between; gap: 30px; margin-top: 40px; transform: translateY(10px); opacity: 0; transition: transform .5s ease-in-out .1s, opacity .5s ease-in-out .1s; }
+    .nwrap.is-in { transform: translateY(0); opacity: 1; }
+    .nbox { position: relative; flex: 1; min-width: 0; }
+    .nbox h3 { padding-bottom: 18px; border-bottom: 1px solid #232321; font-size: 22px; font-weight: 500; line-height: 22px; }
+    .nbox h3 button { padding: 0; border: 0; background: none; font: inherit; color: var(--text); cursor: default; }
+    .nmore { position: absolute; right: 0; top: 0; width: 22px; height: 22px; }
+    .nmore::before, .nmore::after { content: ""; position: absolute; left: 50%; top: 50%; background: var(--text); transform: translate(-50%, -50%); }
+    .nmore::before { width: 20px; height: 2px; }
+    .nmore::after { width: 2px; height: 20px; }
+    .nmore:hover::before, .nmore:hover::after { background: var(--primary); }
+    .nlist { list-style: none; }
+    .nlist li { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 50px; border-bottom: 1px solid #dcdbe0; }
+    .ntitle { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 15px; font-weight: 500; color: #282828; transition: color .3s; }
+    .ntitle::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 0; height: 1px; background: var(--primary); transition: width .8s; }
+    .ndate { flex: none; font-size: 15px; color: #767676; font-variant-numeric: tabular-nums; }
+    .nlist .tag { flex: none; }
+    .nempty { height: 50px; line-height: 50px; border-bottom: 1px solid #dcdbe0; font-size: 15px; color: #767676; }
+    .ntabs { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: 10px; }
+    .ntabs a { font-size: 18px; font-weight: 500; color: #767676; }
+    .ntabs a.on { color: var(--text); }
+    .ntabs a:hover { color: var(--primary); }
+    .nlist.full { border-top: 2px solid #25231d; }
+    @media (min-width: 641px) {
+      .ntitle:hover { color: var(--primary); }
+      .ntitle:hover::after { width: 100%; }
+    }
+    @media (max-width: 1024px) {
+      .nwrap { position: relative; justify-content: flex-start; gap: 20px; padding-bottom: 210px; }
+      .nbox { flex: none; position: static; }
+      .nbox h3 { padding-bottom: 0; border-bottom: 0; font-size: 18px; line-height: 30px; }
+      .nbox h3 button { color: #767676; cursor: pointer; }
+      .nbox.on h3 button { color: var(--text); }
+      .nbox .nbody { position: absolute; left: 0; top: 40px; width: 100%; border-top: 2px solid #25231d; display: none; }
+      .nbox.on .nbody { display: block; }
+      .nmore { top: 4px; display: none; }
+      .nbox.on .nmore { display: block; }
+    }
+    @media (max-width: 400px) {
+      .nlist li { height: 44px; }
+      .nbox .ndate { display: none; }
+    }
     .tag { flex: none; display: inline-block; padding: 5px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; line-height: 1.2; color: #fff; }
     .tag.close { background: var(--primary-deep); }
     .tag.event { background: var(--accent); color: var(--on-accent); }
@@ -276,7 +312,6 @@
       .util-links { display: none; }
       .two-col, .detail { grid-template-columns: 1fr; }
       .cover { height: 220px; }
-      .news .row { align-items: flex-start; }
       .page-title { font-size: 28px; }
       .sec-title, .side-title, .search-band h2 { font-size: 26px; }
       .search-form button { width: 54px; }
@@ -520,7 +555,7 @@
     const fromEvents = EVENTS.map(e => ({
       d: key(addDays(new Date(e.s + 'T00:00'), -7)),
       t: e.t,
-      n: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `[행사] ${e.n} (${rangeText(e)})`,
+      n: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `${e.n} (${rangeText(e)})`,
       body: e.t === 'close'
         ? `${rangeText(e)} ${e.n}로 도서관 문을 닫습니다.\n이 기간에는 대출·반납이 모두 멈춰요.\n반납 예정일이 휴관일이면 다음 운영일까지 반납하면 돼요.`
         : `${rangeText(e)} ${e.time}에 「${e.n}」 행사가 열립니다.\n관심 있는 학생은 도서관 대출·반납 데스크에서 신청해 주세요.`,
@@ -561,12 +596,25 @@
     return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">${esc(label || '독서로에서 찾기')}</button>`;
   }
 
-  function noticeList(list) {
-    return `<ul class="news">${list.map(x => `
-      <li>
-        <time datetime="${x.d}">${x.d.replace(/-/g, '.')}</time>
-        <div class="row"><span class="tag ${x.t}">${TAG_NAME[x.t]}</span><a href="#/notice/${NOTICES.indexOf(x)}">${esc(x.n)}</a></div>
-      </li>`).join('')}</ul>`;
+  const NGROUPS = [
+    { id: 'notice', name: '일반공지', types: ['notice', 'new'] },
+    { id: 'event', name: '행사', types: ['event'] },
+    { id: 'close', name: '휴관', types: ['close'] },
+  ];
+
+  function noticeRow(x, withTag) {
+    return `<li>${withTag ? `<span class="tag ${x.t}">${TAG_NAME[x.t]}</span>` : ''}<a class="ntitle" href="#/notice/${NOTICES.indexOf(x)}" title="${esc(x.n)}">${esc(x.n)}</a><span class="ndate">${x.d.replace(/-/g, '.')}</span></li>`;
+  }
+
+  function noticeBoxes() {
+    return `<section class="nwrap" data-reveal>${NGROUPS.map((g, i) => {
+      const list = NOTICES.filter(x => g.types.includes(x.t)).slice(0, 4);
+      return `<div class="nbox${i === 0 ? ' on' : ''}">
+          <h3><button type="button" data-ntab>${g.name}</button></h3>
+          <a class="nmore" href="#/notice/${g.id}" aria-label="${g.name} 더보기"></a>
+          <div class="nbody"><ul class="nlist">${list.length ? list.map(x => noticeRow(x, false)).join('') : '<li class="nempty">등록된 글이 없어요</li>'}</ul></div>
+        </div>`;
+    }).join('')}</section>`;
   }
 
   function dayInfo(d) {
@@ -594,13 +642,9 @@
     const infos = loanInfos();
     const over = infos.filter(x => x.left < 0).length;
     return `
+      ${noticeBoxes()}
       <div class="home">
         <div>
-          <section class="sec">
-            <h2 class="sec-title">공지사항</h2>
-            ${noticeList(NOTICES.slice(0, 4))}
-            <div class="more"><a href="#/notice" class="btn-navy btn-pill">모든 공지 보기</a></div>
-          </section>
           <section class="sec">
             <h2 class="sec-title">바로가기</h2>
             <div class="link-grid">
@@ -941,8 +985,12 @@
   }
 
   function pageNotice(idx) {
-    if (idx === undefined || idx === '') {
-      return sub('공지사항', [[null, '공지사항']], noticeList(NOTICES));
+    if (idx === undefined || idx === '' || NGROUPS.some(g => g.id === idx)) {
+      const g = NGROUPS.find(x => x.id === idx);
+      const list = g ? NOTICES.filter(x => g.types.includes(x.t)) : NOTICES;
+      const tabs = [['', '전체'], ...NGROUPS.map(x => [x.id, x.name])]
+        .map(([id, name]) => `<a href="#/notice${id ? '/' + id : ''}" class="${(g ? g.id : '') === id ? 'on' : ''}">${name}</a>`).join('');
+      return sub('공지사항', [[null, '공지사항']], `<div class="ntabs">${tabs}</div><ul class="nlist full">${list.map(x => noticeRow(x, !g)).join('')}</ul>`);
     }
     const x = NOTICES[Number(idx)];
     const items = [['#/notice', '공지사항'], [null, '공지 상세']];
@@ -1057,6 +1105,13 @@
     }
     const shelf = e.target.closest('[data-shelf]');
     if (shelf) return go('route/' + shelf.dataset.shelf);
+  });
+
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-ntab]');
+    if (!t) return;
+    const box = t.closest('.nbox');
+    box.parentElement.querySelectorAll('.nbox').forEach(b => b.classList.toggle('on', b === box));
   });
 
   document.addEventListener('keydown', e => {
