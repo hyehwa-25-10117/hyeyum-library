@@ -1167,7 +1167,7 @@
   ];
 
   function menuHtml() {
-    return MENU.map(m => `<li><a class="gnb-top" href="${m.href}" data-nav="${m.key}" aria-expanded="false" aria-controls="mega-${m.key}">${m.name}</a>
+    return `<li><a class="gnb-top" href="#/" data-nav="">홈</a></li>` + MENU.map(m => `<li><a class="gnb-top" href="${m.href}" data-nav="${m.key}" aria-expanded="false" aria-controls="mega-${m.key}">${m.name}</a>
       <div class="mega" id="mega-${m.key}"><div class="mega-clip"><div class="mega-inner">
         <div class="mega-lead"><strong>${m.name}</strong></div>
         <div class="mega-cols">${m.cols.map(([title, links]) => `<div class="mega-col"><h3>${title}</h3><ul>${links.map(([label, to]) =>
@@ -1354,6 +1354,11 @@
     if (megaCur) { setMega(megaCur, false); megaCur = null; }
   }
   document.querySelectorAll('#gnb > li').forEach(li => {
+    if (!li.querySelector('.mega')) {
+      li.addEventListener('pointerenter', closeMega);
+      li.addEventListener('focusin', closeMega);
+      return;
+    }
     li.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') openMega(li); });
     li.addEventListener('focusin', () => { if (innerWidth > 767) openMega(li); });
     li.querySelector('.gnb-top').addEventListener('click', e => {
