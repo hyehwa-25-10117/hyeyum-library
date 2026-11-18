@@ -89,7 +89,8 @@
     .btn-sm { padding: 6px 12px; font-size: 14px; font-weight: 600; }
     button:disabled, .btn-navy:disabled, .btn-line:disabled { background: var(--sunken); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
 
-    .home { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 30px; margin-top: 30px; }
+    .home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin-top: 50px; align-items: start; }
+    .home .side-box { margin-top: 0; }
     .home .sec:first-child { margin-top: 0; }
     .nwrap { display: flex; justify-content: space-between; gap: 30px; margin-top: 40px; transform: translateY(10px); opacity: 0; transition: transform .5s ease-in-out .1s, opacity .5s ease-in-out .1s; }
     .nwrap.is-in { transform: translateY(0); opacity: 1; }
@@ -138,6 +139,10 @@
     .tag.notice { background: var(--muted); }
     .tag.new { background: var(--primary); }
     .more { display: flex; justify-content: flex-end; margin-top: 20px; }
+    .shelves-bg { position: relative; isolation: isolate; padding-bottom: 60px; }
+    .shelves-bg::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: -70px; left: calc(50% - 50vw); width: 100vw; background: linear-gradient(to bottom, #fff 0%, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0.35) 75%, rgba(255, 255, 255, 0.1) 100%), url("covers/school-bg.jpg") center bottom / cover no-repeat; }
+    .shelves-bg .shelf-head { border-bottom-color: var(--text); }
+    .shelves-bg .shelf-title { padding: 2px 8px; border-radius: var(--radius-btn); background: rgba(255, 255, 255, 0.85); }
     .bookshelf { padding: 40px 0 10px; }
     .bookshelf + .bookshelf { padding-top: 70px; }
     .shelf-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
@@ -692,19 +697,9 @@
       ${noticeBoxes()}
       <div class="home">
         <div>
-          <section class="sec">
-            <h2 class="sec-title">바로가기</h2>
-            <div class="link-grid">
-              <a href="#/loans">나의 대출현황</a>
-              <a href="#/map">책 위치 지도</a>
-              <a href="#/hours">도서관 이용시간</a>
-              <a href="#/rec">추천 도서</a>
-              <a href="#" data-school="">독서로 (소장 자료 검색)</a>
-            </div>
-          </section>
+          ${hoursBox()}
         </div>
         <aside>
-          ${hoursBox()}
           <div class="side-box">
             <h3>나의 대출</h3>
             <p><span class="num">${infos.length}</span> / ${LOAN_LIMIT}권 대출 중 ${over ? `<span class="badge bad">연체 ${over}권</span>` : ''}</p>
@@ -713,8 +708,10 @@
           </div>
         </aside>
       </div>
-      ${shelfHtml('인기도서', POPULAR_BOOKS)}
-      ${shelfHtml('신간 도서', NEW_BOOKS)}`;
+      <div class="shelves-bg">
+        ${shelfHtml('인기도서', POPULAR_BOOKS)}
+        ${shelfHtml('신간 도서', NEW_BOOKS)}
+      </div>`;
   }
 
   function pageLoans() {
