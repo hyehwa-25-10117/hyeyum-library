@@ -118,9 +118,7 @@
     .posts.is-in .post { opacity: 1; }
     .post-thumb { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-btn); background: var(--surface-muted); }
     .post-img { display: grid; place-items: center; width: 100%; height: 100%; padding: 10px; text-align: center; font-size: 15px; font-weight: 900; line-height: 1.3; transition: transform 500ms var(--ease); }
-    .post-img.event { background: var(--accent); color: var(--on-accent); }
-    .post-img.close { background: var(--primary-deep); color: #fff; }
-    .post-img.notice { background: var(--surface-muted); color: var(--text); }
+    .post-img { background: var(--sunken); color: var(--muted); font-weight: 600; }
     .post-cat { display: block; margin-top: 12px; font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--primary); }
     .post-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 5px; font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--text); transition: color var(--base) var(--ease); }
     .post:hover .post-img, .post:focus-visible .post-img { transform: scale(1.08); }
@@ -692,14 +690,13 @@
 
   const NEWS_CATS = [['', '전체'], ['event', '행사'], ['close', '휴관'], ['notice', '공지']];
   const newsKind = t => t === 'close' ? 'close' : t === 'event' ? 'event' : 'notice';
-  const thumbText = n => n.replace(/\s*\(.*\)$/, '').replace(/ 안내$/, '');
   let newsShown = 8;
 
   function newsCards(list) {
-    return list.slice(0, newsShown).map(x => `<li><a class="ncard" href="#/notice/${NOTICES.indexOf(x)}">
-        <span class="ncard-thumb"><span class="post-img ${newsKind(x.t)}" aria-hidden="true">${esc(thumbText(x.n))}</span><span class="ncard-cat">${TAG_NAME[x.t]}</span></span>
-        <span class="ncard-info"><span class="ncard-title">${esc(x.n)}</span><span class="ncard-date">${x.d.replace(/-/g, '.')}</span><span class="ncard-excerpt">${esc(x.body)}</span></span>
-      </a></li>`).join('');
+    return list.slice(0, newsShown).map(x => `<li><div class="ncard">
+        <span class="ncard-thumb"><span class="post-img" aria-hidden="true">준비 중</span><span class="ncard-cat">미정</span></span>
+        <span class="ncard-info"><span class="ncard-title">준비 중</span><span class="ncard-date">미정</span><span class="ncard-excerpt">준비 중</span></span>
+      </div></li>`).join('');
   }
 
   function newsList(cat) {
@@ -718,10 +715,9 @@
   }
 
   function postsHtml() {
-    const kind = t => t === 'close' ? 'close' : t === 'event' ? 'event' : 'notice';
     return `<section class="posts" data-reveal>
         <div class="headrow"><h2>도서관 소식</h2><a class="headrow-more" href="#/news">더보기 ›</a></div>
-        <ul class="posts-list">${NOTICES.slice(0, 4).map((x, i) => `<li><a class="post" href="#/notice/${NOTICES.indexOf(x)}" style="--i:${i}"><span class="post-thumb"><span class="post-img ${kind(x.t)}" aria-hidden="true">${esc(x.n.replace(/\s*\(.*\)$/, '').replace(/ 안내$/, ''))}</span></span><span class="post-cat">${TAG_NAME[x.t]}</span><span class="post-title">${esc(x.n)}</span></a></li>`).join('')}</ul>
+        <ul class="posts-list">${NOTICES.slice(0, 4).map((x, i) => `<li><div class="post" style="--i:${i}"><span class="post-thumb"><span class="post-img" aria-hidden="true">준비 중</span></span><span class="post-cat">미정</span><span class="post-title">준비 중</span></div></li>`).join('')}</ul>
       </section>`;
   }
 
