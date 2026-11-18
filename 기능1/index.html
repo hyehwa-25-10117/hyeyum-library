@@ -10,9 +10,8 @@
       color-scheme: light;
       --bg: #ffffff; --surface: #ffffff; --sunken: #f5f6f8;
       --primary: #0368d9; --primary-deep: #162b75; --accent: #feb100; --accent-hover: #e89f00; --on-accent: #222222;
-      --text: #222222; --muted: #6b6c6f; --border: #c2c2c2; --border-input: #8a8a8a; --hover-bg: #eef4fd; --accent-soft: #fff4d6;
+      --text: #222222; --muted: #6b6c6f; --border: #c2c2c2; --border-input: #8a8a8a; --hover-bg: #eef4fd; --surface-muted: #e6e8ec; --accent-soft: #fff4d6;
       --radius-btn: 3px; --radius-md: 12px; --radius-img: 20px; --radius-pill: 24px;
-      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
       --fast: 100ms; --base: 300ms; --ease: cubic-bezier(0.21, 0, 0, 0.99);
       --font: "Seol Sans", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
       --navy: var(--primary); --navy-soft: var(--hover-bg); --red: var(--primary-deep); --brick: var(--primary-deep);
@@ -47,14 +46,17 @@
 
     .search-band { background: var(--sunken); padding: 30px 0 50px; }
     .search-band h2 { font-size: 32px; font-weight: 900; line-height: 1.06; margin-bottom: 15px; }
+    .scope { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .scope button { border: 0; border-radius: var(--radius-pill); padding: 12px 30px; background: var(--surface-muted); color: var(--muted); font-size: 20px; font-weight: 700; line-height: 1.2; transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease); }
+    .scope button:hover { color: var(--text); }
+    .scope button[aria-selected="true"] { background: var(--text); color: #fff; }
     .search-form { display: flex; gap: 10px; }
-    .search-form input { flex: 1; min-width: 0; padding: 12px 20px; font-size: 18px; border: 0; border-radius: var(--radius-pill); background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 2px var(--primary); }
+    .search-form input { flex: 1; min-width: 0; padding: 12px 20px; font-size: 18px; border: 2px solid var(--primary); border-radius: var(--radius-pill); background: var(--surface); color: var(--text); }
     .search-form input:focus { outline: 2px solid var(--primary-deep); outline-offset: 2px; }
-    .search-form button { padding: 12px 28px; font-size: 18px; font-weight: 700; color: #fff; background: var(--primary); border: 0; border-radius: var(--radius-pill); transition: background-color var(--base) var(--ease); }
+    .search-form button { display: grid; place-items: center; width: 64px; padding: 0; color: #fff; background: var(--primary); border: 0; border-radius: var(--radius-pill); transition: background-color var(--base) var(--ease); }
     .search-form button:hover { background: var(--primary-deep); }
-    .band-note { margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--muted); }
-    .band-note.is-done { color: var(--primary); }
-    .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; font-size: 14px; font-weight: 600; }
+    .search-form button svg { width: 26px; height: 26px; }
+    .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; font-size: 14px; font-weight: 600; }
     .band-row a { text-decoration: underline; text-underline-offset: 2px; }
     .band-row a:hover { color: var(--primary); }
 
@@ -66,7 +68,7 @@
     .sec-title { font-size: 32px; font-weight: 900; line-height: 1.06; padding-bottom: 12px; border-bottom: 2px solid var(--text); margin-bottom: 4px; }
     .sec { margin-top: 30px; }
     .hint { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-    .card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px; }
+    .card { background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 20px; }
     .empty { padding: 26px; text-align: center; color: var(--muted); }
     .empty-title { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
     .btn-navy.btn-school { padding: 14px 32px; font-size: 16px; font-weight: 700; }
@@ -86,8 +88,6 @@
     .btn-pill { border-radius: var(--radius-pill); padding: 10px 24px; font-size: 14px; font-weight: 600; }
     .btn-sm { padding: 6px 12px; font-size: 14px; font-weight: 600; }
     button:disabled, .btn-navy:disabled, .btn-line:disabled { background: var(--sunken); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
-    .school-msg { font-size: 14px; font-weight: 600; color: var(--primary); }
-    .school-msg.fail { color: var(--text); }
 
     .home { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 30px; margin-top: 30px; }
     .home .sec:first-child { margin-top: 0; }
@@ -102,14 +102,26 @@
     .tag.notice { background: var(--muted); }
     .tag.new { background: var(--primary); }
     .more { display: flex; justify-content: flex-end; margin-top: 20px; }
-    .rec-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
-    .rec-item { display: block; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
-    .rec-cover { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--hover-bg); border-radius: var(--radius-img) var(--radius-img) 0 0; }
-    .rec-item b { display: block; padding: 12px 15px 0; font-weight: 700; line-height: 1.4; transition: color var(--base) var(--ease); }
-    .rec-item small { display: block; padding: 2px 15px 15px; font-size: 14px; color: var(--muted); }
-    .rec-item:hover b { color: var(--primary); }
+    .shelf { padding: 40px 0 10px; }
+    .shelf-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
+    .shelf-head .sec-title { border: 0; padding: 0; margin: 0; }
+    .shelf-list { position: relative; display: flex; justify-content: space-around; gap: 20px; list-style: none; padding: 90px 0 0; }
+    .shelf-list::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; border-radius: var(--radius-btn); background: var(--surface-muted); }
+    .shelf-item { position: relative; z-index: 1; width: 150px; transform: translateY(20px); transition: transform 500ms var(--ease); transition-delay: calc(var(--i, 0) * 100ms); }
+    .shelf.is-in .shelf-item { transform: translateY(0); }
+    .shelf-book { position: relative; display: block; padding-bottom: 12px; transition: transform 500ms var(--ease); }
+    .shelf-book::before { content: ""; position: absolute; z-index: 0; left: -16px; right: -16px; bottom: -64px; height: 0; border-radius: var(--radius-md); background: var(--surface); transition: height var(--base) var(--ease); }
+    .shelf-cover { position: relative; z-index: 1; display: block; aspect-ratio: 5 / 7; border-radius: 2px; background: var(--surface-muted); outline: 1px solid transparent; transition: outline-color var(--base) var(--ease); }
+    .shelf-cover img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 2px; }
+    .shelf-title { position: absolute; z-index: 1; left: 0; right: 0; top: calc(100% + 2px); font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--text); text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0; transition: opacity var(--base) var(--ease); }
+    @media (hover: hover) and (min-width: 641px) {
+      .shelf-book:hover, .shelf-book:focus-visible { transform: translateY(-48px); }
+      .shelf-book:hover::before, .shelf-book:focus-visible::before { height: calc(100% + 80px); border: 1px solid var(--border); }
+      .shelf-book:hover .shelf-cover, .shelf-book:focus-visible .shelf-cover { outline-color: var(--border); }
+      .shelf-book:hover .shelf-title, .shelf-book:focus-visible .shelf-title { opacity: 1; }
+    }
     .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 20px; }
-    .link-grid a { display: block; padding: 15px 20px; border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-card); font-weight: 700; }
+    .link-grid a { display: block; padding: 15px 20px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); font-weight: 700; }
     .link-grid a:hover { background: var(--hover-bg); color: var(--primary); }
 
     .side-title { font-size: 32px; font-weight: 900; line-height: 1.06; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
@@ -122,7 +134,7 @@
     .day-time { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .day-note { font-size: 14px; color: var(--muted); }
     .hours-all { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
-    .side-box { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px 24px; margin-top: 30px; }
+    .side-box { background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 20px 24px; margin-top: 30px; }
     .side-box h3 { font-size: 18px; font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--text); margin-bottom: 10px; }
     .side-box .num { font-size: 28px; color: var(--primary); font-weight: 900; }
     .info-dl { display: grid; grid-template-columns: 1fr auto; font-size: 15px; }
@@ -173,14 +185,14 @@
     .now { position: absolute; top: -6px; bottom: -6px; width: 3px; margin-left: -1px; background: var(--primary-deep); }
     .now::after { content: "지금"; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: var(--primary-deep); }
     .tick { position: absolute; top: 38px; transform: translateX(-50%); font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; }
     .tbl th, .tbl td { padding: 12px 15px; border-bottom: 1px solid var(--border); text-align: left; }
     .tbl tr:last-child th, .tbl tr:last-child td { border-bottom: 0; }
     .tbl th { width: 38%; background: var(--sunken); font-weight: 700; }
     .tbl tr.cur td, .tbl tr.cur th { color: var(--primary); font-weight: 700; }
     .tbl tr.off td { color: var(--muted); font-weight: 700; }
     .rules { list-style: none; display: grid; gap: 6px; font-size: 15px; margin-top: 15px; }
-    .go-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding: 15px 20px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); font-weight: 700; }
+    .go-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding: 15px 20px; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); font-weight: 700; }
     .go-card:hover { background: var(--hover-bg); color: var(--primary); }
 
     .hive { --hw: min(30vw, 150px); padding: 30px 0 34px; }
@@ -194,7 +206,7 @@
       transition: transform 0.5s var(--ease), opacity var(--base) var(--ease);
     }
     .hex:hover { transform: scale(1.06); }
-    .hex .hx-e { width: calc(var(--hw) * 0.4); height: calc(var(--hw) * 0.58); object-fit: cover; border-radius: var(--radius-btn); box-shadow: var(--shadow-card); }
+    .hex .hx-e { width: calc(var(--hw) * 0.4); height: calc(var(--hw) * 0.58); object-fit: cover; border-radius: var(--radius-btn); }
     .hex .hx-t { font-size: 13px; font-weight: 900; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .hex .hx-a { font-size: 11px; line-height: 1.2; max-height: 0; opacity: 0; overflow: hidden; transition: opacity var(--base) var(--ease); }
     .hive.has-on .hex:not(.on) { transform: scale(0.84); opacity: 0.45; }
@@ -239,7 +251,7 @@
     .chips a.on { border-color: var(--primary); background: var(--primary); color: #fff; }
     .dir { padding: 15px 20px; background: var(--hover-bg); border-radius: var(--radius-md); margin-bottom: 10px; }
 
-    .notice-body { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .notice-body { background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; }
     .notice-head { padding: 20px; border-bottom: 1px solid var(--border); background: var(--sunken); }
     .notice-head h2 { font-size: 24px; font-weight: 900; line-height: 1.3; margin-top: 8px; }
     .notice-head time { font-size: 14px; font-weight: 700; color: var(--muted); }
@@ -250,49 +262,6 @@
     footer a:hover { color: var(--primary); }
     footer p { font-size: 12px; line-height: 1.6; color: var(--muted); }
 
-    .fab {
-      position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 8;
-      height: 48px; padding: 0 24px; border: 0; border-radius: var(--radius-pill); background: var(--primary); color: #fff;
-      font-size: 15px; font-weight: 700; box-shadow: var(--shadow-card); transition: background-color var(--base) var(--ease);
-    }
-    .fab:hover { background: var(--primary-deep); }
-    .fab-say { position: absolute; right: calc(100% + 8px); top: 12px; padding: 4px 10px; border-radius: var(--radius-md) var(--radius-md) 2px var(--radius-md); background: var(--surface); color: var(--text); box-shadow: var(--shadow-card); font-size: 12px; font-weight: 700; white-space: nowrap; }
-    .chat {
-      position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 9;
-      width: min(360px, calc(100vw - 32px)); height: min(540px, calc(100dvh - 32px));
-      display: flex; flex-direction: column; overflow: hidden;
-      background: var(--surface); border-radius: var(--radius-md); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 12px 40px rgba(0, 0, 0, 0.15);
-      animation: pop var(--base) var(--ease);
-    }
-    @keyframes pop { from { transform: translateY(16px) scale(0.96); opacity: 0; } }
-    .chat-head { display: flex; align-items: center; gap: 8px; padding: 12px 15px; background: var(--sunken); border-bottom: 1px solid var(--border); }
-    .chat-head div { flex: 1; line-height: 1.3; }
-    .chat-head b { font-weight: 900; }
-    .chat-head small { font-size: 12px; color: var(--muted); }
-    .chat-head button { border: 0; background: none; font-size: 22px; padding: 2px 8px; }
-    .chat-log { flex: 1; overflow-y: auto; padding: 12px 15px; display: flex; flex-direction: column; gap: 10px; }
-    .msg { display: flex; gap: 6px; align-items: flex-end; max-width: 88%; }
-    .msg.me { align-self: flex-end; }
-    .bubble { padding: 8px 12px; border-radius: var(--radius-md); font-size: 15px; white-space: pre-line; }
-    .msg.bot .bubble { background: var(--sunken); border-bottom-left-radius: var(--radius-btn); }
-    .msg.me .bubble { background: var(--primary); color: #fff; border-bottom-right-radius: var(--radius-btn); }
-    .msg-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .msg-acts button { padding: 5px 12px; font-size: 13px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: var(--surface); color: var(--primary); font-weight: 700; }
-    .msg-acts button:hover { background: var(--hover-bg); }
-    .typing span { display: inline-block; width: 6px; height: 6px; margin: 0 1px; border-radius: 50%; background: var(--muted); animation: blink 1s infinite; }
-    .typing span:nth-child(2) { animation-delay: 0.2s; }
-    .typing span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink { 50% { opacity: 0.2; } }
-    .quick { display: flex; gap: 6px; overflow-x: auto; padding: 8px 15px 0; scrollbar-width: none; }
-    .quick::-webkit-scrollbar { display: none; }
-    .quick button { flex: none; padding: 5px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-input); background: var(--surface); font-size: 13px; font-weight: 600; }
-    .quick button:hover { border-color: var(--primary); color: var(--primary); }
-    .chat-form { display: flex; gap: 6px; padding: 10px 15px 15px; }
-    .chat-form input { flex: 1; min-width: 0; padding: 10px 15px; border-radius: var(--radius-pill); border: 1px solid var(--border-input); }
-    .chat-form input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-    .chat-form button { width: 44px; border-radius: 50%; border: 0; background: var(--primary); color: #fff; font-weight: 900; font-size: 18px; }
-    .chat-form button:hover { background: var(--primary-deep); }
-
     @media (max-width: 1100px) {
       .top .wrap { flex-wrap: wrap; gap: 0 24px; padding-top: 14px; }
       .gnb { order: 3; flex-basis: 100%; overflow-x: auto; scrollbar-width: none; }
@@ -301,7 +270,6 @@
     }
     @media (max-width: 1023px) {
       .home, .map-layout { grid-template-columns: 1fr; }
-      .rec-row { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 640px) {
       .gnb ul { gap: 24px; }
@@ -311,9 +279,14 @@
       .news .row { align-items: flex-start; }
       .page-title { font-size: 28px; }
       .sec-title, .side-title, .search-band h2 { font-size: 26px; }
-      .search-form button { padding: 12px 20px; }
+      .search-form button { width: 54px; }
+      .scope button { padding: 10px 20px; font-size: 15px; }
+      .shelf-list { overflow-x: auto; justify-content: flex-start; padding-top: 20px; }
+      .shelf-item { flex: none; width: 120px; }
+      .shelf-title { position: static; opacity: 1; margin-top: 10px; }
     }
     @media (prefers-reduced-motion: reduce) {
+      .shelf-item { transform: none; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
@@ -346,11 +319,15 @@
   <section class="search-band" id="band" hidden>
     <div class="wrap">
       <h2>자료 검색</h2>
+      <div class="scope" id="scope" role="tablist" aria-label="검색 대상">
+        <button type="button" role="tab" aria-selected="true" data-type="">전체</button>
+        <button type="button" role="tab" aria-selected="false" data-type="TITLE">서명</button>
+        <button type="button" role="tab" aria-selected="false" data-type="AUTHOR">저자</button>
+      </div>
       <form class="search-form" id="search-form" role="search">
-        <input type="search" id="q" placeholder="책 제목, 저자" autocomplete="off" aria-label="도서 검색">
-        <button type="submit">검색</button>
+        <input type="search" id="q" placeholder="찾고 싶은 책 제목이나 저자를 입력해 주세요." autocomplete="off" aria-label="도서 검색">
+        <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
       </form>
-      <p class="band-note" id="band-note" role="status" aria-live="polite">혜윰도서관이 실제로 가진 책을 독서로에서 찾아 새 탭으로 보여 줘요.</p>
       <div class="band-row">
         <a href="#/rec">추천 도서</a>
         <a href="#/map">책 위치 지도</a>
@@ -371,23 +348,6 @@
       <p>혜윰도서관 · 혜화여자고등학교<br>도서·대출·일정·운영 시간은 모두 수업용 예시입니다.<br>© 2026 Hyeyum Library</p>
     </div>
   </footer>
-
-  <button type="button" class="fab" id="fab" aria-label="챗봇 윰이 열기">
-    <span class="fab-say" id="fab-say">궁금한 거 물어봐!</span>윰이에게 묻기
-  </button>
-
-  <div class="chat" id="chat" role="dialog" aria-label="챗봇 윰이" hidden>
-    <div class="chat-head">
-      <div><b>윰이</b><br><small>혜윰도서관 꿀벌 도우미</small></div>
-      <button type="button" id="chat-close" aria-label="닫기">×</button>
-    </div>
-    <div class="chat-log" id="chat-log" aria-live="polite"></div>
-    <div class="quick" id="quick"></div>
-    <form class="chat-form" id="chat-form">
-      <input type="text" id="chat-input" placeholder="윰이에게 물어보기" autocomplete="off" aria-label="메시지">
-      <button type="submit" aria-label="보내기">↑</button>
-    </form>
-  </div>
 
 <script>
   const BOOKS = [
@@ -473,8 +433,8 @@
   const DOOR = [180, 306];
 
   const SCHOOL = { schoolName: '혜화여자고등학교', provCode: 'B10', neisCode: 'B100000562' };
-  const schoolUrl = text => text
-    ? 'https://read365.edunet.net/PureScreen/SchoolSearchResult?' + new URLSearchParams({ searchKeyword: text, ...SCHOOL, searchType: '' })
+  const schoolUrl = (text, type = '') => text
+    ? 'https://read365.edunet.net/PureScreen/SchoolSearchResult?' + new URLSearchParams({ searchKeyword: text, ...SCHOOL, searchType: type })
     : 'https://read365.edunet.net/PureScreen/SchoolSearch?' + new URLSearchParams(SCHOOL);
 
   const DAY = 86400000;
@@ -487,7 +447,6 @@
   const md = d => `${d.getMonth() + 1}월 ${d.getDate()}일`;
   const dot = d => `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
   const toMin = s => Number(s.slice(0, 2)) * 60 + Number(s.slice(3));
-  const norm = s => s.toLowerCase().replace(/\s/g, '');
   const book = id => BOOKS.find(b => b.id === id);
   const $ = id => document.getElementById(id);
   const shelfLabel = id => id === 'new' ? '신간' : id === '8xx' ? '820~' : id;
@@ -500,12 +459,6 @@
 
   function esc(text) {
     return String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-  }
-
-  function josa(word, a, b) {
-    const c = word.charCodeAt(word.length - 1);
-    if (c < 0xac00 || c > 0xd7a3) return word + b;
-    return word + ((c - 0xac00) % 28 ? a : b);
   }
 
   function load(k, fallback) {
@@ -605,7 +558,7 @@
   }
 
   function schoolBtn(text, cls, label) {
-    return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">${esc(label || '독서로에서 찾기')}</button><span class="school-msg" role="status" aria-live="polite"></span>`;
+    return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">${esc(label || '독서로에서 찾기')}</button>`;
   }
 
   function noticeList(list) {
@@ -649,14 +602,6 @@
             <div class="more"><a href="#/notice" class="btn-navy btn-pill">모든 공지 보기</a></div>
           </section>
           <section class="sec">
-            <h2 class="sec-title">이달의 추천 도서</h2>
-            <div class="rec-row">${HIVE.slice(0, 4).map(h => {
-              const b = book(h.id);
-              return `<a class="rec-item" href="#/book/${b.id}"><img class="rec-cover" src="${coverOf(b)}" alt="『${esc(b.title)}』 표지" loading="lazy"><b>${esc(b.title)}</b><small>${esc(b.author)} · ${esc(h.tag)}</small></a>`;
-            }).join('')}</div>
-            <div class="more"><a href="#/rec" class="btn-gray btn-pill">벌집 추천 더 보기</a></div>
-          </section>
-          <section class="sec">
             <h2 class="sec-title">바로가기</h2>
             <div class="link-grid">
               <a href="#/loans">나의 대출현황</a>
@@ -676,7 +621,16 @@
             <div class="acts" style="margin-top:12px"><a href="#/loans" class="btn-line btn-sm">대출현황 보기</a></div>
           </div>
         </aside>
-      </div>`;
+      </div>
+      <section class="shelf" data-reveal>
+        <div class="shelf-head">
+          <h2 class="sec-title">이달의 추천 도서</h2>
+        </div>
+        <ul class="shelf-list">${HIVE.slice(0, 5).map((h, i) => {
+          const b = book(h.id);
+          return `<li class="shelf-item" style="--i:${i}"><a class="shelf-book" href="#/book/${b.id}"><span class="shelf-cover"><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
+        }).join('')}</ul>
+      </section>`;
   }
 
   function pageLoans() {
@@ -1022,7 +976,6 @@
   }
 
   function go(path) {
-    closeChat();
     location.hash = '#/' + path;
   }
 
@@ -1031,6 +984,7 @@
     const page = PAGES[name] || PAGES[''];
     $('view').innerHTML = page.html(...args);
     if (page.after) page.after(...args);
+    watchReveal();
     $('band').hidden = !page.band;
     if (name === '') $('q').value = '';
     document.querySelectorAll('#gnb a').forEach(a => a.classList.toggle('on', a.dataset.nav === page.nav));
@@ -1038,178 +992,35 @@
     window.scrollTo(0, 0);
   }
 
+  const revealIO = 'IntersectionObserver' in window
+    ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-in', e.isIntersecting)), { threshold: 0.3 })
+    : null;
+
+  function watchReveal() {
+    document.querySelectorAll('[data-reveal]').forEach(el => revealIO ? revealIO.observe(el) : el.classList.add('is-in'));
+  }
+
   function openSchool(btn) {
     const fromBand = btn.closest('.util-links') || btn.closest('.link-grid');
     const text = (btn.dataset.school || (fromBand ? $('q').value : '')).trim();
-    const msg = btn.nextElementSibling && btn.nextElementSibling.classList.contains('school-msg') ? btn.nextElementSibling : null;
-    if (msg) msg.textContent = text ? `독서로에서 “${text}” 검색 결과를 새 탭에 열었어요.` : '';
     window.open(schoolUrl(text), '_blank', 'noopener');
   }
-
-  function findBookIn(text) {
-    const t = norm(text);
-    const whole = BOOKS.find(b => t.includes(norm(b.title)) || t.includes(norm(b.author)));
-    if (whole) return whole;
-    const stop = ['어디', '어딨어', '있어', '있나요', '있어요', '위치', '찾아줘', '알려줘', '도서', '도서관', '추천', '대출', '반납'];
-    const tokens = text.split(/[\s?!.,~]+/)
-      .map(w => w.length > 2 ? w.replace(/(은|는|이|가|을|를|도)$/, '') : w)
-      .filter(w => w.length >= 2 && !stop.includes(w));
-    return BOOKS.find(b => tokens.some(w => norm(b.title).includes(norm(w)) || norm(b.author).includes(norm(w))));
-  }
-
-  function reply(text) {
-    const t = norm(text);
-    const found = findBookIn(text);
-    if (found) {
-      const s = SHELVES[shelfOf(found.call)];
-      return {
-        text: `${josa(found.title, '은', '는')} ${s.name} 서가에 있어!\n청구기호는 ${found.call}이고, 지금은 ${found.ok ? '대출 가능' : '누가 빌려 갔어'}`,
-        acts: [
-          { label: '길 안내', go: () => go(`route/${shelfOf(found.call)}/${found.id}`) },
-          { label: '책 상세', go: () => go(`book/${found.id}`) },
-        ],
-      };
-    }
-    if (/안녕|하이|hello|hi|ㅎㅇ|반가/.test(t)) {
-      return { text: '안녕! 나는 혜윰도서관 꿀벌 윰이야\n책 위치, 이용 시간, 휴관일, 대출 현황… 뭐든 물어봐!' };
-    }
-    if (/공지|소식|알림/.test(t)) {
-      const x = NOTICES[0];
-      return { text: `가장 최근 공지야\n• ${x.n}`, acts: [{ label: '공지사항 보기', go: () => go('notice') }] };
-    }
-    if (/휴관|쉬는|쉬어|닫는날|문닫/.test(t)) {
-      const list = upcoming('close', 3);
-      return {
-        text: list.length ? `다가오는 휴관일이야\n${list.map(e => `• ${rangeText(e)} ${e.n}`).join('\n')}\n주말이랑 공휴일도 쉬어!` : '당분간 예정된 휴관일은 없어! 주말이랑 공휴일만 쉬어',
-        acts: [{ label: '도서관 이용시간 보기', go: () => go('hours') }],
-      };
-    }
-    if (/시간|몇시|열어|열려|운영|언제|닫아/.test(t)) {
-      const st = libStatus();
-      return {
-        text: `지금은 "${st.text}" 상태야\n${SLOTS.map(s => `• ${s.n} ${s.f}~${s.t}`).join('\n')}`,
-        acts: [{ label: '도서관 이용시간 보기', go: () => go('hours') }],
-      };
-    }
-    if (/행사|이벤트|프로그램|체험|골든벨/.test(t)) {
-      const list = upcoming('event', 3);
-      return {
-        text: list.length ? `곧 열리는 행사야\n${list.map(e => `• ${rangeText(e)} ${e.n}`).join('\n')}` : '지금은 예정된 행사가 없어. 곧 재밌는 거 준비할게!',
-        acts: [{ label: '공지사항 보기', go: () => go('notice') }],
-      };
-    }
-    if (/연장/.test(t)) {
-      return {
-        text: hasOverdue()
-          ? '지금은 연체된 책이 있어서 연장이 막혀 있어\n연체된 책을 먼저 반납하면 다른 책을 7일 연장할 수 있어!'
-          : '연장은 한 번, 7일 더 할 수 있어\n대출현황에서 "연장 신청"을 눌러 봐!',
-        acts: [{ label: '대출현황 보기', go: () => go('loans') }],
-      };
-    }
-    if (/대출|반납|빌린|빌려|연체|내책/.test(t)) {
-      const infos = loanInfos().sort((a, b) => a.left - b.left);
-      return {
-        text: `지금 ${infos.length}권 빌렸어\n${infos.map(x => `• ${x.b.title} — ${x.left < 0 ? `연체 ${-x.left}일` : x.left === 0 ? '오늘까지!' : `D-${x.left}`}`).join('\n')}`,
-        acts: [{ label: '대출현황 보기', go: () => go('loans') }],
-      };
-    }
-    if (/추천|읽을|심심|뭐읽|재밌/.test(t)) {
-      const h = HIVE[Math.floor(Math.random() * HIVE.length)];
-      const b = book(h.id);
-      return {
-        text: `윰이 추천은 『${b.title}』!\n${h.why}`,
-        acts: [
-          { label: '벌집에서 보기', go: () => { hiveOn = h.id; go('rec'); } },
-          { label: '책 상세', go: () => go(`book/${b.id}`) },
-        ],
-      };
-    }
-    if (/위치|어디|지도|서가/.test(t)) {
-      return {
-        text: '책 제목을 알려 주면 바로 찾아 줄게!\n예: "코스모스 어디 있어?"',
-        acts: [{ label: '지도 보기', go: () => go('map') }],
-      };
-    }
-    if (/고마|감사|땡큐|ㄱㅅ|thank/.test(t)) return { text: '헤헤 천만에! 꿀 같은 독서 하길 바라' };
-    if (/귀여|이름|누구|너는/.test(t)) return { text: '나는 윰이! 혜윰도서관 벌집에 사는 꿀벌이야\n책 냄새를 제일 좋아해!' };
-    return { text: '음… 윰이가 아직 모르는 말이야\n아래 버튼으로 물어봐 줄래?' };
-  }
-
-  const QUICK = ['지금 열려 있어?', '휴관일', '책 추천해 줘', '내 대출', '코스모스 어디 있어?'];
-  let greeted = false;
-
-  function addMsg(who, text, acts) {
-    const log = $('chat-log');
-    const row = document.createElement('div');
-    row.className = `msg ${who}`;
-    const wrap = document.createElement('div');
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.textContent = text;
-    wrap.appendChild(bubble);
-    if (acts && acts.length) {
-      const box = document.createElement('div');
-      box.className = 'msg-acts';
-      acts.forEach(a => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = a.label;
-        btn.addEventListener('click', a.go);
-        box.appendChild(btn);
-      });
-      wrap.appendChild(box);
-    }
-    row.appendChild(wrap);
-    log.appendChild(row);
-    log.scrollTop = log.scrollHeight;
-    return row;
-  }
-
-  function botSay(r) {
-    const typing = addMsg('bot', '');
-    typing.querySelector('.bubble').innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
-    setTimeout(() => {
-      typing.remove();
-      addMsg('bot', r.text, r.acts);
-    }, 550);
-  }
-
-  function ask(text) {
-    if (!text.trim()) return;
-    addMsg('me', text.trim());
-    botSay(reply(text));
-  }
-
-  function openChat() {
-    $('chat').hidden = false;
-    $('fab').hidden = true;
-    if (!greeted) {
-      greeted = true;
-      botSay({ text: '안녕! 나는 혜윰도서관 꿀벌 윰이야\n책 위치, 이용 시간, 휴관일, 대출 현황… 뭐든 물어봐!' });
-    }
-    $('chat-input').focus();
-  }
-
-  function closeChat() {
-    $('chat').hidden = true;
-    $('fab').hidden = false;
-  }
-
-  $('quick').innerHTML = QUICK.map(q => `<button type="button">${q}</button>`).join('');
 
   $('search-form').addEventListener('submit', e => {
     e.preventDefault();
     const text = $('q').value.trim();
-    const note = $('band-note');
     if (!text) {
-      note.className = 'band-note';
-      note.textContent = '찾을 책 제목이나 저자를 입력해 주세요.';
       $('q').focus();
       return;
     }
-    window.open(schoolUrl(text), '_blank', 'noopener');
-    note.className = 'band-note is-done';
-    note.textContent = `독서로에서 “${text}” 검색 결과를 새 탭에 열었어요.`;
+    const tab = document.querySelector('#scope [aria-selected="true"]');
+    window.open(schoolUrl(text, tab ? tab.dataset.type : ''), '_blank', 'noopener');
+  });
+  $('scope').addEventListener('click', e => {
+    const tab = e.target.closest('[role="tab"]');
+    if (!tab) return;
+    document.querySelectorAll('#scope [role="tab"]').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+    $('q').focus();
   });
 
   document.addEventListener('click', e => {
@@ -1254,21 +1065,7 @@
       e.preventDefault();
       go('route/' + shelf.dataset.shelf);
     }
-    if (e.key === 'Escape' && !$('chat').hidden) closeChat();
   });
-
-  $('fab').addEventListener('click', openChat);
-  $('chat-close').addEventListener('click', closeChat);
-  $('quick').addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (b) ask(b.textContent);
-  });
-  $('chat-form').addEventListener('submit', e => {
-    e.preventDefault();
-    ask($('chat-input').value);
-    $('chat-input').value = '';
-  });
-  setTimeout(() => { $('fab-say').hidden = true; }, 6000);
 
   window.addEventListener('hashchange', router);
   router();
