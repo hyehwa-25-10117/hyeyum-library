@@ -108,6 +108,56 @@
     .home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; margin-top: 50px; align-items: start; }
     .home .side-box { margin-top: 0; }
     .home .sec:first-child { margin-top: 0; }
+    .posts { margin-top: 50px; }
+    .headrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
+    .headrow h2 { font-size: 32px; font-weight: 900; line-height: 1.06; }
+    .headrow-more { flex: none; font-size: 15px; font-weight: 600; }
+    .headrow-more:hover { color: var(--primary); }
+    .posts-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; list-style: none; }
+    .post { display: block; opacity: 0; transition: opacity 500ms var(--ease); transition-delay: calc(var(--i, 0) * 100ms); }
+    .posts.is-in .post { opacity: 1; }
+    .post-thumb { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-btn); background: var(--surface-muted); }
+    .post-img { display: grid; place-items: center; width: 100%; height: 100%; padding: 10px; text-align: center; font-size: 15px; font-weight: 900; line-height: 1.3; transition: transform 500ms var(--ease); }
+    .post-img.event { background: var(--accent); color: var(--on-accent); }
+    .post-img.close { background: var(--primary-deep); color: #fff; }
+    .post-img.notice { background: var(--surface-muted); color: var(--text); }
+    .post-cat { display: block; margin-top: 12px; font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--primary); }
+    .post-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 5px; font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--text); transition: color var(--base) var(--ease); }
+    .post:hover .post-img, .post:focus-visible .post-img { transform: scale(1.08); }
+    .post:hover .post-title, .post:focus-visible .post-title { color: var(--primary); }
+    @media (max-width: 767px) {
+      .posts-list { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - 15px) / 2); gap: 15px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+      .posts-list > li { scroll-snap-align: start; }
+      .post-title { font-size: 16px; }
+      .headrow h2 { font-size: 26px; }
+    }
+    .news-head { text-align: center; margin: 40px 0 50px; }
+    .news-head h1 { font-size: 36px; font-weight: 900; line-height: 1.3; }
+    .news-head h1::after { content: ""; display: block; width: 50px; height: 3px; margin: 18px auto 0; border-radius: var(--radius-btn); background: var(--primary); }
+    .news-cats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 4px; margin-top: 30px; list-style: none; }
+    .news-cats a { display: block; padding: 5px 14px; border-radius: var(--radius-btn); font-size: 17px; color: var(--text); transition: background-color .4s, color .4s; }
+    .news-cats a:hover { color: var(--primary); }
+    .news-cats a.on { background: var(--text); color: #fff; }
+    .news-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 60px 24px; list-style: none; }
+    .ncard { position: relative; display: block; overflow: hidden; }
+    .ncard-thumb { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-btn); }
+    .ncard-thumb .post-img { font-size: 17px; transition: transform 1.5s var(--ease); }
+    .ncard-cat { position: absolute; top: 12px; left: 12px; padding: 3px 10px; border-radius: var(--radius-pill); background: rgba(0, 0, 0, 0.6); color: #fff; font-size: 12px; font-weight: 700; opacity: 0; transition: opacity .7s; }
+    .ncard-info { position: relative; display: block; height: 76px; padding: 12px 8px 0; background: var(--surface); transition: transform .4s var(--ease); }
+    .ncard-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--text); }
+    .ncard-date { display: block; margin-top: 4px; font-size: 13px; color: #767676; font-variant-numeric: tabular-nums; }
+    .ncard-excerpt { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; margin-top: 10px; font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre-line; opacity: 0; transform: translateY(10px); transition: opacity .3s ease-out .1s, transform .3s ease-out .1s; }
+    @media (hover: hover) {
+      .ncard:hover .ncard-thumb .post-img, .ncard:focus-visible .ncard-thumb .post-img { transform: scale(1.04); }
+      .ncard:hover .ncard-cat, .ncard:focus-visible .ncard-cat { opacity: 1; }
+      .ncard:hover .ncard-info, .ncard:focus-visible .ncard-info { height: 190px; transform: translateY(-114px); margin-bottom: -114px; }
+      .ncard:hover .ncard-excerpt, .ncard:focus-visible .ncard-excerpt { opacity: 1; transform: translateY(0); }
+      .ncard:hover .ncard-title, .ncard:focus-visible .ncard-title { color: var(--primary); }
+    }
+    .news-more { display: block; width: 200px; margin: 60px auto 0; padding: 10px 0; border: 1px solid var(--border-input); border-radius: var(--radius-pill); background: var(--surface); font-size: 16px; font-weight: 600; color: var(--text); }
+    .news-more:hover { border-color: var(--primary); color: var(--primary); }
+    @media (max-width: 1023px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 16px; } }
+    @media (max-width: 640px) { .news-head h1 { font-size: 28px; } .news-cats a { font-size: 15px; padding: 4px 10px; } }
     .nwrap { display: flex; justify-content: space-between; gap: 30px; margin-top: 40px; transform: translateY(10px); opacity: 0; transition: transform .5s ease-in-out .1s, opacity .5s ease-in-out .1s; }
     .nwrap.is-in { transform: translateY(0); opacity: 1; }
     .nbox { position: relative; flex: 1; min-width: 0; }
@@ -359,6 +409,7 @@
     }
     @media (max-width: 767px) { .mega { display: none; } }
     @media (prefers-reduced-motion: reduce) {
+      .post { opacity: 1; }
       .mega, .gnb li.is-open > .mega { transition: none; }
       .shelf-item { transform: none; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -639,6 +690,41 @@
     return `<li>${withTag ? `<span class="tag ${x.t}">${TAG_NAME[x.t]}</span>` : ''}<a class="ntitle" href="#/notice/${NOTICES.indexOf(x)}" title="${esc(x.n)}">${esc(x.n)}</a><span class="ndate">${x.d.replace(/-/g, '.')}</span></li>`;
   }
 
+  const NEWS_CATS = [['', '전체'], ['event', '행사'], ['close', '휴관'], ['notice', '공지']];
+  const newsKind = t => t === 'close' ? 'close' : t === 'event' ? 'event' : 'notice';
+  const thumbText = n => n.replace(/\s*\(.*\)$/, '').replace(/ 안내$/, '');
+  let newsShown = 8;
+
+  function newsCards(list) {
+    return list.slice(0, newsShown).map(x => `<li><a class="ncard" href="#/notice/${NOTICES.indexOf(x)}">
+        <span class="ncard-thumb"><span class="post-img ${newsKind(x.t)}" aria-hidden="true">${esc(thumbText(x.n))}</span><span class="ncard-cat">${TAG_NAME[x.t]}</span></span>
+        <span class="ncard-info"><span class="ncard-title">${esc(x.n)}</span><span class="ncard-date">${x.d.replace(/-/g, '.')}</span><span class="ncard-excerpt">${esc(x.body)}</span></span>
+      </a></li>`).join('');
+  }
+
+  function newsList(cat) {
+    return cat ? NOTICES.filter(x => newsKind(x.t) === cat) : NOTICES;
+  }
+
+  function pageNews(cat = '') {
+    newsShown = 8;
+    const list = newsList(cat);
+    return `${crumb([[null, '행사·소식'], [null, '도서관 소식']])}
+      <header class="news-head"><h1>도서관 소식</h1>
+        <ul class="news-cats">${NEWS_CATS.map(([id, name]) => `<li><a href="#/news${id ? '/' + id : ''}" class="${id === cat ? 'on' : ''}">${name}</a></li>`).join('')}</ul>
+      </header>
+      <ul class="news-grid" id="news-grid" data-cat="${cat}">${newsCards(list)}</ul>
+      ${list.length > newsShown ? '<button type="button" class="news-more" id="news-more">더보기</button>' : ''}`;
+  }
+
+  function postsHtml() {
+    const kind = t => t === 'close' ? 'close' : t === 'event' ? 'event' : 'notice';
+    return `<section class="posts" data-reveal>
+        <div class="headrow"><h2>도서관 소식</h2><a class="headrow-more" href="#/news">더보기 ›</a></div>
+        <ul class="posts-list">${NOTICES.slice(0, 4).map((x, i) => `<li><a class="post" href="#/notice/${NOTICES.indexOf(x)}" style="--i:${i}"><span class="post-thumb"><span class="post-img ${kind(x.t)}" aria-hidden="true">${esc(x.n.replace(/\s*\(.*\)$/, '').replace(/ 안내$/, ''))}</span></span><span class="post-cat">${TAG_NAME[x.t]}</span><span class="post-title">${esc(x.n)}</span></a></li>`).join('')}</ul>
+      </section>`;
+  }
+
   function noticeBoxes() {
     return `<section class="nwrap" data-reveal>${NGROUPS.map((g, i) => {
       const list = NOTICES.filter(x => g.types.includes(x.t)).slice(0, 4);
@@ -675,14 +761,14 @@
   const NEW_BOOKS = ['b9', 'b14', 'b16', 'b18', 'b19', 'b17', 'b11', 'b12', 'b13'];
   const ARROW = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 
-  function shelfHtml(title, ids) {
+  function shelfHtml(title, ids, toDls) {
     return `<section class="bookshelf" data-reveal>
         <div class="shelf-head"><h2 class="sec-title">${title}</h2></div>
         <div class="shelf-wrap">
           <button type="button" class="shelf-nav prev" data-shelf-nav="-1" aria-label="${title} 이전">${ARROW('M15 5l-7 7 7 7')}</button>
           <ul class="shelf-list">${ids.map((id, i) => {
             const b = book(id);
-            return `<li class="shelf-item" style="--i:${Math.min(i, 5)}"><a class="shelf-book" href="#/book/${b.id}"><span class="shelf-cover"><span class="shelf-pages"></span><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
+            return `<li class="shelf-item" style="--i:${Math.min(i, 5)}"><a class="shelf-book" href="${toDls ? '#' : '#/book/' + b.id}"${toDls ? ` data-school="${esc(b.title)}"` : ''}><span class="shelf-cover"><span class="shelf-pages"></span><img src="${coverOf(b)}" alt="『${esc(b.title)}』 표지"></span><span class="shelf-title">${esc(b.title)}</span></a></li>`;
           }).join('')}</ul>
           <button type="button" class="shelf-nav next" data-shelf-nav="1" aria-label="${title} 다음">${ARROW('M9 5l7 7-7 7')}</button>
         </div>
@@ -708,6 +794,7 @@
     const over = infos.filter(x => x.left < 0).length;
     return `
       ${noticeBoxes()}
+      ${postsHtml()}
       <div class="home">
         <div>
           ${hoursBox()}
@@ -723,7 +810,7 @@
       </div>
       <div class="shelves-bg">
         ${shelfHtml('인기도서', POPULAR_BOOKS)}
-        ${shelfHtml('신간 도서', NEW_BOOKS)}
+        ${shelfHtml('신간 도서', NEW_BOOKS, true)}
       </div>`;
   }
 
@@ -1071,6 +1158,7 @@
     { key: 'news', name: '행사·소식', href: '#/notice', cols: [
       ['일정', [['행사·교육 일정 달력', 'soon']]],
       ['공지사항', [['일반 공지', '#/notice/notice'], ['행사', '#/notice/event'], ['휴관', '#/notice/close']]],
+      ['소식', [['도서관 소식', '#/news']]],
     ] },
     { key: 'guide', name: '이용 안내', href: '#/hours', cols: [
       ['이용시간', [['도서관 이용시간', '#/hours'], ['휴관일', '#/hours']]],
@@ -1104,7 +1192,7 @@
     const title = isNew ? '신간 도서' : '인기도서';
     return sub(title, [['#/list/popular', '컬렉션'], [null, title]], `<div class="card" style="padding-top:0;padding-bottom:0">${ids.map(id => {
       const b = book(id);
-      return `<div class="book-row"><img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy"><div class="book-main"><a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>${statusTag(b)}</div><a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a></div>`;
+      return `<div class="book-row"><img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy"><div class="book-main"><a class="book-title" href="${isNew ? '#' : '#/book/' + b.id}"${isNew ? ` data-school="${esc(b.title)}"` : ''}>${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>${statusTag(b)}</div><a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a></div>`;
     }).join('')}</div>`);
   }
 
@@ -1120,6 +1208,7 @@
     map: { html: pageMap, title: '책 위치', nav: 'find' },
     route: { html: pageRoute, title: '길 안내', nav: 'find' },
     notice: { html: pageNotice, title: '공지사항', nav: 'news' },
+    news: { html: pageNews, title: '도서관 소식', nav: 'news' },
     soon: { html: pageSoon, title: '준비 중', nav: g => g },
   };
 
@@ -1217,6 +1306,15 @@
     }
     const shelf = e.target.closest('[data-shelf]');
     if (shelf) return go('route/' + shelf.dataset.shelf);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#news-more')) return;
+    const grid = $('news-grid');
+    const list = newsList(grid.dataset.cat);
+    newsShown += 8;
+    grid.innerHTML = newsCards(list);
+    if (newsShown >= list.length) $('news-more').remove();
   });
 
   document.addEventListener('click', e => {
