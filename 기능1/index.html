@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>혜윰도서관</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ffffff; --surface: #ffffff; --sunken: #f5f6f8;
+      --primary: #0368d9; --primary-deep: #162b75; --accent: #feb100; --accent-hover: #e89f00; --on-accent: #222222;
+      --text: #222222; --muted: #6b6c6f; --border: #c2c2c2; --border-input: #8a8a8a; --hover-bg: #eef4fd; --accent-soft: #fff4d6;
+      --radius-btn: 3px; --radius-md: 12px; --radius-img: 20px; --radius-pill: 24px;
+      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --fast: 100ms; --base: 300ms; --ease: cubic-bezier(0.21, 0, 0, 0.99);
+      --font: "Seol Sans", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+      --navy: var(--primary); --navy-soft: var(--hover-bg); --red: var(--primary-deep); --brick: var(--primary-deep);
+      --line: var(--border); --link: var(--primary); --bad: var(--primary-deep);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); font-size: 16px; color: var(--text); background: var(--bg); line-height: 1.5; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: inherit; text-decoration: none; transition: color var(--base) var(--ease), background-color var(--base) var(--ease); }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+    a:focus-visible, button:focus-visible, input:focus-visible, .shelf:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .wrap { max-width: 1170px; margin: 0 auto; padding: 0 15px; }
+
+    .top { background: var(--surface); border-bottom: 1px solid var(--border); }
+    .top .wrap { display: flex; align-items: center; gap: 40px; min-height: 88px; }
+    .brand { flex: none; display: block; }
+    .brand strong { display: block; font-size: 22px; font-weight: 900; line-height: 1.1; color: var(--text); }
+    .brand span { display: block; margin-top: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--primary); }
+    .gnb { flex: 1; min-width: 0; }
+    .gnb ul { display: flex; gap: 32px; list-style: none; }
+    .gnb a { position: relative; display: block; padding: 10px 0; font-size: 17px; font-weight: 700; white-space: nowrap; color: var(--text); }
+    .gnb a:hover { color: var(--primary); }
+    .gnb a.on { color: var(--primary); }
+    .gnb a.on::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 24px; height: 3px; margin-left: -12px; border-radius: var(--radius-btn); background: var(--primary); }
+    .util { flex: none; display: flex; align-items: center; gap: 20px; }
+    .util-links { display: flex; gap: 20px; list-style: none; font-size: 14px; font-weight: 600; }
+    .util-links a:hover { color: var(--primary); }
+    .status { display: inline-block; padding: 5px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; line-height: 1.2; color: #fff; white-space: nowrap; }
+    .status.open { background: var(--primary); }
+    .status.closed { background: var(--primary-deep); }
+
+    .search-band { background: var(--sunken); padding: 30px 0 50px; }
+    .search-band h2 { font-size: 32px; font-weight: 900; line-height: 1.06; margin-bottom: 15px; }
+    .search-form { display: flex; gap: 10px; }
+    .search-form input { flex: 1; min-width: 0; padding: 12px 20px; font-size: 18px; border: 0; border-radius: var(--radius-pill); background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 2px var(--primary); }
+    .search-form input:focus { outline: 2px solid var(--primary-deep); outline-offset: 2px; }
+    .search-form button { padding: 12px 28px; font-size: 18px; font-weight: 700; color: #fff; background: var(--primary); border: 0; border-radius: var(--radius-pill); transition: background-color var(--base) var(--ease); }
+    .search-form button:hover { background: var(--primary-deep); }
+    .band-row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; font-size: 14px; font-weight: 600; }
+    .band-row a { text-decoration: underline; text-underline-offset: 2px; }
+    .band-row a:hover { color: var(--primary); }
+    .band-school { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 20px; }
+
+    main { padding-top: 6px; padding-bottom: 50px; min-height: 60vh; }
+    .crumb { margin-top: 24px; font-size: 14px; font-weight: 600; color: var(--muted); }
+    .crumb a { text-decoration: underline; text-underline-offset: 2px; }
+    .crumb a:hover { color: var(--primary); }
+    .page-title { font-size: 36px; font-weight: 900; line-height: 1.4; padding-bottom: 12px; border-bottom: 2px solid var(--text); margin: 6px 0 24px; }
+    .sec-title { font-size: 32px; font-weight: 900; line-height: 1.06; padding-bottom: 12px; border-bottom: 2px solid var(--text); margin-bottom: 4px; }
+    .sec { margin-top: 30px; }
+    .hint { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+    .card { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px; }
+    .empty { padding: 26px; text-align: center; color: var(--muted); }
+    .acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+    .btn-navy, .btn-line, .btn-red, .btn-gray {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 10px 20px;
+      font-size: 16px; font-weight: 700; line-height: 1.5; border: 1px solid transparent; border-radius: var(--radius-btn); white-space: nowrap;
+      transition: background-color var(--base) var(--ease), color var(--base) var(--ease), border-color var(--base) var(--ease);
+    }
+    .btn-navy { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-navy:hover { background: var(--primary-deep); border-color: var(--primary-deep); }
+    .btn-red { background: var(--primary-deep); border-color: var(--primary-deep); color: #fff; }
+    .btn-red:hover { background: var(--primary); border-color: var(--primary); }
+    .btn-line, .btn-gray { background: var(--surface); border-color: var(--border-input); color: var(--text); }
+    .btn-line:hover, .btn-gray:hover { background: var(--hover-bg); border-color: var(--primary); color: var(--primary); }
+    .btn-pill { border-radius: var(--radius-pill); padding: 10px 24px; font-size: 14px; font-weight: 600; }
+    .btn-sm { padding: 6px 12px; font-size: 14px; font-weight: 600; }
+    button:disabled, .btn-navy:disabled, .btn-line:disabled { background: var(--sunken); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
+    .school-msg { font-size: 14px; font-weight: 600; color: var(--primary); }
+    .school-msg.fail { color: var(--text); }
+
+    .home { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 30px; margin-top: 30px; }
+    .home .sec:first-child { margin-top: 0; }
+    .news { list-style: none; }
+    .news li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .news time { display: block; font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+    .news .row { display: flex; align-items: center; gap: 12px; }
+    .news a:hover { color: var(--primary); }
+    .tag { flex: none; display: inline-block; padding: 5px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; line-height: 1.2; color: #fff; }
+    .tag.close { background: var(--primary-deep); }
+    .tag.event { background: var(--accent); color: var(--on-accent); }
+    .tag.notice { background: var(--muted); }
+    .tag.new { background: var(--primary); }
+    .more { display: flex; justify-content: flex-end; margin-top: 20px; }
+    .rec-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+    .rec-item { display: block; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .rec-cover { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--hover-bg); border-radius: var(--radius-img) var(--radius-img) 0 0; }
+    .rec-item b { display: block; padding: 12px 15px 0; font-weight: 700; line-height: 1.4; transition: color var(--base) var(--ease); }
+    .rec-item small { display: block; padding: 2px 15px 15px; font-size: 14px; color: var(--muted); }
+    .rec-item:hover b { color: var(--primary); }
+    .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 20px; }
+    .link-grid a { display: block; padding: 15px 20px; border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-card); font-weight: 700; }
+    .link-grid a:hover { background: var(--hover-bg); color: var(--primary); }
+
+    .side-title { font-size: 32px; font-weight: 900; line-height: 1.06; padding-bottom: 12px; border-bottom: 2px solid var(--text); }
+    .days { list-style: none; }
+    .day { display: grid; grid-template-columns: 56px 1fr; gap: 15px; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border); }
+    .day:last-child { border-bottom: 0; }
+    .day-date { display: grid; justify-items: center; gap: 5px; }
+    .day-dow { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; font-size: 17px; font-weight: 900; line-height: 1; }
+    .day-md { font-size: 13px; font-weight: 700; line-height: 1; color: var(--primary); font-variant-numeric: tabular-nums; }
+    .day-time { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .day-note { font-size: 14px; color: var(--muted); }
+    .day.closed .day-dow { background: var(--muted); }
+    .day.closed .day-md { color: var(--muted); }
+    .hours-all { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+    .side-box { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 20px 24px; margin-top: 30px; }
+    .side-box h3 { font-size: 18px; font-weight: 900; padding-bottom: 10px; border-bottom: 2px solid var(--text); margin-bottom: 10px; }
+    .side-box .num { font-size: 28px; color: var(--primary); font-weight: 900; }
+    .info-dl { display: grid; grid-template-columns: 1fr auto; font-size: 15px; }
+    .info-dl dt, .info-dl dd { padding: 8px 0; border-top: 1px solid var(--border); }
+    .info-dl dd { text-align: right; font-weight: 700; }
+
+    .badge, .st, .dday, .rtag { display: inline-block; padding: 5px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+    .badge.bad, .st.no, .dday.bad { background: var(--accent); color: var(--on-accent); }
+    .badge.warn, .dday.warn, .rtag { background: var(--accent-soft); color: var(--on-accent); }
+    .badge.ok, .st.ok { background: var(--hover-bg); color: var(--primary); }
+    .dday { background: var(--sunken); color: var(--text); font-size: 14px; }
+    .closed-banner { display: flex; align-items: center; gap: 12px; padding: 15px 20px; margin-bottom: 24px; background: var(--sunken); border-radius: var(--radius-md); font-weight: 700; }
+    .closed-banner .status { flex: none; }
+    .alert { padding: 12px 16px; margin-top: 15px; background: var(--accent-soft); border-radius: var(--radius-md); font-size: 15px; }
+
+    .book-row { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--border); }
+    .book-row:last-child { border-bottom: 0; }
+    .book-thumb { flex: none; width: 46px; height: 66px; object-fit: cover; background: var(--primary); border-radius: var(--radius-btn); }
+    .book-main { flex: 1; min-width: 0; }
+    .book-title { font-weight: 700; line-height: 1.4; }
+    a.book-title:hover { color: var(--primary); }
+    .book-meta { font-size: 14px; color: var(--muted); }
+    .hit-row { background: var(--hover-bg); }
+
+    .loan-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .loan-sum strong { font-size: 28px; font-weight: 900; color: var(--primary); }
+    .loan-sum .cnt { flex: 1; }
+    .loan { padding: 15px 0; border-bottom: 1px solid var(--border); display: grid; gap: 8px; }
+    .loan-top { display: flex; align-items: center; gap: 15px; }
+    .bar { height: 6px; background: var(--sunken); border-radius: var(--radius-pill); overflow: hidden; }
+    .bar span { display: block; height: 100%; background: var(--primary); border-radius: var(--radius-pill); }
+    .bar.warn span, .bar.bad span { background: var(--accent); }
+    .loan-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    .compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 15px; margin-top: 15px; text-align: center; }
+    .compare div { padding: 15px; background: var(--sunken); border-radius: var(--radius-md); }
+    .compare div.new { background: var(--hover-bg); color: var(--primary); font-weight: 700; }
+    .compare small { display: block; font-weight: 400; color: var(--muted); }
+    .done { text-align: center; padding: 40px 20px; }
+    .done svg { width: 84px; height: 84px; }
+    .done svg circle, .done svg path { stroke: var(--primary); }
+    .done h2 { font-size: 28px; font-weight: 900; margin: 15px 0 6px; }
+
+    .timeline { position: relative; height: 34px; margin: 30px 0 34px; background: var(--sunken); border-radius: var(--radius-btn); }
+    .seg { position: absolute; top: 0; bottom: 0; background: var(--hover-bg); border: 2px solid var(--primary); border-radius: var(--radius-btn); }
+    .seg.cur { background: var(--primary); }
+    .now { position: absolute; top: -6px; bottom: -6px; width: 3px; margin-left: -1px; background: var(--primary-deep); }
+    .now::after { content: "지금"; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: var(--primary-deep); }
+    .tick { position: absolute; top: 38px; transform: translateX(-50%); font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .tbl th, .tbl td { padding: 12px 15px; border-bottom: 1px solid var(--border); text-align: left; }
+    .tbl tr:last-child th, .tbl tr:last-child td { border-bottom: 0; }
+    .tbl th { width: 38%; background: var(--sunken); font-weight: 700; }
+    .tbl tr.cur td, .tbl tr.cur th { color: var(--primary); font-weight: 700; }
+    .tbl tr.off td { color: var(--muted); font-weight: 700; }
+    .rules { list-style: none; display: grid; gap: 6px; font-size: 15px; margin-top: 15px; }
+    .go-card { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding: 15px 20px; background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); font-weight: 700; }
+    .go-card:hover { background: var(--hover-bg); color: var(--primary); }
+
+    .hive { --hw: min(30vw, 150px); padding: 30px 0 34px; }
+    .hrow { display: flex; justify-content: center; gap: 6px; }
+    .hrow + .hrow { margin-top: calc(var(--hw) * -0.2887 + 5px); }
+    .hex {
+      position: relative; width: var(--hw); height: calc(var(--hw) * 1.1547); border: 0; padding: 0 10px;
+      clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+      display: grid; place-content: center; justify-items: center; gap: 4px; text-align: center;
+      background: var(--fill); color: var(--text);
+      transition: transform 0.5s var(--ease), opacity var(--base) var(--ease);
+    }
+    .hex:hover { transform: scale(1.06); }
+    .hex .hx-e { width: calc(var(--hw) * 0.4); height: calc(var(--hw) * 0.58); object-fit: cover; border-radius: var(--radius-btn); box-shadow: var(--shadow-card); }
+    .hex .hx-t { font-size: 13px; font-weight: 900; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hex .hx-a { font-size: 11px; line-height: 1.2; max-height: 0; opacity: 0; overflow: hidden; transition: opacity var(--base) var(--ease); }
+    .hive.has-on .hex:not(.on) { transform: scale(0.84); opacity: 0.45; }
+    .hex.on { transform: scale(1.38); z-index: 2; }
+    .hex.on .hx-a { max-height: 2em; opacity: 1; }
+    .pick { max-width: 640px; margin: 0 auto; }
+    .pick.idle { text-align: center; color: var(--muted); }
+
+    .detail { display: grid; grid-template-columns: 220px 1fr; gap: 30px; }
+    .cover { display: block; width: 100%; height: 300px; object-fit: contain; background: var(--sunken); border-radius: var(--radius-md); }
+    .detail h2 { font-size: 28px; font-weight: 900; line-height: 1.25; margin-top: 6px; }
+    .detail .why { margin-top: 15px; padding: 15px 20px; background: var(--hover-bg); border-radius: var(--radius-md); }
+    .ext-box { margin-top: 30px; padding: 20px 24px; background: var(--sunken); border-radius: var(--radius-md); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .ext-box b { display: block; font-weight: 900; }
+    .ext-box small { font-size: 14px; color: var(--muted); }
+
+    .map-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 30px; align-items: start; }
+    .map-card { padding: 10px; }
+    .map-svg { width: 100%; height: auto; display: block; }
+    .room-out { fill: #fff; stroke: var(--border-input); stroke-width: 3; }
+    .tblr { fill: var(--sunken); stroke: var(--border); stroke-width: 1.5; }
+    .desk { fill: var(--hover-bg); stroke: var(--primary-deep); stroke-width: 1.5; }
+    .lbl { font-size: 9px; fill: var(--muted); text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .shelf { cursor: pointer; }
+    .shelf rect { fill: var(--hover-bg); stroke: var(--primary); stroke-width: 1.5; rx: 2; transition: fill var(--base) var(--ease); }
+    .shelf text { font-size: 9px; font-weight: 900; fill: var(--primary); text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .shelf text.nm { font-size: 7.5px; font-weight: 600; }
+    .shelf:hover rect { fill: #d6e6fa; }
+    .shelf.hit rect { fill: var(--primary); }
+    .shelf.hit text { fill: #fff; }
+    .shelf.new rect { fill: var(--accent-soft); stroke: var(--accent-hover); }
+    .shelf.new text { fill: var(--on-accent); }
+    .shelf.new.hit rect { fill: var(--accent); }
+    .route { fill: none; stroke: var(--primary-deep); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 6; animation: march 0.8s linear infinite; }
+    @keyframes march { to { stroke-dashoffset: -12; } }
+    .pin-ring { fill: none; stroke: var(--primary-deep); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: ping 1.4s ease-out infinite; }
+    @keyframes ping { from { transform: scale(0.6); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
+    .you { fill: var(--accent); stroke: var(--text); stroke-width: 1.5; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .chips a { padding: 5px 12px; border: 1px solid var(--border-input); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; font-weight: 600; }
+    .chips a:hover { border-color: var(--primary); color: var(--primary); }
+    .chips a.on { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .dir { padding: 15px 20px; background: var(--hover-bg); border-radius: var(--radius-md); margin-bottom: 10px; }
+
+    .notice-body { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden; }
+    .notice-head { padding: 20px; border-bottom: 1px solid var(--border); background: var(--sunken); }
+    .notice-head h2 { font-size: 24px; font-weight: 900; line-height: 1.3; margin-top: 8px; }
+    .notice-head time { font-size: 14px; font-weight: 700; color: var(--muted); }
+    .notice-text { padding: 24px 20px 36px; white-space: pre-line; }
+
+    footer { background: var(--sunken); border-top: 1px solid var(--border); padding: 30px 0; }
+    footer ul { display: flex; flex-wrap: wrap; gap: 5px 20px; list-style: none; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+    footer a:hover { color: var(--primary); }
+    footer p { font-size: 12px; line-height: 1.6; color: var(--muted); }
+
+    .fab {
+      position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 8;
+      height: 48px; padding: 0 24px; border: 0; border-radius: var(--radius-pill); background: var(--primary); color: #fff;
+      font-size: 15px; font-weight: 700; box-shadow: var(--shadow-card); transition: background-color var(--base) var(--ease);
+    }
+    .fab:hover { background: var(--primary-deep); }
+    .fab-say { position: absolute; right: calc(100% + 8px); top: 12px; padding: 4px 10px; border-radius: var(--radius-md) var(--radius-md) 2px var(--radius-md); background: var(--surface); color: var(--text); box-shadow: var(--shadow-card); font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .chat {
+      position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 9;
+      width: min(360px, calc(100vw - 32px)); height: min(540px, calc(100dvh - 32px));
+      display: flex; flex-direction: column; overflow: hidden;
+      background: var(--surface); border-radius: var(--radius-md); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 12px 40px rgba(0, 0, 0, 0.15);
+      animation: pop var(--base) var(--ease);
+    }
+    @keyframes pop { from { transform: translateY(16px) scale(0.96); opacity: 0; } }
+    .chat-head { display: flex; align-items: center; gap: 8px; padding: 12px 15px; background: var(--sunken); border-bottom: 1px solid var(--border); }
+    .chat-head div { flex: 1; line-height: 1.3; }
+    .chat-head b { font-weight: 900; }
+    .chat-head small { font-size: 12px; color: var(--muted); }
+    .chat-head button { border: 0; background: none; font-size: 22px; padding: 2px 8px; }
+    .chat-log { flex: 1; overflow-y: auto; padding: 12px 15px; display: flex; flex-direction: column; gap: 10px; }
+    .msg { display: flex; gap: 6px; align-items: flex-end; max-width: 88%; }
+    .msg.me { align-self: flex-end; }
+    .bubble { padding: 8px 12px; border-radius: var(--radius-md); font-size: 15px; white-space: pre-line; }
+    .msg.bot .bubble { background: var(--sunken); border-bottom-left-radius: var(--radius-btn); }
+    .msg.me .bubble { background: var(--primary); color: #fff; border-bottom-right-radius: var(--radius-btn); }
+    .msg-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .msg-acts button { padding: 5px 12px; font-size: 13px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: var(--surface); color: var(--primary); font-weight: 700; }
+    .msg-acts button:hover { background: var(--hover-bg); }
+    .typing span { display: inline-block; width: 6px; height: 6px; margin: 0 1px; border-radius: 50%; background: var(--muted); animation: blink 1s infinite; }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 50% { opacity: 0.2; } }
+    .quick { display: flex; gap: 6px; overflow-x: auto; padding: 8px 15px 0; scrollbar-width: none; }
+    .quick::-webkit-scrollbar { display: none; }
+    .quick button { flex: none; padding: 5px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-input); background: var(--surface); font-size: 13px; font-weight: 600; }
+    .quick button:hover { border-color: var(--primary); color: var(--primary); }
+    .chat-form { display: flex; gap: 6px; padding: 10px 15px 15px; }
+    .chat-form input { flex: 1; min-width: 0; padding: 10px 15px; border-radius: var(--radius-pill); border: 1px solid var(--border-input); }
+    .chat-form input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+    .chat-form button { width: 44px; border-radius: 50%; border: 0; background: var(--primary); color: #fff; font-weight: 900; font-size: 18px; }
+    .chat-form button:hover { background: var(--primary-deep); }
+
+    @media (max-width: 1100px) {
+      .top .wrap { flex-wrap: wrap; gap: 0 24px; padding-top: 14px; }
+      .gnb { order: 3; flex-basis: 100%; overflow-x: auto; scrollbar-width: none; }
+      .gnb::-webkit-scrollbar { display: none; }
+      .util { margin-left: auto; }
+    }
+    @media (max-width: 1023px) {
+      .home, .map-layout { grid-template-columns: 1fr; }
+      .rec-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .gnb ul { gap: 24px; }
+      .util-links { display: none; }
+      .two-col, .detail { grid-template-columns: 1fr; }
+      .cover { height: 220px; }
+      .news .row { align-items: flex-start; }
+      .page-title { font-size: 28px; }
+      .sec-title, .side-title, .search-band h2 { font-size: 26px; }
+      .search-form button { padding: 12px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#/">
+        <strong>혜윰도서관</strong>
+        <span>HYEYUM LIBRARY</span>
+      </a>
+      <nav class="gnb" aria-label="주 메뉴">
+        <ul id="gnb">
+          <li><a href="#/" data-nav="">홈</a></li>
+          <li><a href="#/loans" data-nav="loans">대출현황</a></li>
+          <li><a href="#/hours" data-nav="hours">이용 시간</a></li>
+          <li><a href="#/rec" data-nav="rec">추천 도서</a></li>
+          <li><a href="#/map" data-nav="map">책 위치</a></li>
+          <li><a href="#/notice" data-nav="notice">공지사항</a></li>
+        </ul>
+      </nav>
+      <div class="util">
+        <ul class="util-links">
+          <li><a href="#" data-school="">독서로</a></li>
+        </ul>
+        <span class="status" id="status"></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="search-band" id="band" hidden>
+    <div class="wrap">
+      <h2>자료 검색</h2>
+      <form class="search-form" id="search-form" role="search">
+        <input type="search" id="q" placeholder="책 제목, 저자, 청구기호" autocomplete="off" aria-label="도서 검색">
+        <button type="submit">검색</button>
+      </form>
+      <div class="band-school">
+        <button type="button" class="btn-line btn-sm" data-school="">혜화여고 도서관에서 찾기</button>
+        <span class="school-msg" role="status" aria-live="polite"></span>
+      </div>
+      <div class="band-row">
+        <a href="#/rec">추천 도서</a>
+        <a href="#/map">책 위치 지도</a>
+        <a href="#/hours">이용 안내</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap" id="view"></main>
+
+  <footer>
+    <div class="wrap">
+      <ul>
+        <li><a href="#/hours">이용 안내</a></li>
+        <li><a href="#/map">찾아오시는 길</a></li>
+        <li><a href="#/notice">공지사항</a></li>
+      </ul>
+      <p>혜윰도서관 · 혜화여자고등학교<br>도서·대출·일정·운영 시간은 모두 수업용 예시입니다.<br>© 2026 Hyeyum Library</p>
+    </div>
+  </footer>
+
+  <button type="button" class="fab" id="fab" aria-label="챗봇 윰이 열기">
+    <span class="fab-say" id="fab-say">궁금한 거 물어봐!</span>윰이에게 묻기
+  </button>
+
+  <div class="chat" id="chat" role="dialog" aria-label="챗봇 윰이" hidden>
+    <div class="chat-head">
+      <div><b>윰이</b><br><small>혜윰도서관 꿀벌 도우미</small></div>
+      <button type="button" id="chat-close" aria-label="닫기">×</button>
+    </div>
+    <div class="chat-log" id="chat-log" aria-live="polite"></div>
+    <div class="quick" id="quick"></div>
+    <form class="chat-form" id="chat-form">
+      <input type="text" id="chat-input" placeholder="윰이에게 물어보기" autocomplete="off" aria-label="메시지">
+      <button type="submit" aria-label="보내기">↑</button>
+    </form>
+  </div>
+
+<script>
+  const BOOKS = [
+    { id: 'b1', title: '아몬드', author: '손원평', call: '813.7-손66ㅇ', ok: false },
+    { id: 'b2', title: '코스모스', author: '칼 세이건', call: '443-세68ㅋ', ok: false },
+    { id: 'b3', title: 'Do it! 점프 투 파이썬', author: '박응용', call: '005.133-박67ㄷ', ok: false },
+    { id: 'b4', title: '지구 끝의 온실', author: '김초엽', call: '813.7-김887ㅈ', ok: true },
+    { id: 'b5', title: '사피엔스', author: '유발 하라리', call: '909-하292ㅅ', ok: true },
+    { id: 'b6', title: '정의란 무엇인가', author: '마이클 샌델', call: '190-샌29ㅈ', ok: true },
+    { id: 'b7', title: '데미안', author: '헤르만 헤세', call: '853-헤54ㄷ', ok: true },
+    { id: 'b8', title: '이기적 유전자', author: '리처드 도킨스', call: '476.1-도17ㅇ', ok: false },
+    { id: 'b9', title: '팩트풀니스', author: '한스 로슬링', call: '301-로57ㅍ', ok: true },
+    { id: 'b10', title: '불편한 편의점', author: '김호연', call: '813.7-김95ㅂ', ok: true },
+    { id: 'b11', title: '어린 왕자', author: '생텍쥐페리', call: '863-생84ㅇ', ok: true },
+    { id: 'b12', title: '1984', author: '조지 오웰', call: '843-오65ㅇ', ok: true },
+    { id: 'b13', title: '미움받을 용기', author: '기시미 이치로', call: '179-기58ㅁ', ok: false },
+    { id: 'b14', title: '언어의 온도', author: '이기주', call: '814.7-이18ㅇ', ok: true },
+    { id: 'b15', title: '수학이 필요한 순간', author: '김민형', call: '410-김39ㅅ', ok: true },
+    { id: 'b16', title: '미술관에 간 화학자', author: '전창림', call: '650.1-전82ㅁ', ok: true },
+    { id: 'b17', title: '영어책 한 권 외워봤니?', author: '김민식', call: '740-김39ㅇ', ok: true },
+    { id: 'b18', title: '침묵의 봄', author: '레이첼 카슨', call: '539.9-카57ㅊ', ok: true },
+    { id: 'b19', title: '세계 종교 둘러보기', author: '오강남', call: '209-오14ㅅ', ok: true },
+  ];
+
+  const HIVE = [
+    { id: 'b5', tag: '스테디셀러', why: '인류가 어떻게 지구의 주인이 됐는지 한 번에 훑어보는 책이에요.', fill: '#f5f6f8' },
+    { id: 'b10', tag: '사서 추천', why: '따뜻하고 술술 읽혀서 시험 끝나고 머리 식히기 좋아요.', fill: '#eef4fd' },
+    { id: 'b15', tag: '신간', why: '수학이 계산이 아니라 세상을 보는 방법이라는 걸 알려 줘요.', fill: '#eef4fd' },
+    { id: 'b4', tag: '이달의 책', why: '무너진 세상에서 식물이 다시 사람을 잇는 이야기. SF 입문으로 딱이에요.', fill: '#c9dcf7' },
+    { id: 'b6', tag: '수행평가', why: '토론 수행평가 전에 읽으면 든든한 철학 입문서예요.', fill: '#eef4fd' },
+    { id: 'b7', tag: '고전', why: '“새는 알을 깨고 나온다.” 나를 찾아가는 성장 소설의 고전.', fill: '#dbe8fb' },
+    { id: 'b9', tag: '신간', why: '데이터로 세상을 바로 보는 법. 그래프 읽는 눈이 생겨요.', fill: '#f5f6f8' },
+  ];
+  const HIVE_ROWS = [2, 3, 2];
+
+  const LOANS = [
+    { id: 'b1', ago: 9 },
+    { id: 'b2', ago: 15 },
+    { id: 'b3', ago: 2 },
+  ];
+  const LOAN_LIMIT = 5;
+
+  const EVENTS = [
+    { s: '2026-10-09', t: 'close', n: '한글날 휴관' },
+    { s: '2026-10-21', t: 'event', n: '가을 독서 주간 개막', time: '점심시간' },
+    { s: '2026-11-05', t: 'event', n: '독서토론 동아리 공개 모임', time: '방과후' },
+    { s: '2026-11-12', t: 'event', n: '작가와의 만남', time: '방과후 · 시청각실' },
+    { s: '2026-11-16', e: '2026-11-18', t: 'close', n: '장서 점검 휴관' },
+    { s: '2026-11-20', t: 'event', n: '책갈피 만들기 체험', time: '점심시간' },
+    { s: '2026-11-25', t: 'event', n: '북큐레이션: 겨울에 읽는 책', time: '하루 종일' },
+    { s: '2026-12-04', t: 'event', n: '독서 골든벨', time: '방과후' },
+    { s: '2026-12-11', t: 'close', n: '도서관 소독 휴관' },
+    { s: '2026-12-18', t: 'event', n: '겨울방학 장기대출 시작', time: '하루 종일' },
+    { s: '2026-12-28', e: '2026-12-31', t: 'close', n: '연말 휴관' },
+  ];
+
+  const EXTRA_NOTICES = [
+    { d: '2026-11-02', t: 'notice', n: '혜화여고 도서관(독서로) 검색 연결 안내', body: '검색창 아래 "혜화여고 도서관에서 찾기" 버튼을 누르면 입력한 검색어가 복사되고, 학교 도서관(독서로) 검색 페이지가 새 탭으로 열려요.\n열린 창 검색칸에 Ctrl+V 하면 바로 검색할 수 있어요.' },
+    { d: '2026-10-15', t: 'notice', n: '연체 도서 대출 정지 규정 안내', body: '반납 예정일이 지난 책이 있으면 늦은 날만큼 대출이 멈춰요.\n연체 중인 책이 한 권이라도 있으면 다른 책도 연장할 수 없어요. 먼저 연체 도서를 반납해 주세요.' },
+    { d: '2026-10-01', t: 'new', n: '10월 신간 도서 입고 안내', body: '「수학이 필요한 순간」, 「팩트풀니스」 등 신간이 들어왔어요.\n입구 오른쪽 신간·추천 서가에서 만나 보세요.' },
+  ];
+
+  const SLOTS = [
+    { n: '아침', f: '08:00', t: '08:40' },
+    { n: '점심시간', f: '12:20', t: '13:20' },
+    { n: '방과후', f: '15:50', t: '17:30' },
+  ];
+
+  const SHELVES = {
+    '000': { name: '총류·컴퓨터', x: 20, y: 62, w: 26, h: 56, side: 'left' },
+    '100': { name: '철학·심리', x: 20, y: 124, w: 26, h: 56, side: 'left' },
+    '200': { name: '종교', x: 20, y: 186, w: 26, h: 56, side: 'left' },
+    '300': { name: '사회과학', x: 20, y: 20, w: 74, h: 26, side: 'top' },
+    '400': { name: '자연과학', x: 102, y: 20, w: 74, h: 26, side: 'top' },
+    '500': { name: '기술과학', x: 184, y: 20, w: 74, h: 26, side: 'top' },
+    '600': { name: '예술', x: 266, y: 20, w: 74, h: 26, side: 'top' },
+    '700': { name: '언어', x: 314, y: 62, w: 26, h: 44, side: 'right' },
+    '810': { name: '한국문학', x: 314, y: 112, w: 26, h: 56, side: 'right' },
+    '8xx': { name: '외국문학', x: 314, y: 174, w: 26, h: 56, side: 'right' },
+    '900': { name: '역사', x: 314, y: 236, w: 26, h: 52, side: 'right' },
+    'new': { name: '신간·추천', x: 210, y: 222, w: 84, h: 24, side: 'island' },
+  };
+  const DOOR = [180, 306];
+
+  const SCHOOL_URL = 'https://read365.edunet.net/PureScreen/SchoolSearch?schoolName='
+    + encodeURIComponent('혜화여자고등학교') + '&provCode=B10&neisCode=B100000562';
+
+  const DAY = 86400000;
+  const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const pad = n => String(n).padStart(2, '0');
+  const key = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const md = d => `${d.getMonth() + 1}월 ${d.getDate()}일`;
+  const dot = d => `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+  const toMin = s => Number(s.slice(0, 2)) * 60 + Number(s.slice(3));
+  const norm = s => s.toLowerCase().replace(/\s/g, '');
+  const book = id => BOOKS.find(b => b.id === id);
+  const $ = id => document.getElementById(id);
+  const shelfLabel = id => id === 'new' ? '신간' : id === '8xx' ? '820~' : id;
+
+  function addDays(d, n) {
+    const x = new Date(d);
+    x.setDate(x.getDate() + n);
+    return x;
+  }
+
+  function esc(text) {
+    return String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
+
+  function josa(word, a, b) {
+    const c = word.charCodeAt(word.length - 1);
+    if (c < 0xac00 || c > 0xd7a3) return word + b;
+    return word + ((c - 0xac00) % 28 ? a : b);
+  }
+
+  function load(k, fallback) {
+    try {
+      const v = localStorage.getItem(k);
+      return v ? JSON.parse(v) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  const coverOf = b => `covers/${b.id}.jpg`;
+
+  function save(k, v) {
+    try {
+      localStorage.setItem(k, JSON.stringify(v));
+    } catch (e) {}
+  }
+
+  function shelfOf(call) {
+    const n = parseFloat(call);
+    const c = Math.floor(n / 100) * 100;
+    if (c === 800) return n < 820 ? '810' : '8xx';
+    return String(c).padStart(3, '0');
+  }
+
+  function eventsOn(k) {
+    return EVENTS.filter(e => e.s <= k && k <= (e.e || e.s));
+  }
+
+  function upcoming(type, count) {
+    const k = key(today);
+    return EVENTS.filter(e => e.t === type && (e.e || e.s) >= k).slice(0, count);
+  }
+
+  function rangeText(e) {
+    const s = new Date(e.s + 'T00:00');
+    if (!e.e) return `${md(s)}(${WEEK[s.getDay()]})`;
+    const t = new Date(e.e + 'T00:00');
+    return `${md(s)}~${md(t)}`;
+  }
+
+  function libStatus() {
+    const now = new Date();
+    const closeEv = eventsOn(key(now)).find(e => e.t === 'close');
+    if (closeEv) return { open: false, closedDay: true, reason: closeEv.n, text: `오늘 휴관 · ${closeEv.n}` };
+    if (now.getDay() === 0 || now.getDay() === 6) return { open: false, closedDay: true, reason: '주말', text: '주말 휴관' };
+    const cur = now.getHours() * 60 + now.getMinutes();
+    const slot = SLOTS.find(s => cur >= toMin(s.f) && cur < toMin(s.t));
+    if (slot) return { open: true, text: `운영 중 · ${slot.t}까지`, slot };
+    const next = SLOTS.find(s => cur < toMin(s.f));
+    if (next) return { open: false, text: `${next.f}에 열어요` };
+    return { open: false, text: '오늘 운영 끝' };
+  }
+
+  const TAG_NAME = { close: '휴관', event: '행사', notice: '공지', new: '신간' };
+
+  function buildNotices() {
+    const fromEvents = EVENTS.map(e => ({
+      d: key(addDays(new Date(e.s + 'T00:00'), -7)),
+      t: e.t,
+      n: e.t === 'close' ? `${e.n} 안내 (${rangeText(e)})` : `[행사] ${e.n} (${rangeText(e)})`,
+      body: e.t === 'close'
+        ? `${rangeText(e)} ${e.n}로 도서관 문을 닫습니다.\n이 기간에는 대출·반납이 모두 멈춰요.\n반납 예정일이 휴관일이면 다음 운영일까지 반납하면 돼요.`
+        : `${rangeText(e)} ${e.time}에 「${e.n}」 행사가 열립니다.\n관심 있는 학생은 도서관 대출·반납 데스크에서 신청해 주세요.`,
+    }));
+    const k = key(today);
+    return fromEvents.concat(EXTRA_NOTICES).filter(x => x.d <= k).sort((a, b) => b.d.localeCompare(a.d));
+  }
+  const NOTICES = buildNotices();
+
+  let extended = load('hyeyum-extended', {});
+
+  function loanInfo(l) {
+    const b = book(l.id);
+    const from = addDays(today, -l.ago);
+    const period = 14 + (extended[l.id] ? 7 : 0);
+    const due = addDays(from, period);
+    const left = Math.round((due - today) / DAY);
+    return { b, from, due, left, period, ext: !!extended[l.id] };
+  }
+
+  let returned = load('hyeyum-returned', {});
+  const loanInfos = () => LOANS.filter(l => !returned[l.id]).map(loanInfo);
+  const hasOverdue = () => loanInfos().some(x => x.left < 0);
+
+  function statusTag(b) {
+    return `<span class="st ${b.ok ? 'ok' : 'no'}">${b.ok ? '대출 가능' : '대출 중'}</span>`;
+  }
+
+  function searchBooks(q) {
+    const n = norm(q);
+    if (!n) return [];
+    return BOOKS.filter(b => norm(b.title + ' ' + b.author + ' ' + b.call).includes(n));
+  }
+
+  function crumb(items) {
+    return `<nav class="crumb" aria-label="현재 위치"><a href="#/">홈</a>${items.map(([href, label]) => ` › ${href ? `<a href="${href}">${label}</a>` : label}`).join('')}</nav>`;
+  }
+
+  function sub(title, items, body) {
+    return `${crumb(items)}<h1 class="page-title">${title}</h1>${body}`;
+  }
+
+  function schoolBtn(text, cls) {
+    return `<button type="button" class="${cls || 'btn-line'}" data-school="${esc(text)}">혜화여고 도서관에서 찾기</button><span class="school-msg" role="status" aria-live="polite"></span>`;
+  }
+
+  function noticeList(list) {
+    return `<ul class="news">${list.map(x => `
+      <li>
+        <time datetime="${x.d}">${x.d.replace(/-/g, '.')}</time>
+        <div class="row"><span class="tag ${x.t}">${TAG_NAME[x.t]}</span><a href="#/notice/${NOTICES.indexOf(x)}">${esc(x.n)}</a></div>
+      </li>`).join('')}</ul>`;
+  }
+
+  function dayInfo(d) {
+    const closeEv = eventsOn(key(d)).find(e => e.t === 'close');
+    if (closeEv) return { closed: true, note: closeEv.n };
+    if (d.getDay() === 0 || d.getDay() === 6) return { closed: true, note: '주말 휴관' };
+    return { closed: false, note: SLOTS.map(s => s.n).join(' · ') };
+  }
+
+  function hoursBox() {
+    const st = libStatus();
+    const days = Array.from({ length: 5 }, (_, i) => addDays(today, i));
+    return `
+      <h2 class="side-title">이용 시간</h2>
+      <ul class="days">${days.map((d, i) => {
+        const info = dayInfo(d);
+        const time = info.closed ? '휴관' : `${SLOTS[0].f} ~ ${SLOTS[SLOTS.length - 1].t}`;
+        const note = i === 0 ? `오늘 · ${info.closed ? info.note : st.text}` : info.note;
+        return `<li class="day${info.closed ? ' closed' : ''}"><div class="day-date"><span class="day-dow">${WEEK[d.getDay()]}</span><span class="day-md">${pad(d.getMonth() + 1)}-${pad(d.getDate())}</span></div><div><p class="day-time">${time}</p><p class="day-note">${esc(note)}</p></div></li>`;
+      }).join('')}</ul>
+      <a href="#/hours" class="hours-all">이용 시간 전체 보기</a>`;
+  }
+
+  function pageHome() {
+    const infos = loanInfos();
+    const over = infos.filter(x => x.left < 0).length;
+    return `
+      <div class="home">
+        <div>
+          <section class="sec">
+            <h2 class="sec-title">공지사항</h2>
+            ${noticeList(NOTICES.slice(0, 4))}
+            <div class="more"><a href="#/notice" class="btn-navy btn-pill">모든 공지 보기</a></div>
+          </section>
+          <section class="sec">
+            <h2 class="sec-title">이달의 추천 도서</h2>
+            <div class="rec-row">${HIVE.slice(0, 4).map(h => {
+              const b = book(h.id);
+              return `<a class="rec-item" href="#/book/${b.id}"><img class="rec-cover" src="${coverOf(b)}" alt="『${esc(b.title)}』 표지" loading="lazy"><b>${esc(b.title)}</b><small>${esc(b.author)} · ${esc(h.tag)}</small></a>`;
+            }).join('')}</div>
+            <div class="more"><a href="#/rec" class="btn-gray btn-pill">벌집 추천 더 보기</a></div>
+          </section>
+          <section class="sec">
+            <h2 class="sec-title">바로가기</h2>
+            <div class="link-grid">
+              <a href="#/loans">나의 대출현황</a>
+              <a href="#/map">책 위치 지도</a>
+              <a href="#/hours">이용 시간</a>
+              <a href="#/rec">추천 도서</a>
+              <a href="#" data-school="">독서로 (학교 도서관)</a>
+            </div>
+          </section>
+        </div>
+        <aside>
+          ${hoursBox()}
+          <div class="side-box">
+            <h3>나의 대출</h3>
+            <p><span class="num">${infos.length}</span> / ${LOAN_LIMIT}권 대출 중 ${over ? `<span class="badge bad">연체 ${over}권</span>` : ''}</p>
+            <dl class="info-dl">${infos.slice().sort((a, b) => a.left - b.left).map(x => `<dt>${esc(x.b.title)}</dt><dd>${x.left < 0 ? `<b style="color:var(--bad)">연체 ${-x.left}일</b>` : x.left === 0 ? 'D-DAY' : `D-${x.left}`}</dd>`).join('')}</dl>
+            <div class="acts" style="margin-top:12px"><a href="#/loans" class="btn-line btn-sm">대출현황 보기</a></div>
+          </div>
+        </aside>
+      </div>`;
+  }
+
+  function resultsHtml(q) {
+    if (!q.trim()) {
+      return `<p class="card empty">책 제목, 저자, 청구기호로 검색해 보세요.<br>예: ${['코스모스', '김초엽', '813.7'].map(w => `<a href="#/search/${encodeURIComponent(w)}" style="color:var(--link);text-decoration:underline">${w}</a>`).join(' · ')}</p>`;
+    }
+    const list = searchBooks(q);
+    return `
+      <p class="hint">“${esc(q.trim())}” 검색 결과 <b>${list.length}</b>권</p>
+      ${list.length ? `<div class="card" style="padding-top:0;padding-bottom:0">${list.map(b => `
+        <div class="book-row">
+          <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
+          <div class="book-main">
+            <a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a>
+            <p class="book-meta">${esc(b.author)} · ${esc(b.call)} · ${SHELVES[shelfOf(b.call)].name} 서가</p>
+            ${statusTag(b)}
+          </div>
+          <a class="btn-line btn-sm" href="#/route/${shelfOf(b.call)}/${b.id}">위치</a>
+        </div>`).join('')}</div>`
+      : `<div class="card empty">혜윰도서관에는 찾는 책이 없어요.<div class="acts" style="justify-content:center">${schoolBtn(q.trim())}</div></div>`}`;
+  }
+
+  function pageSearch(q = '') {
+    return sub('검색 결과', [[null, '검색']], `<div id="results">${resultsHtml(q)}</div>`);
+  }
+
+  function pageLoans() {
+    const infos = loanInfos();
+    const over = infos.filter(x => x.left < 0);
+    const soon = infos.filter(x => x.left >= 0 && x.left <= 3);
+    const blocked = over.length > 0;
+    return sub('나의 대출현황', [[null, '대출현황']], `
+      <p class="hint">1인 5권 · 14일, 연장은 1회 7일</p>
+      <div class="card">
+        <div class="loan-sum">
+          <span class="cnt"><strong>${infos.length}</strong> / ${LOAN_LIMIT}권 대출 중</span>
+          ${over.length ? `<span class="badge bad">연체 ${over.length}권</span>` : ''}
+          ${soon.length ? `<span class="badge warn">반납 임박 ${soon.length}권</span>` : ''}
+        </div>
+        ${infos.map(x => {
+          const level = x.left < 0 ? 'bad' : x.left <= 3 ? 'warn' : '';
+          const label = x.left < 0 ? `연체 ${-x.left}일` : x.left === 0 ? 'D-DAY' : `D-${x.left}`;
+          const pct = Math.min(100, Math.max(4, ((x.period - x.left) / x.period) * 100));
+          const btn = x.left < 0
+            ? `<button type="button" class="btn-red btn-sm" data-return="${x.b.id}">반납하기 (체험)</button>`
+            : x.ext
+            ? '<button type="button" class="btn-line btn-sm" disabled>연장 완료</button>'
+            : blocked
+              ? '<button type="button" class="btn-line btn-sm" disabled>연장 불가</button>'
+              : `<a class="btn-navy btn-sm" href="#/extend/${x.b.id}">연장 신청</a>`;
+          return `
+            <div class="loan">
+              <div class="loan-top">
+                <img class="book-thumb" src="${coverOf(x.b)}" alt="" loading="lazy">
+                <div class="book-main">
+                  <a class="book-title" href="#/book/${x.b.id}">${esc(x.b.title)}</a>
+                  <p class="book-meta">${esc(x.b.author)}</p>
+                </div>
+                <span class="dday ${level}">${label}</span>
+              </div>
+              <div class="bar ${level}"><span style="width:${pct}%"></span></div>
+              <div class="loan-foot"><span>${md(x.from)} 대출 → ${md(x.due)}까지${x.ext ? ' (연장됨)' : ''}</span>${btn}</div>
+            </div>`;
+        }).join('')}
+        ${blocked ? `<p class="alert">연체 중인 책이 있어서 모든 책의 연장이 막혀 있어요. 『${esc(over[0].b.title)}』을(를) 먼저 반납해 주세요. 오늘 반납하면 ${Math.max(...over.map(x => -x.left))}일 동안 대출이 멈춰요.</p>` : ''}
+        ${!infos.length ? '<p class="empty">빌린 책이 없어요.</p>' : ''}
+      </div>
+      <div class="acts"><button type="button" class="btn-gray btn-sm" data-reset>체험 처음으로 되돌리기</button></div>`);
+  }
+
+  function pageExtend(id) {
+    const l = LOANS.find(x => x.id === id);
+    const items = [['#/loans', '대출현황'], [null, '연장 신청']];
+    if (!l) return sub('연장 신청', items, '<p class="card empty">대출 중인 책이 아니에요.</p><div class="acts"><a href="#/loans" class="btn-gray">대출현황으로</a></div>');
+    const x = loanInfo(l);
+    let block = '';
+    if (x.ext) block = '이미 한 번 연장한 책이에요. 연장은 1회만 할 수 있어요.';
+    else if (hasOverdue()) block = '연체 중인 책이 있으면 연장할 수 없어요. 연체 도서를 먼저 반납해 주세요.';
+    return sub('연장 신청', items, `
+      <div class="card">
+        <div class="loan-top">
+          <img class="book-thumb" src="${coverOf(x.b)}" alt="" loading="lazy">
+          <div class="book-main"><p class="book-title">${esc(x.b.title)}</p><p class="book-meta">${esc(x.b.author)} · ${esc(x.b.call)}</p></div>
+        </div>
+        <div class="compare">
+          <div>${md(x.due)}<small>지금 반납일</small></div>
+          <span aria-hidden="true">→</span>
+          <div class="new">${md(addDays(x.due, 7))}<small>연장 후 반납일 (+7일)</small></div>
+        </div>
+        <ul class="rules">
+          <li>연장은 책 한 권당 1번, 7일만 할 수 있어요.</li>
+          <li>연체 중인 책이 있으면 연장할 수 없어요.</li>
+        </ul>
+        ${block ? `<p class="alert">${block}</p>` : ''}
+        <div class="acts">
+          <a href="#/loans" class="btn-gray">취소</a>
+          <button type="button" class="btn-navy" data-confirm-extend="${x.b.id}"${block ? ' disabled' : ''}>연장 신청하기</button>
+        </div>
+      </div>`);
+  }
+
+  function pageDone(id) {
+    const l = LOANS.find(x => x.id === id);
+    const x = l && loanInfo(l);
+    return sub('연장 완료', [['#/loans', '대출현황'], [null, '연장 완료']], `
+      <div class="card done">
+        <svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="none" stroke="#22a35a" stroke-width="5"/><path d="M25 43 L37 55 L60 30" fill="none" stroke="#22a35a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>${x ? `『${esc(x.b.title)}』 연장 완료!` : '연장 완료!'}</h2>
+        ${x ? `<p>새 반납일은 <b>${md(x.due)}(${WEEK[x.due.getDay()]})</b>이에요.</p>` : ''}
+        <div class="acts" style="justify-content:center"><a href="#/loans" class="btn-navy">대출현황으로 돌아가기</a><a href="#/" class="btn-gray">홈으로</a></div>
+      </div>`);
+  }
+
+  function pageHours() {
+    const st = libStatus();
+    const START = toMin('07:30');
+    const SPAN = toMin('18:00') - START;
+    const pos = t => ((t - START) / SPAN) * 100;
+    const now = new Date();
+    const cur = now.getHours() * 60 + now.getMinutes();
+    let tl = SLOTS.map(s => `<span class="seg${st.slot === s ? ' cur' : ''}" style="left:${pos(toMin(s.f))}%;width:${pos(toMin(s.t)) - pos(toMin(s.f))}%" title="${s.n} ${s.f}–${s.t}"></span>`).join('');
+    tl += [8, 10, 12, 14, 16, 18].map(h => `<span class="tick" style="left:${pos(h * 60)}%">${h}시</span>`).join('');
+    if (!st.closedDay && cur >= START && cur <= START + SPAN) tl += `<span class="now" style="left:${pos(cur)}%"></span>`;
+    const closes = upcoming('close', 4);
+    return sub('이용 시간', [[null, '이용 시간']], `
+      ${st.closedDay ? `<div class="closed-banner"><span class="status closed">휴관</span>오늘은 ${esc(st.reason)}로 도서관이 쉬어요.</div>` : ''}
+      <div class="two-col">
+        <div>
+          <h2 class="sec-title">학기 중 운영 시간</h2>
+          <p style="margin-top:10px"><span class="status ${st.open ? 'open' : 'closed'}">${esc(st.text)}</span></p>
+          <div class="timeline">${tl}</div>
+          <table class="tbl">
+            ${SLOTS.map(s => `<tr class="${st.slot === s ? 'cur' : ''}"><th>${s.n}</th><td>${s.f} – ${s.t}${st.slot === s ? ' · 지금!' : ''}</td></tr>`).join('')}
+            <tr class="off"><th>토·일·공휴일</th><td>휴관</td></tr>
+            <tr><th>시험 기간</th><td>방과후 18:30까지 연장</td></tr>
+          </table>
+        </div>
+        <div>
+          <h2 class="sec-title">다가오는 휴관일</h2>
+          <table class="tbl" style="margin-top:14px">${closes.length ? closes.map(e => `<tr class="off"><th>${rangeText(e)}</th><td>${esc(e.n)}</td></tr>`).join('') : '<tr><td>예정된 휴관일이 없어요</td></tr>'}</table>
+          <ul class="rules">
+            <li>한 사람당 5권까지, 14일 동안 빌릴 수 있어요</li>
+            <li>연장은 1번, 7일 더 빌릴 수 있어요</li>
+            <li>연체하면 늦은 날만큼 대출이 멈춰요</li>
+            <li>열람석에서는 조용히 해 주세요</li>
+          </ul>
+        </div>
+      </div>`);
+  }
+  let hiveOn = null;
+
+  function hiveHtml() {
+    let i = 0;
+    return HIVE_ROWS.map(count => {
+      const row = HIVE.slice(i, i + count);
+      i += count;
+      return `<div class="hrow">${row.map(h => {
+        const b = book(h.id);
+        return `<button type="button" class="hex${hiveOn === h.id ? ' on' : ''}" style="--fill:${h.fill}" data-hex="${h.id}" aria-pressed="${hiveOn === h.id}">
+          <img class="hx-e" src="${coverOf(b)}" alt=""><span class="hx-t">${esc(b.title)}</span><span class="hx-a">${esc(b.author)}</span>
+        </button>`;
+      }).join('')}</div>`;
+    }).join('');
+  }
+
+  function pickHtml() {
+    const h = HIVE.find(x => x.id === hiveOn);
+    if (!h) return '마음에 드는 벌집 칸을 골라 보세요';
+    const b = book(h.id);
+    return `
+      <div class="loan-top">
+        <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
+        <div class="book-main">
+          <span class="rtag">${esc(h.tag)}</span>
+          <p class="book-title">${esc(b.title)}</p>
+          <p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p>
+        </div>
+        ${statusTag(b)}
+      </div>
+      <p style="margin-top:10px">${esc(h.why)}</p>
+      <div class="acts"><a href="#/book/${b.id}" class="btn-navy btn-sm">책 상세 보기</a><a href="#/route/${shelfOf(b.call)}/${b.id}" class="btn-line btn-sm">서가 위치</a></div>`;
+  }
+
+  function renderHive() {
+    const hive = $('hive');
+    if (!hive) return;
+    hive.innerHTML = hiveHtml();
+    hive.classList.toggle('has-on', !!hiveOn);
+    $('pick').innerHTML = pickHtml();
+    $('pick').classList.toggle('idle', !hiveOn);
+  }
+
+  function pageRec() {
+    return sub('추천 도서', [[null, '추천 도서']], `
+      <p class="hint">벌집 칸을 누르면 커져요. 한 번 더 누르면 작아져요.</p>
+      <div class="hive" id="hive"></div>
+      <div class="card pick" id="pick"></div>`);
+  }
+
+  function pageBook(id) {
+    const b = book(id);
+    const items = [['#/rec', '추천 도서'], [null, '책 상세']];
+    if (!b) return sub('책 상세', items, '<p class="card empty">책을 찾을 수 없어요.</p>');
+    const h = HIVE.find(x => x.id === id);
+    const sid = shelfOf(b.call);
+    return sub('책 상세', items, `
+      <div class="detail">
+        <img class="cover" src="${coverOf(b)}" alt="『${esc(b.title)}』 표지">
+        <div>
+          ${h ? `<span class="rtag">${esc(h.tag)}</span>` : ''}
+          <h2>${esc(b.title)}</h2>
+          <p class="book-meta" style="font-size:1rem">${esc(b.author)}</p>
+          <table class="tbl" style="margin-top:14px">
+            <tr><th>청구기호</th><td>${esc(b.call)}</td></tr>
+            <tr><th>서가</th><td>${sid === '8xx' ? '820~890' : sid} ${SHELVES[sid].name}</td></tr>
+            <tr><th>대출 상태</th><td>${statusTag(b)}</td></tr>
+          </table>
+          ${h ? `<p class="why">${esc(h.why)}</p>` : ''}
+          <div class="acts"><a class="btn-navy" href="#/route/${sid}/${b.id}">서가 위치 · 길 안내</a></div>
+        </div>
+      </div>
+      <div class="ext-box">
+        <div><b>독서로 (외부)</b><small>학교 도서관 시스템에서 이 책을 찾아봐요. 책 제목이 자동으로 복사돼요.</small></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">${schoolBtn(b.title)}</div>
+      </div>`);
+  }
+
+  function frontOf(s) {
+    const cx = s.x + s.w / 2;
+    const cy = s.y + s.h / 2;
+    if (s.side === 'top') return [cx, s.y + s.h + 6];
+    if (s.side === 'left') return [s.x + s.w + 7, cy];
+    if (s.side === 'right') return [s.x - 7, cy];
+    return [s.x - 7, cy];
+  }
+
+  function routeTo(s) {
+    const [fx, fy] = frontOf(s);
+    const [dx, dy] = DOOR;
+    if (s.side === 'top') return [[dx, dy], [dx, 72], [fx, 72], [fx, fy]];
+    return [[dx, dy], [dx, fy], [fx, fy]];
+  }
+
+  function mapSvg(sel) {
+    let svg = `
+      <rect x="10" y="10" width="340" height="290" rx="4" class="room-out"/>
+      <rect x="158" y="294" width="44" height="12" fill="#fff"/>
+      <text x="180" y="318" class="lbl" style="font-weight:900;fill:var(--text)">입구</text>
+      <rect x="100" y="98" width="60" height="30" class="tblr"/>
+      <rect x="200" y="98" width="60" height="30" class="tblr"/>
+      <rect x="100" y="166" width="60" height="30" class="tblr"/>
+      <rect x="200" y="166" width="60" height="30" class="tblr"/>
+      <text x="130" y="113" class="lbl">열람석 A</text><text x="230" y="113" class="lbl">열람석 B</text>
+      <text x="130" y="181" class="lbl">열람석 C</text><text x="230" y="181" class="lbl">열람석 D</text>
+      <rect x="66" y="262" width="80" height="26" class="desk"/>
+      <text x="106" y="275" class="lbl" style="fill:var(--brick);font-weight:700">대출·반납</text>`;
+    Object.entries(SHELVES).forEach(([id, s]) => {
+      const cx = s.x + s.w / 2;
+      const cy = s.y + s.h / 2;
+      const text = id === 'new'
+        ? `<text x="${cx}" y="${cy}">신간·추천</text>`
+        : s.w > 40
+          ? `<text x="${cx}" y="${cy - 5}">${id}</text><text x="${cx}" y="${cy + 6}" class="nm">${s.name}</text>`
+          : `<text x="${cx}" y="${cy}">${shelfLabel(id)}</text>`;
+      svg += `<g class="shelf${id === 'new' ? ' new' : ''}${sel === id ? ' hit' : ''}" data-shelf="${id}" tabindex="0" role="button" aria-label="${id === 'new' ? '' : id + ' '}${s.name} 서가 길 안내">
+        <rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="2"/>${text}</g>`;
+    });
+    if (sel) {
+      const s = SHELVES[sel];
+      const [fx, fy] = frontOf(s);
+      svg += `<polyline class="route" points="${routeTo(s).map(p => p.join(',')).join(' ')}"/>`;
+      svg += `<circle cx="${fx}" cy="${fy}" r="6" class="pin-ring"/><circle cx="${fx}" cy="${fy}" r="4.5" fill="var(--red)"/>`;
+    }
+    svg += `<circle cx="${DOOR[0]}" cy="${DOOR[1] - 4}" r="5" class="you"/>`;
+    return `<svg class="map-svg" id="map-svg" viewBox="0 0 360 326" role="img" aria-label="혜윰도서관 배치도">${svg}</svg>`;
+  }
+
+  function chipsHtml(sel) {
+    const order = ['000', '100', '200', '300', '400', '500', '600', '700', '810', '8xx', '900', 'new'];
+    return `<div class="chips">${order.map(id =>
+      `<a href="#/route/${id}" class="${sel === id ? 'on' : ''}">${id === 'new' ? '' : shelfLabel(id) + ' '}${SHELVES[id].name}</a>`).join('')}</div>`;
+  }
+
+  function directions(id) {
+    const s = SHELVES[id];
+    if (s.side === 'top') return '입구에서 가운데 통로로 쭉 올라가 맨 안쪽 벽에 있어요.';
+    if (s.side === 'left') return '입구로 들어와 가운데 통로를 걷다가 왼쪽 벽 쪽으로 가세요.';
+    if (s.side === 'right') return '입구로 들어와 가운데 통로를 걷다가 오른쪽 벽 쪽으로 가세요.';
+    return '입구로 들어오면 오른쪽 앞에 바로 보여요.';
+  }
+
+  function pageMap() {
+    return sub('책 위치', [[null, '책 위치']], `
+      <div class="map-layout">
+        <div class="card map-card">${mapSvg(null)}</div>
+        <div>
+          <p class="dir">노란 점이 입구예요. 서가를 누르면 입구부터 가는 길을 그려 줄게요.</p>
+          ${chipsHtml(null)}
+          <table class="tbl" style="margin-top:16px">
+            <tr><th>왼쪽 벽</th><td>000 총류 · 100 철학 · 200 종교</td></tr>
+            <tr><th>안쪽 벽</th><td>300 사회 · 400 자연 · 500 기술 · 600 예술</td></tr>
+            <tr><th>오른쪽 벽</th><td>700 언어 · 810 한국문학 · 820~ 외국문학 · 900 역사</td></tr>
+            <tr><th>입구 앞</th><td>신간·추천, 대출·반납 데스크</td></tr>
+          </table>
+        </div>
+      </div>`);
+  }
+
+  function pageRoute(id, bookId) {
+    const items = [['#/map', '책 위치'], [null, '길 안내']];
+    const s = SHELVES[id];
+    if (!s) return sub('길 안내', items, '<p class="card empty">서가를 찾을 수 없어요.</p>');
+    const target = bookId && book(bookId);
+    const list = id === 'new' ? HIVE.map(h => book(h.id)) : BOOKS.filter(b => shelfOf(b.call) === id);
+    return sub('길 안내', items, `
+      <div class="map-layout">
+        <div class="card map-card">${mapSvg(id)}</div>
+        <div>
+          <p class="dir"><b>${id === 'new' ? '' : (id === '8xx' ? '820~890' : id) + ' '}${s.name}</b>${target ? ` — 『${esc(target.title)}』 (${esc(target.call)})` : ''}<br>${directions(id)}</p>
+          <div class="card" style="padding-top:0;padding-bottom:0">
+            ${list.map(b => `
+              <div class="book-row${b.id === bookId ? ' hit-row' : ''}">
+                <img class="book-thumb" src="${coverOf(b)}" alt="" loading="lazy">
+                <div class="book-main"><a class="book-title" href="#/book/${b.id}">${esc(b.title)}</a><p class="book-meta">${esc(b.author)} · ${esc(b.call)}</p></div>
+                ${statusTag(b)}
+              </div>`).join('') || '<p class="empty">이 서가의 예시 도서가 아직 없어요</p>'}
+          </div>
+          ${chipsHtml(id)}
+          <div class="acts"><a href="#/map" class="btn-gray">전체 지도로</a></div>
+        </div>
+      </div>`);
+  }
+
+  function pageNotice(idx) {
+    if (idx === undefined || idx === '') {
+      return sub('공지사항', [[null, '공지사항']], noticeList(NOTICES));
+    }
+    const x = NOTICES[Number(idx)];
+    const items = [['#/notice', '공지사항'], [null, '공지 상세']];
+    if (!x) return sub('공지 상세', items, '<p class="card empty">공지를 찾을 수 없어요.</p>');
+    return sub('공지 상세', items, `
+      <article class="notice-body">
+        <div class="notice-head"><span class="tag ${x.t}">${TAG_NAME[x.t]}</span><h2>${esc(x.n)}</h2><time datetime="${x.d}">${x.d.replace(/-/g, '.')} · 혜윰도서관</time></div>
+        <div class="notice-text">${esc(x.body)}</div>
+      </article>
+      <div class="acts"><a href="#/notice" class="btn-gray">목록으로</a></div>`);
+  }
+
+  const PAGES = {
+    '': { html: pageHome, title: '홈', nav: '', band: true },
+    search: { html: pageSearch, title: '검색', nav: null, band: true },
+    loans: { html: pageLoans, title: '대출현황', nav: 'loans' },
+    extend: { html: pageExtend, title: '연장 신청', nav: 'loans' },
+    done: { html: pageDone, title: '연장 완료', nav: 'loans' },
+    hours: { html: pageHours, title: '이용 시간', nav: 'hours' },
+    rec: { html: pageRec, title: '추천 도서', nav: 'rec', after: renderHive },
+    book: { html: pageBook, title: '책 상세', nav: 'rec' },
+    map: { html: pageMap, title: '책 위치', nav: 'map' },
+    route: { html: pageRoute, title: '길 안내', nav: 'map' },
+    notice: { html: pageNotice, title: '공지사항', nav: 'notice' },
+  };
+
+  function parse() {
+    const parts = location.hash.replace(/^#\/?/, '').split('/').map(p => {
+      try { return decodeURIComponent(p); } catch (e) { return p; }
+    });
+    return { name: parts[0] || '', args: parts.slice(1) };
+  }
+
+  function go(path) {
+    closeChat();
+    location.hash = '#/' + path;
+  }
+
+  function router() {
+    const { name, args } = parse();
+    const page = PAGES[name] || PAGES[''];
+    $('view').innerHTML = page.html(...args);
+    if (page.after) page.after(...args);
+    $('band').hidden = !page.band;
+    if (name === 'search') $('q').value = args[0] || '';
+    if (name === '') $('q').value = '';
+    document.querySelectorAll('#gnb a').forEach(a => a.classList.toggle('on', a.dataset.nav === page.nav));
+    document.title = page === PAGES[''] ? '혜윰도서관' : `${page.title} | 혜윰도서관`;
+    renderStatus();
+    window.scrollTo(0, 0);
+  }
+
+  function renderStatus() {
+    const st = libStatus();
+    const el = $('status');
+    el.className = `status ${st.open ? 'open' : 'closed'}`;
+    el.textContent = st.closedDay ? `휴관 · ${st.reason}` : st.text;
+  }
+
+  function copyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    ta.remove();
+    if (ok) return Promise.resolve();
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return Promise.reject(new Error('copy failed'));
+  }
+
+  function openSchool(btn) {
+    const fromBand = btn.closest('.band-school') || btn.closest('.util-links') || btn.closest('.link-grid');
+    const text = (btn.dataset.school || (fromBand ? $('q').value : '')).trim();
+    const msg = btn.nextElementSibling && btn.nextElementSibling.classList.contains('school-msg') ? btn.nextElementSibling : null;
+    if (msg) {
+      msg.className = 'school-msg';
+      msg.textContent = '';
+    }
+    if (text) {
+      copyText(text).then(() => {
+        if (msg) msg.textContent = `“${text}” 복사 완료! 열린 창 검색칸에 Ctrl+V 하세요.`;
+      }).catch(() => {
+        if (msg) {
+          msg.className = 'school-msg fail';
+          msg.textContent = `복사에 실패했어요. 열린 창에 “${text}”를 직접 입력하세요.`;
+        }
+      });
+    }
+    window.open(SCHOOL_URL, '_blank', 'noopener');
+  }
+
+  function findBookIn(text) {
+    const t = norm(text);
+    const whole = BOOKS.find(b => t.includes(norm(b.title)) || t.includes(norm(b.author)));
+    if (whole) return whole;
+    const stop = ['어디', '어딨어', '있어', '있나요', '있어요', '위치', '찾아줘', '알려줘', '도서', '도서관', '추천', '대출', '반납'];
+    const tokens = text.split(/[\s?!.,~]+/)
+      .map(w => w.length > 2 ? w.replace(/(은|는|이|가|을|를|도)$/, '') : w)
+      .filter(w => w.length >= 2 && !stop.includes(w));
+    return BOOKS.find(b => tokens.some(w => norm(b.title).includes(norm(w)) || norm(b.author).includes(norm(w))));
+  }
+
+  function reply(text) {
+    const t = norm(text);
+    const found = findBookIn(text);
+    if (found) {
+      const s = SHELVES[shelfOf(found.call)];
+      return {
+        text: `${josa(found.title, '은', '는')} ${s.name} 서가에 있어!\n청구기호는 ${found.call}이고, 지금은 ${found.ok ? '대출 가능' : '누가 빌려 갔어'}`,
+        acts: [
+          { label: '길 안내', go: () => go(`route/${shelfOf(found.call)}/${found.id}`) },
+          { label: '책 상세', go: () => go(`book/${found.id}`) },
+        ],
+      };
+    }
+    if (/안녕|하이|hello|hi|ㅎㅇ|반가/.test(t)) {
+      return { text: '안녕! 나는 혜윰도서관 꿀벌 윰이야\n책 위치, 이용 시간, 휴관일, 대출 현황… 뭐든 물어봐!' };
+    }
+    if (/공지|소식|알림/.test(t)) {
+      const x = NOTICES[0];
+      return { text: `가장 최근 공지야\n• ${x.n}`, acts: [{ label: '공지사항 보기', go: () => go('notice') }] };
+    }
+    if (/휴관|쉬는|쉬어|닫는날|문닫/.test(t)) {
+      const list = upcoming('close', 3);
+      return {
+        text: list.length ? `다가오는 휴관일이야\n${list.map(e => `• ${rangeText(e)} ${e.n}`).join('\n')}\n주말이랑 공휴일도 쉬어!` : '당분간 예정된 휴관일은 없어! 주말이랑 공휴일만 쉬어',
+        acts: [{ label: '이용 시간 보기', go: () => go('hours') }],
+      };
+    }
+    if (/시간|몇시|열어|열려|운영|언제|닫아/.test(t)) {
+      const st = libStatus();
+      return {
+        text: `지금은 "${st.text}" 상태야\n${SLOTS.map(s => `• ${s.n} ${s.f}~${s.t}`).join('\n')}`,
+        acts: [{ label: '이용 시간 보기', go: () => go('hours') }],
+      };
+    }
+    if (/행사|이벤트|프로그램|체험|골든벨/.test(t)) {
+      const list = upcoming('event', 3);
+      return {
+        text: list.length ? `곧 열리는 행사야\n${list.map(e => `• ${rangeText(e)} ${e.n}`).join('\n')}` : '지금은 예정된 행사가 없어. 곧 재밌는 거 준비할게!',
+        acts: [{ label: '공지사항 보기', go: () => go('notice') }],
+      };
+    }
+    if (/연장/.test(t)) {
+      return {
+        text: hasOverdue()
+          ? '지금은 연체된 책이 있어서 연장이 막혀 있어\n연체된 책을 먼저 반납하면 다른 책을 7일 연장할 수 있어!'
+          : '연장은 한 번, 7일 더 할 수 있어\n대출현황에서 "연장 신청"을 눌러 봐!',
+        acts: [{ label: '대출현황 보기', go: () => go('loans') }],
+      };
+    }
+    if (/대출|반납|빌린|빌려|연체|내책/.test(t)) {
+      const infos = loanInfos().sort((a, b) => a.left - b.left);
+      return {
+        text: `지금 ${infos.length}권 빌렸어\n${infos.map(x => `• ${x.b.title} — ${x.left < 0 ? `연체 ${-x.left}일` : x.left === 0 ? '오늘까지!' : `D-${x.left}`}`).join('\n')}`,
+        acts: [{ label: '대출현황 보기', go: () => go('loans') }],
+      };
+    }
+    if (/추천|읽을|심심|뭐읽|재밌/.test(t)) {
+      const h = HIVE[Math.floor(Math.random() * HIVE.length)];
+      const b = book(h.id);
+      return {
+        text: `윰이 추천은 『${b.title}』!\n${h.why}`,
+        acts: [
+          { label: '벌집에서 보기', go: () => { hiveOn = h.id; go('rec'); } },
+          { label: '책 상세', go: () => go(`book/${b.id}`) },
+        ],
+      };
+    }
+    if (/위치|어디|지도|서가/.test(t)) {
+      return {
+        text: '책 제목을 알려 주면 바로 찾아 줄게!\n예: "코스모스 어디 있어?"',
+        acts: [{ label: '지도 보기', go: () => go('map') }],
+      };
+    }
+    if (/고마|감사|땡큐|ㄱㅅ|thank/.test(t)) return { text: '헤헤 천만에! 꿀 같은 독서 하길 바라' };
+    if (/귀여|이름|누구|너는/.test(t)) return { text: '나는 윰이! 혜윰도서관 벌집에 사는 꿀벌이야\n책 냄새를 제일 좋아해!' };
+    return { text: '음… 윰이가 아직 모르는 말이야\n아래 버튼으로 물어봐 줄래?' };
+  }
+
+  const QUICK = ['지금 열려 있어?', '휴관일', '책 추천해 줘', '내 대출', '코스모스 어디 있어?'];
+  let greeted = false;
+
+  function addMsg(who, text, acts) {
+    const log = $('chat-log');
+    const row = document.createElement('div');
+    row.className = `msg ${who}`;
+    const wrap = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    if (acts && acts.length) {
+      const box = document.createElement('div');
+      box.className = 'msg-acts';
+      acts.forEach(a => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = a.label;
+        btn.addEventListener('click', a.go);
+        box.appendChild(btn);
+      });
+      wrap.appendChild(box);
+    }
+    row.appendChild(wrap);
+    log.appendChild(row);
+    log.scrollTop = log.scrollHeight;
+    return row;
+  }
+
+  function botSay(r) {
+    const typing = addMsg('bot', '');
+    typing.querySelector('.bubble').innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
+    setTimeout(() => {
+      typing.remove();
+      addMsg('bot', r.text, r.acts);
+    }, 550);
+  }
+
+  function ask(text) {
+    if (!text.trim()) return;
+    addMsg('me', text.trim());
+    botSay(reply(text));
+  }
+
+  function openChat() {
+    $('chat').hidden = false;
+    $('fab').hidden = true;
+    if (!greeted) {
+      greeted = true;
+      botSay({ text: '안녕! 나는 혜윰도서관 꿀벌 윰이야\n책 위치, 이용 시간, 휴관일, 대출 현황… 뭐든 물어봐!' });
+    }
+    $('chat-input').focus();
+  }
+
+  function closeChat() {
+    $('chat').hidden = true;
+    $('fab').hidden = false;
+  }
+
+  $('quick').innerHTML = QUICK.map(q => `<button type="button">${q}</button>`).join('');
+
+  $('search-form').addEventListener('submit', e => {
+    e.preventDefault();
+    go('search/' + encodeURIComponent($('q').value.trim()));
+  });
+  $('q').addEventListener('input', e => {
+    if (parse().name !== 'search' || !$('results')) return;
+    history.replaceState(null, '', '#/search/' + encodeURIComponent(e.target.value.trim()));
+    $('results').innerHTML = resultsHtml(e.target.value);
+  });
+
+  document.addEventListener('click', e => {
+    const school = e.target.closest('[data-school]');
+    if (school) {
+      e.preventDefault();
+      return openSchool(school);
+    }
+    const hex = e.target.closest('[data-hex]');
+    if (hex) {
+      hiveOn = hiveOn === hex.dataset.hex ? null : hex.dataset.hex;
+      return renderHive();
+    }
+    const ret = e.target.closest('[data-return]');
+    if (ret) {
+      returned[ret.dataset.return] = true;
+      save('hyeyum-returned', returned);
+      return router();
+    }
+    if (e.target.closest('[data-reset]')) {
+      returned = {};
+      extended = {};
+      save('hyeyum-returned', returned);
+      save('hyeyum-extended', extended);
+      return router();
+    }
+    const conf = e.target.closest('[data-confirm-extend]');
+    if (conf && !conf.disabled) {
+      const id = conf.dataset.confirmExtend;
+      if (hasOverdue() || extended[id]) return router();
+      extended[id] = true;
+      save('hyeyum-extended', extended);
+      return go('done/' + id);
+    }
+    const shelf = e.target.closest('[data-shelf]');
+    if (shelf) return go('route/' + shelf.dataset.shelf);
+  });
+
+  document.addEventListener('keydown', e => {
+    const shelf = e.target.closest && e.target.closest('[data-shelf]');
+    if (shelf && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      go('route/' + shelf.dataset.shelf);
+    }
+    if (e.key === 'Escape' && !$('chat').hidden) closeChat();
+  });
+
+  $('fab').addEventListener('click', openChat);
+  $('chat-close').addEventListener('click', closeChat);
+  $('quick').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) ask(b.textContent);
+  });
+  $('chat-form').addEventListener('submit', e => {
+    e.preventDefault();
+    ask($('chat-input').value);
+    $('chat-input').value = '';
+  });
+  setTimeout(() => { $('fab-say').hidden = true; }, 6000);
+
+  window.addEventListener('hashchange', router);
+  router();
+  setInterval(renderStatus, 60000);
+</script>
+</body>
+</html>
